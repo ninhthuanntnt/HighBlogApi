@@ -1,0 +1,169 @@
+<?xml version="1.0" encoding="utf-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog https://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.3.xsd">
+    <property name="now" value="now(3)"/>
+
+    <changeSet id="HB-00000000000000-1" author="ninhthuanntnt">
+        <createTable tableName="hb_accounts">
+            <column name="id" type="bigint" autoIncrement="true">
+                <constraints primaryKey="true" primaryKeyName="pk_accounts"/>
+            </column>
+            <column name="user_id" type="bigint">
+                <constraints nullable="false"/>
+            </column>
+            <column name="username" type="varchar(100)">
+                <constraints unique="true" nullable="false"/>
+            </column>
+            <column name="password" type="varchar(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="email" type="varchar(255)">
+                <constraints nullable="false" unique="true"/>
+            </column>
+
+            <column name="created_by" type="varchar(50)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="created_date" type="timestamp(3)" defaultValueComputed="${now}">
+                <constraints nullable="false"/>
+            </column>
+            <column name="last_modified_by" type="varchar(50)"/>
+            <column name="last_modified_date" type="timestamp(3)"/>
+        </createTable>
+        <createIndex tableName="hb_accounts" indexName="idx_accounts_user_id">
+            <column name="user_id" type="bigint"/>
+        </createIndex>
+        <loadData tableName="hb_accounts"
+                  separator=";"
+                  file="config/liquibase_ext/data/hb_accounts.csv"/>
+    </changeSet>
+
+    <changeSet id="HB-00000000000000-2" author="ninhthuanntnt">
+        <createTable tableName="hb_roles">
+            <column name="id" type="bigint" autoIncrement="true">
+                <constraints primaryKey="true" primaryKeyName="pk_roles"/>
+            </column>
+            <column name="role_type" type="varchar(50)">
+                <constraints unique="true" nullable="false"/>
+            </column>
+        </createTable>
+        <loadData tableName="hb_roles"
+                  separator=";"
+                  file="config/liquibase_ext/data/hb_roles.csv"/>
+    </changeSet>
+
+    <changeSet id="HB-00000000000000-3" author="ninhthuanntnt">
+        <createTable tableName="hb_accounts_roles">
+            <column name="id" type="bigint" autoIncrement="true">
+                <constraints primaryKey="true" primaryKeyName="pk_accounts_roles"/>
+            </column>
+            <column name="account_id" type="bigint"/>
+            <column name="role_id" type="bigint"/>
+
+            <column name="created_by" type="varchar(50)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="created_date" type="timestamp(3)" defaultValueComputed="${now}">
+                <constraints nullable="false"/>
+            </column>
+            <column name="last_modified_by" type="varchar(50)"/>
+            <column name="last_modified_date" type="timestamp(3)"/>
+        </createTable>
+        <createIndex tableName="hb_accounts_roles" indexName="idx_accounts_roles_account_id">
+            <column name="account_id" type="bigint"/>
+        </createIndex>
+        <createIndex tableName="hb_accounts_roles" indexName="idx_accounts_roles_role_id">
+            <column name="role_id" type="bigint"/>
+        </createIndex>
+        <loadData tableName="hb_accounts_roles"
+                  separator=";"
+                  file="config/liquibase_ext/data/hb_accounts_roles.csv"/>
+    </changeSet>
+
+    <changeSet id="HB-00000000000000-4" author="ninhthuanntnt">
+        <createTable tableName="hb_users">
+            <column name="id" type="bigint" autoIncrement="true">
+                <constraints primaryKey="true" primaryKeyName="pk_users"/>
+            </column>
+            <column name="first_name" type="varchar(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="last_name" type="varchar(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="gender_type" type="varchar(10)" defaultValue="MALE">
+                <constraints nullable="false"/>
+            </column>
+            <column name="image_path" type="varchar(255)"/>
+            <column name="background_path" type="varchar(255)"/>
+
+            <column name="created_by" type="varchar(50)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="created_date" type="timestamp(3)" defaultValueComputed="${now}">
+                <constraints nullable="false"/>
+            </column>
+            <column name="last_modified_by" type="varchar(50)"/>
+            <column name="last_modified_date" type="timestamp(3)"/>
+        </createTable>
+    </changeSet>
+
+    <changeSet id="HB-00000000000000-5" author="ninhthuanntnt">
+        <createTable tableName="hb_files">
+            <column name="id" type="bigint" autoIncrement="true">
+                <constraints primaryKey="true" primaryKeyName="pk_files"/>
+            </column>
+            <column name="user_id" type="bigint"/>
+            <column name="name" type="varchar(50)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="path" type="varchar(255)"/>
+
+            <column name="created_by" type="varchar(50)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="created_date" type="timestamp(3)" defaultValueComputed="${now}">
+                <constraints nullable="false"/>
+            </column>
+            <column name="last_modified_by" type="varchar(50)"/>
+            <column name="last_modified_date" type="timestamp(3)"/>
+        </createTable>
+        <createIndex tableName="hb_files" indexName="idx_files_user_id">
+            <column name="user_id" type="bigint"/>
+        </createIndex>
+    </changeSet>
+
+    <changeSet id="HB-00000000000000-6" author="ninhthuanntnt">
+        <createTable tableName="hb_confirmation_codes">
+            <column name="id" type="bigint" autoIncrement="true">
+                <constraints primaryKey="true" primaryKeyName="pk_confirmation_codes"/>
+            </column>
+            <column name="account_id" type="bigint">
+                <constraints nullable="false"/>
+            </column>
+            <column name="code" type="varchar(255)">
+                <constraints unique="true" nullable="false"/>
+            </column>
+            <column name="expiration" type="bigint">
+                <constraints nullable="false"/>
+            </column>
+            <column name="code_type" type="varchar(50)">
+                <constraints nullable="false"/>
+            </column>
+
+            <column name="created_by" type="varchar(50)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="created_date" type="timestamp(3)" defaultValueComputed="${now}">
+                <constraints nullable="false"/>
+            </column>
+            <column name="last_modified_by" type="varchar(50)"/>
+            <column name="last_modified_date" type="timestamp(3)"/>
+        </createTable>
+        <createIndex tableName="hb_confirmation_codes" indexName="idx_confirmation_codes_account_id">
+            <column name="account_id" type="bigint"/>
+        </createIndex>
+    </changeSet>
+</databaseChangeLog>

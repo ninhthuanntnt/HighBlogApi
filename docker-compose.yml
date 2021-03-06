@@ -1,0 +1,47 @@
+version: '3'
+services:
+  api:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      args:
+        - HB_WORK_DIR_NAME=${HB_WORK_DIR_NAME}
+        - HB_ABSOLUTE_PATH_UPLOADS_DIR=${HB_ABSOLUTE_PATH_UPLOADS_DIR}
+        - HB_ABSOLUTE_PATH_IMAGES_DIR=${HB_ABSOLUTE_PATH_IMAGES_DIR}
+    image: ninhthuanntnt/high_blog_api:0.0.1
+    volumes:
+      - uploads_data:/high_blog/uploads
+    restart: always
+    environment:
+      - HB_DB_URL=${HB_DB_URL}
+      - HB_DB_USERNAME=${HB_DB_USERNAME}
+      - HB_DB_PASSWORD=${HB_DB_PASSWORD}
+      - HB_JWT_SECRET_KEY=${HB_JWT_SECRET_KEY}
+      - HB_JWT_ISSUER=${HB_JWT_ISSUER}
+      - HB_JWT_EXPIRATION=${HB_JWT_EXPIRATION}
+      - HB_JWT_REFRESH_EXPIRATION=${HB_JWT_REFRESH_EXPIRATION}
+      - HB_ABSOLUTE_PATH_UPLOADS_DIR=${HB_ABSOLUTE_PATH_UPLOADS_DIR}
+      - HB_MAIL_USERNAME=${HB_MAIL_USERNAME}
+      - HB_MAIL_PASSWORD=${HB_MAIL_PASSWORD}
+      - HB_ALLOWED_ORIGIN=${HB_ALLOWED_ORIGIN}
+    ports:
+      - "8080:8080"
+    depends_on:
+      - mysql
+
+  mysql:
+    image: mysql:8.0
+    volumes:
+      - mysql_data:/var/lib/mysql
+    restart: always
+    environment:
+      - MYSQL_ROOT_PASSWORD=${MYSQL_ROOT_PASSWORD}
+      - MYSQL_DATABASE=${MYSQL_DATABASE}
+      - MYSQL_USER=${MYSQL_USER}
+      - MYSQL_PASSWORD=${MYSQL_PASSWORD}
+    ports:
+      - "3306:3306"
+
+volumes:
+  mysql_data:
+  uploads_data:

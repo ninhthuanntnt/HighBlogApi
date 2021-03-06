@@ -1,0 +1,47 @@
+plugins {
+    id "org.springframework.boot" version "2.4.3"
+    id "io.spring.dependency-management" version "1.0.11.RELEASE"
+    id "java"
+}
+
+group = "com.high"
+version = "0.0.1"
+sourceCompatibility = "1.8"
+
+configurations {
+    compileOnly {
+        extendsFrom annotationProcessor
+    }
+}
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    implementation "org.springframework.boot:spring-boot-starter-data-jpa"
+    implementation "org.springframework.boot:spring-boot-starter-security"
+    implementation "org.springframework.boot:spring-boot-starter-web"
+    implementation "org.springframework.boot:spring-boot-starter-validation"
+    implementation "org.springframework.boot:spring-boot-starter-mail"
+    implementation "mysql:mysql-connector-java:${mysql_connector_java_version}"
+    implementation "org.mapstruct:mapstruct:${mapstruct_version}"
+    implementation "org.liquibase:liquibase-core:${liquid_base_core_version}"
+    implementation "io.jsonwebtoken:jjwt:${jjwt_version}"
+    implementation "io.springfox:springfox-boot-starter:${spring_fox_boot_starter_version}"
+    implementation "io.springfox:springfox-swagger-ui:${spring_fox_swagger_ui_version}"
+    implementation "commons-io:commons-io:${commons_io_version}"
+    implementation "org.apache.commons:commons-lang3:${commons_lang3_version}"
+
+    compileOnly "org.projectlombok:lombok"
+    developmentOnly "org.springframework.boot:spring-boot-devtools"
+    annotationProcessor "org.projectlombok:lombok"
+    annotationProcessor "org.mapstruct:mapstruct-processor:${mapstruct_version}"
+    annotationProcessor "org.springframework.boot:spring-boot-configuration-processor"
+    testImplementation "org.springframework.boot:spring-boot-starter-test"
+    testImplementation "org.springframework.security:spring-security-test"
+}
+
+test {
+    useJUnitPlatform()
+}

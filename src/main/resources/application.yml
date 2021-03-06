@@ -1,0 +1,41 @@
+spring:
+    datasource:
+        url: ${HB_DB_URL}
+        username: ${HB_DB_USERNAME}
+        password: ${HB_DB_PASSWORD}
+    jpa:
+        hibernate:
+            ddl-auto: none
+        open-in-view: false
+    liquibase:
+        change-log: classpath:config/liquibase_ext/master.xml
+    servlet:
+        multipart:
+            max-file-size: 10MB
+    mail:
+        host: smtp.gmail.com
+        port: 587
+        username: ${HB_MAIL_USERNAME}
+        password: ${HB_MAIL_PASSWORD}
+        protocol: smtp
+        properties.mail.smtp:
+            auth: true
+            starttls.enable: true
+application:
+    jwt:
+        secret-key: ${HB_JWT_SECRET_KEY}
+        issuer: ${HB_JWT_ISSUER}
+        expiration: ${HB_JWT_EXPIRATION}
+        refresh-expiration: ${HB_JWT_REFRESH_EXPIRATION}
+    file-upload:
+        allowed-image-extensions:
+            - jpg
+            - jepg
+            - png
+            - gif
+        root-dir: ${HB_ABSOLUTE_PATH_UPLOADS_DIR:/home/ninhthuan/uploads}
+        images-sub-dir: ${HB_IMAGES_SUB_DIR:images}
+    resource-template:
+        registration-email-template: classpath:./templates/registration_email_template.html
+    cors:
+        allowed-origin: ${HB_ALLOWED_ORIGIN}
