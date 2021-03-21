@@ -25,12 +25,14 @@ public class WebConfig
 
     private final ApplicationConfigProperties.FileUpload fileUploadConfigProperties;
     private final ApplicationConfigProperties.ResourceTemplate resourceTemplateConfigProperties;
+    private final ApplicationConfigProperties.Cors corsConfigProperties;
     private final ResourceLoader resourceLoader;
 
     public WebConfig(final ApplicationConfigProperties applicationConfigProperties,
                      final ResourceLoader resourceLoader) {
         this.fileUploadConfigProperties = applicationConfigProperties.getFileUpload();
         this.resourceTemplateConfigProperties = applicationConfigProperties.getResourceTemplate();
+        this.corsConfigProperties = applicationConfigProperties.getCors();
         this.resourceLoader = resourceLoader;
     }
 
@@ -56,7 +58,7 @@ public class WebConfig
                 .allowCredentials(true)
                 .allowedHeaders("*")
                 .allowedMethods("*")
-                .allowedOrigins("https://developer.mozilla.org")
+                .allowedOrigins(corsConfigProperties.getAllowedOrigin())
                 .maxAge(3600);
     }
 

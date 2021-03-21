@@ -7,4 +7,5 @@
     <include file="config/liquibase/master.xml" relativeToChangelogFile="false"/>
 
     <include file="config/liquibase_ext/changelog/00000000000000_changelog.xml" relativeToChangelogFile="false" />
+    <include file="config/liquibase_ext/changelog/20210321163200_changelog.xml" relativeToChangelogFile="false" />
 </databaseChangeLog>
