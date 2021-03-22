@@ -2,9 +2,9 @@ package com.high.highblog.api;
 
 import com.high.highblog.bloc.FileBloc;
 import com.high.highblog.helper.FileHelper;
-import com.high.highblog.model.dto.request.FileUploadReq;
-import com.high.highblog.model.dto.response.CkFileUploadRes;
-import com.high.highblog.model.dto.response.FileRes;
+import com.high.highblog.model.dto.request.ImageUploadReq;
+import com.high.highblog.model.dto.response.CkImageUploadRes;
+import com.high.highblog.model.dto.response.ImageUploadRes;
 import com.high.highblog.model.entity.File;
 import com.high.highblog.model.mapper.FileMapper;
 import org.springframework.http.ResponseEntity;
@@ -16,23 +16,23 @@ import org.springframework.web.multipart.MultipartFile;
 
 @RestController
 @RequestMapping("/api/v1/files")
-public class FileController {
+public class FileUploadController {
 
     private final FileBloc fileBloc;
 
-    public FileController(final FileBloc fileBloc) {
+    public FileUploadController(final FileBloc fileBloc) {
         this.fileBloc = fileBloc;
     }
 
     @PostMapping("/images")
-    public ResponseEntity<FileRes> uploadImage(final FileUploadReq fileUploadReqs) {
-        File image = fileBloc.uploadImage(fileUploadReqs);
+    public ResponseEntity<ImageUploadRes> uploadImage(final ImageUploadReq imageUploadReqs) {
+        File image = fileBloc.uploadImage(imageUploadReqs);
         return ResponseEntity.ok(FileMapper.INSTANCE.toFileRes(image));
     }
 
     @PostMapping("/ck/images")
-    public ResponseEntity<CkFileUploadRes> ckUploadImage(@RequestParam("file") MultipartFile multipartFile) {
+    public ResponseEntity<CkImageUploadRes> ckUploadImage(@RequestParam("upload") MultipartFile multipartFile) {
         File image = fileBloc.ckUploadImange(multipartFile);
-        return ResponseEntity.ok(new CkFileUploadRes(FileHelper.appendDomainToPath(image.getPath())));
+        return ResponseEntity.ok(new CkImageUploadRes(FileHelper.appendDomainToPath(image.getPath())));
     }
 }

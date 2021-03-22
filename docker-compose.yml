@@ -5,25 +5,25 @@ services:
       context: .
       dockerfile: Dockerfile
       args:
-        - HB_WORK_DIR_NAME=${HB_WORK_DIR_NAME}
-        - HB_ABSOLUTE_PATH_UPLOADS_DIR=${HB_ABSOLUTE_PATH_UPLOADS_DIR}
-        - HB_ABSOLUTE_PATH_IMAGES_DIR=${HB_ABSOLUTE_PATH_IMAGES_DIR}
+        - HB_WORK_DIR_NAME=high_blog
+        - HB_ABSOLUTE_PATH_UPLOADS_DIR=/high_blog/uploads
+        - HB_ABSOLUTE_PATH_IMAGES_DIR=/high_blog/uploads/images
     image: ninhthuanntnt/high_blog_api:0.0.1
     volumes:
       - uploads_data:/high_blog/uploads
     restart: always
     environment:
-      - HB_DB_URL=${HB_DB_URL}
-      - HB_DB_USERNAME=${HB_DB_USERNAME}
-      - HB_DB_PASSWORD=${HB_DB_PASSWORD}
-      - HB_JWT_SECRET_KEY=${HB_JWT_SECRET_KEY}
-      - HB_JWT_ISSUER=${HB_JWT_ISSUER}
-      - HB_JWT_EXPIRATION=${HB_JWT_EXPIRATION}
-      - HB_JWT_REFRESH_EXPIRATION=${HB_JWT_REFRESH_EXPIRATION}
-      - HB_ABSOLUTE_PATH_UPLOADS_DIR=${HB_ABSOLUTE_PATH_UPLOADS_DIR}
-      - HB_MAIL_USERNAME=${HB_MAIL_USERNAME}
-      - HB_MAIL_PASSWORD=${HB_MAIL_PASSWORD}
-      - HB_ALLOWED_ORIGIN=${HB_ALLOWED_ORIGIN}
+      - HB_DB_URL=jdbc:mysql://mysql:3306/high_blog_db?allowPublicKeyRetrieval=true&useSSL=false&serverTimezone=UTC&useLegacyDatetimeCode=false&autoReconnect=true&failOverReadOnly=false&maxReconnects=10
+      - HB_DB_USERNAME=thuan
+      - HB_DB_PASSWORD=1234qwer!@#$QWER
+      - HB_JWT_SECRET_KEY=asdfkasdfolasfdkj3543adfffffaswrwer3662a6sdfasdf
+      - HB_JWT_ISSUER=highblog.com
+      - HB_JWT_EXPIRATION=8640000
+      - HB_JWT_REFRESH_EXPIRATION=864000000
+      - HB_ABSOLUTE_PATH_UPLOADS_DIR=/high_blog/uploads
+      - HB_MAIL_USERNAME= Điền gmail đẵ bật tính năng bảo mật yếu
+      - HB_MAIL_PASSWORD= Điền mật khẩu gmail ở trên
+      - HB_ALLOWED_ORIGIN=http://localhost:3000
     ports:
       - "8080:8080"
     depends_on:
@@ -35,10 +35,10 @@ services:
       - mysql_data:/var/lib/mysql
     restart: always
     environment:
-      - MYSQL_ROOT_PASSWORD=${MYSQL_ROOT_PASSWORD}
-      - MYSQL_DATABASE=${MYSQL_DATABASE}
-      - MYSQL_USER=${MYSQL_USER}
-      - MYSQL_PASSWORD=${MYSQL_PASSWORD}
+      - MYSQL_ROOT_PASSWORD=1234qwer!@#$QWER
+      - MYSQL_DATABASE=high_blog_db
+      - MYSQL_USER=thuan
+      - MYSQL_PASSWORD=1234qwer!@#$QWER
     ports:
       - "3306:3306"
 
