@@ -1,0 +1,13 @@
+git checkout master
+git pull --rebase
+docker-compose down
+docker rmi ninhthuanntnt/high_blog_api:0.0.1
+docker-compose build
+docker push ninhthuanntnt/high_blog_api:0.0.1
+
+ssh -i /home/ninhthuan/.ssh/id_rsa_ninhthuan1999 ninhthuan1999@35.240.173.198 << \EOF
+cd project/high_blog_api
+docker-compose down
+docker rmi ninhthuanntnt/high_blog_api:0.0.1
+docker-compose up -d
+EOF
