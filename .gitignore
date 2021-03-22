@@ -35,3 +35,9 @@ out/
 
 ### VS Code ###
 .vscode/
+
+### Docker bundle ###
+*.dab
+
+### Docker compose ###
+docker-compose.yml

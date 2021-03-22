@@ -9,6 +9,6 @@ import lombok.Setter;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-public class CkFileUploadRes {
+public class CkImageUploadRes {
     private String url;
 }

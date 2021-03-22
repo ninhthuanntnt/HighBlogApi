@@ -1,6 +1,6 @@
 package com.high.highblog.bloc;
 
-import com.high.highblog.model.dto.request.FileUploadReq;
+import com.high.highblog.model.dto.request.ImageUploadReq;
 import com.high.highblog.model.entity.File;
 import com.high.highblog.service.FileService;
 import lombok.extern.slf4j.Slf4j;
@@ -21,14 +21,14 @@ public class FileBloc {
 
 
     @Transactional
-    public File uploadImage(final FileUploadReq fileUploadReq) {
+    public File uploadImage(final ImageUploadReq imageUploadReq) {
 
-        String url = fileService.saveImageToStorage(fileUploadReq.getImage());
+        String url = fileService.saveImageToStorage(imageUploadReq.getImage());
 
-        String name = fileUploadReq.getName();
+        String name = imageUploadReq.getName();
 
         if (ObjectUtils.isEmpty(name)) {
-            name = fileUploadReq.getImage().getOriginalFilename();
+            name = imageUploadReq.getImage().getOriginalFilename();
         }
 
         return fileService.save(name, url);
