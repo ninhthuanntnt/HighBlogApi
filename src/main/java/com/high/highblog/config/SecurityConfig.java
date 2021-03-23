@@ -1,5 +1,6 @@
 package com.high.highblog.config;
 
+import com.high.highblog.enums.RoleType;
 import com.high.highblog.security.CustomUserDetailsService;
 import com.high.highblog.security.JwtFilter;
 import org.springframework.beans.factory.BeanInitializationException;
@@ -64,7 +65,7 @@ public class SecurityConfig
         http.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
 
         http.authorizeRequests()
-            .antMatchers("/api/*/auth/login",
+            .antMatchers("/api/*/auth/**",
                          "/api/*/auth/logout",
                          "/api/*/register/**",
                          "/v2/api-docs",
@@ -73,7 +74,7 @@ public class SecurityConfig
                          "/configuration/security",
                          "/swagger-ui.html",
                          "/webjars/**").permitAll()
-            .antMatchers("/api/**").authenticated();
+            .antMatchers("/api/*/user/**").hasAuthority(RoleType.ROLE_USER.name());
 
         http.addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class);
     }
