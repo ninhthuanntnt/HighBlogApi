@@ -3,9 +3,11 @@ package com.high.highblog.service;
 import com.high.highblog.constant.Constant;
 import com.high.highblog.enums.CodeType;
 import com.high.highblog.error.exception.ObjectNotFoundException;
+import com.high.highblog.error.exception.ValidatorException;
 import com.high.highblog.model.entity.ConfirmationCode;
 import com.high.highblog.repository.ConfirmationCodeRepository;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.ObjectUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import sun.rmi.runtime.Log;
@@ -29,14 +31,17 @@ public class ConfirmationCodeService {
                          .orElseThrow(() -> new ObjectNotFoundException("confirmationCode"));
     }
 
-    public void save(ConfirmationCode confirmationCode) {
+    @Transactional
+    public void saveNew(ConfirmationCode confirmationCode) {
         log.info("Save confirmation code with data #{}", confirmationCode);
+
+        validateConfirmationCodeBeforeSaveNew(confirmationCode);
 
         repository.save(confirmationCode);
     }
 
     @Transactional
-    public ConfirmationCode save(final Long accountId, final String code, final CodeType codeType) {
+    public ConfirmationCode saveNew(final Long accountId, final String code, final CodeType codeType) {
         log.info("Create confirmation code with code #{} for type #{}", code, codeType.name());
         ConfirmationCode confirmationCode = ConfirmationCode.builder()
                                                             .accountId(accountId)
@@ -44,7 +49,13 @@ public class ConfirmationCodeService {
                                                             .codeType(codeType)
                                                             .expiration(DEFAULT_EXPIRATION)
                                                             .build();
-        this.save(confirmationCode);
+        this.saveNew(confirmationCode);
         return confirmationCode;
+    }
+
+    private void validateConfirmationCodeBeforeSaveNew(final ConfirmationCode confirmationCode) {
+        if(ObjectUtils.isNotEmpty(confirmationCode.getId())){
+            throw new ValidatorException("Invalid confirmation code id", "id");
+        }
     }
 }

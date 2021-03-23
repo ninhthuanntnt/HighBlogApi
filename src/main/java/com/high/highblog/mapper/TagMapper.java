@@ -1,4 +1,4 @@
-package com.high.highblog.model.mapper;
+package com.high.highblog.mapper;
 
 
 import com.high.highblog.model.dto.response.TagRes;

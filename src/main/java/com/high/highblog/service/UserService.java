@@ -1,9 +1,11 @@
 package com.high.highblog.service;
 
 import com.high.highblog.error.exception.ObjectNotFoundException;
+import com.high.highblog.error.exception.ValidatorException;
 import com.high.highblog.model.entity.User;
 import com.high.highblog.repository.UserRepository;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.ObjectUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -25,9 +27,17 @@ public class UserService {
     }
 
     @Transactional
-    public void save(final User user) {
-        log.info("Save user with info #{}", user);
+    public void saveNew(final User user) {
+        log.info("Save new user with info #{}", user);
+
+        validateUserBeforeSaveNew(user);
 
         userRepository.save(user);
+    }
+
+    private void validateUserBeforeSaveNew(final User user) {
+        if (ObjectUtils.isNotEmpty(user.getId())) {
+            throw new ValidatorException("Invalid user id", "id");
+        }
     }
 }

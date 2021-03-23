@@ -1,5 +1,6 @@
 package com.high.highblog.bloc;
 
+import com.high.highblog.helper.SecurityHelper;
 import com.high.highblog.model.dto.request.ImageUploadReq;
 import com.high.highblog.model.entity.File;
 import com.high.highblog.service.FileService;
@@ -11,11 +12,11 @@ import org.springframework.web.multipart.MultipartFile;
 
 @Slf4j
 @Component
-public class FileBloc {
+public class FileUploadBloc {
 
     private final FileService fileService;
 
-    public FileBloc(final FileService fileService) {
+    public FileUploadBloc(final FileService fileService) {
         this.fileService = fileService;
     }
 
@@ -23,24 +24,36 @@ public class FileBloc {
     @Transactional
     public File uploadImage(final ImageUploadReq imageUploadReq) {
 
-        String url = fileService.saveImageToStorage(imageUploadReq.getImage());
+        String path = fileService.saveNewImageToStorage(imageUploadReq.getImage());
 
         String name = imageUploadReq.getName();
 
+        log.info("Upload image with path #{}", path);
         if (ObjectUtils.isEmpty(name)) {
             name = imageUploadReq.getImage().getOriginalFilename();
         }
 
-        return fileService.save(name, url);
+        return fileService.saveNew(buildFileToSaveNew(name, path));
     }
 
     @Transactional
-    public File ckUploadImange(final MultipartFile image) {
+    public File ckUploadImage(final MultipartFile image) {
 
-        String url = fileService.saveImageToStorage(image);
+        String path = fileService.saveNewImageToStorage(image);
 
         String name = image.getOriginalFilename();
 
-        return fileService.save(name, url);
+        log.info("Ck upload image with path #{}", path);
+        return fileService.saveNew(buildFileToSaveNew(name, path));
+    }
+
+    private File buildFileToSaveNew(final String name, final String path) {
+        Long userId = SecurityHelper.getUserId();
+
+        return File.builder()
+                   .userId(userId)
+                   .name(name)
+                   .path(path)
+                   .build();
     }
 }

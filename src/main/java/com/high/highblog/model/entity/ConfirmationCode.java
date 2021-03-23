@@ -51,7 +51,7 @@ public class ConfirmationCode
     private CodeType codeType;
 
     public boolean isExpired() {
-        long expirationDate = this.getExpiration() + this.getCreatedDate().getLong(ChronoField.MILLI_OF_SECOND);
-        return expirationDate < Instant.now().getLong(ChronoField.MILLI_OF_SECOND);
+        long expirationDate = this.getExpiration() + this.getCreatedDate().toEpochMilli();
+        return expirationDate < Instant.now().toEpochMilli();
     }
 }
