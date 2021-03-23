@@ -7,6 +7,7 @@ import com.high.highblog.model.dto.response.TokenRes;
 import com.high.highblog.security.CustomUserDetails;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -45,7 +46,7 @@ public class AuthController {
     public ResponseEntity<TokenRes> refreshToken(@RequestBody final RefreshTokenReq refreshTokenReq) {
 
         // TODO: Get refresh token from Redis to make sure that it is exists for current user
-        if (jwtBloc.isExpiredToken(refreshTokenReq)) {
+        if (!jwtBloc.isExpiredToken(refreshTokenReq)) {
             return ResponseEntity.ok(jwtBloc.generateToken(refreshTokenReq));
         }
         return new ResponseEntity<>(HttpStatus.FORBIDDEN);

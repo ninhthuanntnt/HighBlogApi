@@ -18,6 +18,7 @@ import javax.annotation.PostConstruct;
 
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.io.FilenameUtils;
+import org.apache.commons.lang3.ObjectUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -51,15 +52,15 @@ public class FileService {
     }
 
     @Transactional
-    public File save(final String name, final String path) {
-        log.info("Save file info with name #{} and path #{}", name, path);
+    public File saveNew(final File file) {
+        log.info("Save new file info with name #{} and path #{}", file.getName(), file.getPath());
 
-        Long userId = SecurityHelper.getUserId();
+        validateFileBeforeSaveNew(file);
 
-        return fileRepository.save(buildFile(userId, name, path));
+        return fileRepository.save(file);
     }
 
-    public String saveImageToStorage(MultipartFile multipartFile) {
+    public String saveNewImageToStorage(MultipartFile multipartFile) {
         try {
             validateImage(multipartFile);
 
@@ -95,11 +96,9 @@ public class FileService {
         }
     }
 
-    private File buildFile(final Long userId, final String name, final String path) {
-        return File.builder()
-                   .userId(userId)
-                   .name(name)
-                   .path(path)
-                   .build();
+    private void validateFileBeforeSaveNew(final File file) {
+        if (ObjectUtils.isNotEmpty(file.getId()))
+            throw new ValidatorException("Invalid file id", "id");
     }
+
 }

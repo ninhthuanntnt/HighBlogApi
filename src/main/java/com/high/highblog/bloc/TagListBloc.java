@@ -9,11 +9,11 @@ import java.util.List;
 
 @Slf4j
 @Component
-public class TagBloc {
+public class TagListBloc {
 
     private final TagService tagService;
 
-    public TagBloc(final TagService tagService) {
+    public TagListBloc(final TagService tagService) {
         this.tagService = tagService;
     }
 

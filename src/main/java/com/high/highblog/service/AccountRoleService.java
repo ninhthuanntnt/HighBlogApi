@@ -20,16 +20,16 @@ public class AccountRoleService {
     }
 
     @Transactional
-    public void deleteOldAndSave(final Long accountId, List<Long> roleIds) {
+    public void deleteOldAndSaveNew(final Long accountId, List<Long> roleIds) {
         log.info("Delete old accountRole then save for accountId #{} and list roleIds #{}", accountId, roleIds);
         List<AccountRole> oldAccountRoles = accountRoleRepository.findByAccountId(accountId);
         accountRoleRepository.deleteAll(oldAccountRoles);
 
-        save(accountId, roleIds);
+        saveNew(accountId, roleIds);
     }
 
     @Transactional
-    public void save(final Long accountId, List<Long> roleIds) {
+    public void saveNew(final Long accountId, List<Long> roleIds) {
         log.info("Save for accountId #{} and list roleIds #{}", accountId, roleIds);
         List<AccountRole> accountRoles = roleIds.stream()
                                                 .map(roleId -> AccountRole.builder()

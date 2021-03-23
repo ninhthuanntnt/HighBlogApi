@@ -8,5 +8,6 @@ public class AppErrorCode {
     public static final String INVALID_LOGIN_INFO = "HB-0105";
     public static final String DEFAULT_VALIDATOR = "HB-0100";
     public static final String INVALID_EMAIL_INFO = "HB-0106";
+    public static final String DEFAULT_INTERNAL_SERVER_ERROR = "HB-0500";
     public static final String DEFAULT_OBJECT_NOT_FOUND = "HB-0600";
 }

@@ -60,7 +60,7 @@ public class RegisterBloc {
                         .firstName(registerReq.getFirstName()).lastName(registerReq.getLastName())
                         .genderType(registerReq.getGenderType())
                         .build();
-        userService.save(user);
+        userService.saveNew(user);
 
         Account account = Account.builder()
                                  .userId(user.getId())
@@ -68,14 +68,14 @@ public class RegisterBloc {
                                  .password(registerReq.getPassword())
                                  .email(registerReq.getEmail())
                                  .build();
-        accountService.save(account);
+        accountService.saveNew(account);
 
         Role role = roleService.getRoleByRoleType(DEFAULT_ACCOUNT_ROLE);
-        accountRoleService.save(account.getId(), Collections.singletonList(role.getId()));
+        accountRoleService.saveNew(account.getId(), Collections.singletonList(role.getId()));
 
-        ConfirmationCode confirmationCode = confirmationCodeService.save(account.getId(),
-                                                                         generateUUID(),
-                                                                         CodeType.REGISTRATION);
+        ConfirmationCode confirmationCode = confirmationCodeService.saveNew(account.getId(),
+                                                                            generateUUID(),
+                                                                            CodeType.REGISTRATION);
 
         mailBloc.sendConfirmRegistrationMailTo("ninhthuan1999@gmail.com",
                                                registerReq.getReturnUrl(),
@@ -103,8 +103,8 @@ public class RegisterBloc {
                 && ObjectUtils.notEqual(SecurityHelper.getAccountId(), accountId)) {
             // For use-case user login into system then activate account
             throw new ValidatorException("Mismatch account id", "accountId");
-        } else if (confirmationCode.isExpired()){
-            throw new ValidatorException("confirmationCode", "confirmationCode");
+        } else if (confirmationCode.isExpired()) {
+            throw new ValidatorException("Expired confimation code", "confirmationCode");
         }
     }
 
@@ -118,7 +118,7 @@ public class RegisterBloc {
 
     private void activate(final Long accountId) {
         Role role = roleService.getRoleByRoleType(RoleType.ROLE_USER);
-        accountRoleService.deleteOldAndSave(accountId, Collections.singletonList(role.getId()));
+        accountRoleService.deleteOldAndSaveNew(accountId, Collections.singletonList(role.getId()));
     }
 
     private String generateUUID() {

@@ -1,10 +1,12 @@
 package com.high.highblog.service;
 
 import com.high.highblog.error.exception.ObjectNotFoundException;
+import com.high.highblog.error.exception.ValidatorException;
 import com.high.highblog.model.entity.Account;
 import com.high.highblog.repository.AccountRepository;
 import com.high.highblog.repository.AccountRoleRepository;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.ObjectUtils;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -39,19 +41,25 @@ public class AccountService {
 
     @Transactional(readOnly = true)
     public Account getAccountById(Long id) {
-        log.info("Get account by id #{}", getAccountById(id));
+        log.info("Get account by id #{}", id);
 
         return accountRepository.findById(id)
                                 .orElseThrow(() -> new ObjectNotFoundException("account"));
     }
 
     @Transactional
-    public void save(final Account account) {
-        log.info("Save account with info #{}", account);
+    public void saveNew(final Account account) {
+        log.info("Save new account with info #{}", account);
+        validateAccountBeforeSaveNew(account);
 
         String encodedPassword = passwordEncoder.encode(account.getPassword());
         account.setPassword(encodedPassword);
 
         accountRepository.save(account);
+    }
+
+    private void validateAccountBeforeSaveNew(final Account account) {
+        if(ObjectUtils.isNotEmpty(account.getId()))
+            throw new ValidatorException("Invalid account id", "id");
     }
 }
