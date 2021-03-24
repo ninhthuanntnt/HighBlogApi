@@ -32,6 +32,7 @@ dependencies {
     implementation "io.springfox:springfox-swagger-ui:${spring_fox_swagger_ui_version}"
     implementation "commons-io:commons-io:${commons_io_version}"
     implementation "org.apache.commons:commons-lang3:${commons_lang3_version}"
+    implementation "org.apache.commons:commons-collections4:4.4"
 
     compileOnly "org.projectlombok:lombok"
     developmentOnly "org.springframework.boot:spring-boot-devtools"
