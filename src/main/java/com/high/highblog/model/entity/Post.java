@@ -14,7 +14,10 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
+import javax.persistence.Transient;
 import javax.validation.constraints.NotNull;
+
+import java.util.List;
 
 @Entity
 @Table(name = "hb_posts")
@@ -66,4 +69,7 @@ public class Post
     @NotNull
     @Column(name = "post_type")
     private PostType postType;
+
+    @Transient
+    private List<PostTag> postTags;
 }

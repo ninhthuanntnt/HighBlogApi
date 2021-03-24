@@ -45,4 +45,16 @@ public class PostCrudBloc {
             postTagService.saveNew(postTags);
         }
     }
+
+    public Post getPostDetail(final Long id) {
+        log.info("Get post detail by id #{}", id);
+
+        Post post = postService.getById(id);
+
+        List<PostTag> postTags = postTagService.getByPostId(id);
+
+        post.setPostTags(postTags);
+
+        return post;
+    }
 }
