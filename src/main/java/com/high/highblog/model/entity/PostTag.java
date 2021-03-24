@@ -13,10 +13,11 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
+import javax.persistence.Transient;
 import javax.validation.constraints.NotNull;
 
 @Entity
-@Table(name = "hb_posts")
+@Table(name = "hb_posts_tags")
 @Getter
 @Setter
 @AllArgsConstructor
@@ -36,4 +37,12 @@ public class PostTag
     @NotNull
     @Column(name = "tag_id")
     private Long tagId;
+
+    @Transient
+    private String name;
+
+    public PostTag(final Long tagId, final String name) {
+        this.tagId = tagId;
+        this.name = name;
+    }
 }

@@ -15,8 +15,8 @@ public interface RoleRepository extends JpaRepository<Role, Long> {
 
     @Query("SELECT r FROM Role r"
          + " JOIN AccountRole ar ON ar.role_id = r.id"
-         + " WHERE ar.id = :id")
-    List<Role> fetchByAccountId(@Param("id") Long id);
+         + " WHERE ar.accountId = :accountId")
+    List<Role> fetchByAccountId(@Param("accountId") Long accountId);
 
     Optional<Role> findByRoleType(RoleType roleType);
 }

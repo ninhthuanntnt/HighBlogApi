@@ -7,6 +7,7 @@ import com.high.highblog.repository.PostTagRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.ObjectUtils;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -26,12 +27,20 @@ public class PostTagService {
         repository.save(postTag);
     }
 
+    @Transactional
     public void saveNew(final List<PostTag> postTag) {
         log.info("Save new post tag with data #{}", postTag);
 
         validatePostBeforeSaveNew(postTag);
 
         repository.saveAll(postTag);
+    }
+
+    @Transactional(readOnly = true)
+    public List<PostTag> getByPostId(final Long postId) {
+        log.info("Get post tag by postId #{}", postId);
+
+        return repository.getByPostId(postId);
     }
 
     private void validatePostBeforeSaveNew(final PostTag postTag) {
