@@ -1,15 +1,17 @@
 package com.high.highblog.bloc;
 
 import com.high.highblog.helper.SecurityHelper;
+import com.high.highblog.mapper.PostMapper;
 import com.high.highblog.model.dto.request.PostCreateReq;
+import com.high.highblog.model.dto.request.PostUpdateReq;
 import com.high.highblog.model.entity.Post;
 import com.high.highblog.model.entity.PostTag;
-import com.high.highblog.mapper.PostMapper;
 import com.high.highblog.service.PostService;
 import com.high.highblog.service.PostTagService;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.commons.lang3.ObjectUtils;
+import org.apache.commons.collections4.CollectionUtils;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -27,6 +29,7 @@ public class PostCrudBloc {
         this.postTagService = postTagService;
     }
 
+    @Transactional
     public void createPost(final PostCreateReq postCreateReq) {
         log.info("Create new post with data #{}", postCreateReq);
 
@@ -34,18 +37,14 @@ public class PostCrudBloc {
         post.setUserId(SecurityHelper.getUserId());
         postService.saveNew(post);
 
-        if (ObjectUtils.isNotEmpty(postCreateReq.getTagCreateReqs())) {
-            List<PostTag> postTags =
-                    postCreateReq.getTagCreateReqs().stream().map(tagCreateReq -> PostTag.builder()
-                                                                                         .postId(post.getId())
-                                                                                         .tagId(tagCreateReq.getId())
-                                                                                         .build())
-                                 .collect(Collectors.toList());
+        List<PostTag> postTags = (List<PostTag>) CollectionUtils.emptyIfNull(post.getPostTags());
 
-            postTagService.saveNew(postTags);
-        }
+        postTags.forEach(postTag -> postTag.setPostId(post.getId()));
+
+        postTagService.saveNew(postTags);
     }
 
+    @Transactional
     public Post getPostDetail(final Long id) {
         log.info("Get post detail by id #{}", id);
 
@@ -56,5 +55,19 @@ public class PostCrudBloc {
         post.setPostTags(postTags);
 
         return post;
+    }
+
+    @Transactional
+    public void updatePost(final Long id, final PostUpdateReq postUpdateReq) {
+
+        Post dbPost = postService.getById(id);
+        Post newPost = PostMapper.INSTANCE.toPost(postUpdateReq, dbPost);
+        postService.save(newPost);
+
+        List<PostTag> postTags = (List<PostTag>) CollectionUtils.emptyIfNull(newPost.getPostTags());
+
+        postTags.forEach(postTag -> postTag.setPostId(id));
+
+        postTagService.deleteOldAndSaveNew(newPost.getId(), postTags);
     }
 }

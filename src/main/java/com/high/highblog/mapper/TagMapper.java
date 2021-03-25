@@ -19,8 +19,6 @@ public interface TagMapper {
 
     List<TagRes> toListTagRes(List<Tag> tags);
 
-    @Mappings({
-            @Mapping(target = "id", source = "tagId")
-    })
+    @Mapping(target = "id", source = "tagId")
     TagRes toTagRes(PostTag postTag);
 }

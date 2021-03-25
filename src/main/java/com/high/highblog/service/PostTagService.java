@@ -22,8 +22,8 @@ public class PostTagService {
 
     public void saveNew(final PostTag postTag) {
         log.info("Save new post tag with postId #{} and tagId #{}", postTag.getPostId(), postTag.getTagId());
-        validatePostBeforeSaveNew(postTag);
 
+        validatePostBeforeSaveNew(postTag);
         repository.save(postTag);
     }
 
@@ -32,7 +32,6 @@ public class PostTagService {
         log.info("Save new post tag with data #{}", postTag);
 
         validatePostBeforeSaveNew(postTag);
-
         repository.saveAll(postTag);
     }
 
@@ -43,6 +42,16 @@ public class PostTagService {
         return repository.getByPostId(postId);
     }
 
+    @Transactional
+    public void deleteOldAndSaveNew(final Long postId, final List<PostTag> postTags) {
+        log.info("Delete old post tag with postId #{} and save new with data #{}", postId, postTags);
+        List<PostTag> oldPostTags = repository.findByPostId(postId);
+        repository.deleteAll(oldPostTags);
+
+        validatePostBeforeSaveNew(postTags);
+        repository.saveAll(postTags);
+    }
+
     private void validatePostBeforeSaveNew(final PostTag postTag) {
         if (ObjectUtils.isNotEmpty(postTag.getId()))
             throw new ValidatorException("Invalid post tag id", "id");
@@ -51,7 +60,7 @@ public class PostTagService {
     private void validatePostBeforeSaveNew(final List<PostTag> postTags) {
         if (ObjectUtils.isNotEmpty(postTags))
             postTags.forEach(postTag -> {
-                if (ObjectUtils.isEmpty(postTag.getId())) {
+                if (ObjectUtils.isNotEmpty(postTag.getId())) {
                     throw new ValidatorException("Invalid post tag id", "id");
                 }
             });
