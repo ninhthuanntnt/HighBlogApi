@@ -4,7 +4,6 @@ import com.high.highblog.error.exception.ObjectNotFoundException;
 import com.high.highblog.error.exception.ValidatorException;
 import com.high.highblog.model.entity.Post;
 import com.high.highblog.repository.PostRepository;
-import javafx.geometry.Pos;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.ObjectUtils;
 import org.springframework.stereotype.Service;
@@ -33,6 +32,14 @@ public class PostService {
         validatePostBeforeSave(post);
 
         repository.save(post);
+    }
+
+    @Transactional(readOnly = true)
+    public Post getByIdAndUserId(final Long id, final Long userId) {
+        log.info("Get post by id #{} and userId #{}", id, userId);
+
+        return repository.findByIdAndUserId(id, userId)
+                         .orElseThrow(() -> new ObjectNotFoundException("post"));
     }
 
     @Transactional(readOnly = true)
