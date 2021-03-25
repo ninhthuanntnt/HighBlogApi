@@ -14,7 +14,6 @@ import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Slf4j
 @Component
@@ -44,13 +43,25 @@ public class PostCrudBloc {
         postTagService.saveNew(postTags);
     }
 
+    @Transactional(readOnly = true)
+    public Post getPostDetailForCurrentUser(final Long id) {
+        log.info("Get post detail for user by id #{}", id);
+
+        Post post = postService.getByIdAndUserId(id, SecurityHelper.getUserId());
+
+        List<PostTag> postTags = postTagService.getByPostId(post.getId());
+
+        post.setPostTags(postTags);
+
+        return post;
+    }
+
     @Transactional
     public Post getPostDetail(final Long id) {
         log.info("Get post detail by id #{}", id);
 
         Post post = postService.getById(id);
-
-        List<PostTag> postTags = postTagService.getByPostId(id);
+        List<PostTag> postTags = postTagService.getByPostId(post.getId());
 
         post.setPostTags(postTags);
 
@@ -60,7 +71,7 @@ public class PostCrudBloc {
     @Transactional
     public void updatePost(final Long id, final PostUpdateReq postUpdateReq) {
 
-        Post dbPost = postService.getById(id);
+        Post dbPost = postService.getByIdAndUserId(id, SecurityHelper.getUserId());
         Post newPost = PostMapper.INSTANCE.toPost(postUpdateReq, dbPost);
         postService.save(newPost);
 

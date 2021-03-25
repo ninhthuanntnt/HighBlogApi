@@ -1,4 +1,4 @@
-package com.high.highblog.api.user;
+package com.high.highblog.api.common;
 
 import com.high.highblog.bloc.TagListBloc;
 import com.high.highblog.model.dto.response.TagRes;
@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/v1/user/tags")
+@RequestMapping("/api/v1/tags")
 public class TagListController {
 
     private final TagListBloc tagListBloc;

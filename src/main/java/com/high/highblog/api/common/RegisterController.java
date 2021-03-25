@@ -1,4 +1,4 @@
-package com.high.highblog.api;
+package com.high.highblog.api.common;
 
 import com.high.highblog.bloc.RegisterBloc;
 import com.high.highblog.model.dto.request.RegisterReq;

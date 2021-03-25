@@ -20,10 +20,16 @@ import java.util.List;
 @NoArgsConstructor
 @Builder
 @JsonInclude(JsonInclude.Include.NON_NULL)
-public class PostDetailRes {
+public class UserPostDetailRes {
+    @NotNull
+    @JsonProperty("category_id")
+    private Long categoryId;
+
     @NotNull
     @NotEmpty
     private String title;
+
+    private String summary;
 
     @NotNull
     @NotEmpty
@@ -31,6 +37,10 @@ public class PostDetailRes {
 
     @JsonProperty("cover_image_path")
     private String coverImagePath;
+
+    @NotNull
+    @JsonProperty("post_type")
+    private PostType postType;
 
     @JsonProperty("tags")
     private List<TagRes> tagsRes;

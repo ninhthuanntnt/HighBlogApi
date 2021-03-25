@@ -36,6 +36,14 @@ public class PostService {
     }
 
     @Transactional(readOnly = true)
+    public Post getByIdAndUserId(final Long id, final Long userId) {
+        log.info("Get post by id #{} and userId #{}", id, userId);
+
+        return repository.findByIdAndUserId(id, userId)
+                         .orElseThrow(() -> new ObjectNotFoundException("post"));
+    }
+
+    @Transactional(readOnly = true)
     public Post getById(final Long id) {
         log.info("Get post by id #{}", id);
 
