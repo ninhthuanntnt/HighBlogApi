@@ -56,7 +56,7 @@ public class PostCrudBloc {
         return post;
     }
 
-    @Transactional
+    @Transactional(readOnly = true)
     public Post getPostDetail(final Long id) {
         log.info("Get post detail by id #{}", id);
 
