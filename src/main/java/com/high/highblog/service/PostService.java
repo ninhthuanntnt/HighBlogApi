@@ -6,6 +6,8 @@ import com.high.highblog.model.entity.Post;
 import com.high.highblog.repository.PostRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.ObjectUtils;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -27,7 +29,7 @@ public class PostService {
     }
 
     @Transactional
-    public void save(final Post post){
+    public void save(final Post post) {
         log.info("Save post with id #{}", post.getId());
         validatePostBeforeSave(post);
 
@@ -50,10 +52,18 @@ public class PostService {
                          .orElseThrow(() -> new ObjectNotFoundException("post"));
     }
 
+    @Transactional(readOnly = true)
+    public Page<Post> fetchPostsWithPageRequest(final PageRequest pageRequest) {
+        log.info("Fetch post by page request");
+
+        return repository.findAll(pageRequest);
+    }
+
     private void validatePostBeforeSaveNew(final Post post) {
         if (ObjectUtils.isNotEmpty(post.getId()))
             throw new ValidatorException("Invalid post id", "id");
     }
+
     private void validatePostBeforeSave(final Post post) {
         if (ObjectUtils.isEmpty(post.getId()))
             throw new ValidatorException("Invalid post id", "id");

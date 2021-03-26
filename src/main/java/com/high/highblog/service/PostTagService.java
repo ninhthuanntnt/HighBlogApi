@@ -9,6 +9,7 @@ import org.apache.commons.lang3.ObjectUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Collections;
 import java.util.List;
 
 @Slf4j
@@ -20,6 +21,7 @@ public class PostTagService {
         this.repository = repository;
     }
 
+    @Transactional
     public void saveNew(final PostTag postTag) {
         log.info("Save new post tag with postId #{} and tagId #{}", postTag.getPostId(), postTag.getTagId());
 
@@ -50,6 +52,16 @@ public class PostTagService {
 
         validatePostBeforeSaveNew(postTags);
         repository.saveAll(postTags);
+    }
+
+    @Transactional(readOnly = true)
+    public List<PostTag> fetchPostTagsByPostIdIn(List<Long> postIds) {
+        log.info("Fetch post tags by postId in #{}", postIds);
+
+        if(ObjectUtils.isEmpty(postIds))
+            return Collections.emptyList();
+
+        return repository.findByPostIdIn(postIds);
     }
 
     private void validatePostBeforeSaveNew(final PostTag postTag) {

@@ -19,4 +19,6 @@ public interface PostTagRepository
     List<PostTag> getByPostId(@Param("postId") Long postId);
 
     List<PostTag> findByPostId(Long postId);
+
+    List<PostTag> findByPostIdIn(List<Long> postId);
 }
