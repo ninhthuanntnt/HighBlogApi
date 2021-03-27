@@ -59,6 +59,17 @@ public class PostService {
         return repository.findAll(pageRequest);
     }
 
+    @Transactional
+    public Page<Post> searchPostsByKeywordWithPageRequest(final String keyword,
+                                                          final PageRequest pageRequest) {
+        log.info("Search post with keyword #{}", keyword);
+
+        if (keyword.length() <= 2)
+            return repository.searchPosts(keyword, pageRequest);
+        else
+            return repository.searchFullTextPosts(keyword, pageRequest);
+    }
+
     private void validatePostBeforeSaveNew(final Post post) {
         if (ObjectUtils.isNotEmpty(post.getId()))
             throw new ValidatorException("Invalid post id", "id");

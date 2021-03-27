@@ -20,15 +20,24 @@ import java.util.List;
 @Builder
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class PostRes {
+
+    private Long id;
+
     @NotNull
     @NotEmpty
     private String title;
 
     private String summary;
 
-    @JsonProperty("cover_image_path")
     private String coverImagePath;
+
+    private Long numberOfVotes;
+
+    private Long createdDate;
 
     @JsonProperty("tags")
     private List<TagRes> tagsRes;
+
+    @JsonProperty("user")
+    private UserInPostRes userInPostRes;
 }

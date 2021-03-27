@@ -18,9 +18,7 @@ public class ErrorMessageRes {
     private String message;
     private String error;
 
-    @JsonProperty("error_code")
     private String errorCode;
 
-    @JsonProperty("field_name")
     private String fieldName;
 }

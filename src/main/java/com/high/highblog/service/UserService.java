@@ -9,6 +9,10 @@ import org.apache.commons.lang3.ObjectUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Collection;
+import java.util.Collections;
+import java.util.List;
+
 @Slf4j
 @Service
 public class UserService {
@@ -16,6 +20,16 @@ public class UserService {
 
     public UserService(final UserRepository userRepository) {
         this.userRepository = userRepository;
+    }
+
+    @Transactional
+    public Collection<User> fetchByIdIn(final Collection<Long> ids){
+        log.info("Fetch list users by id in #{}", ids);
+
+        if(ObjectUtils.isEmpty(ids))
+            return Collections.emptyList();
+
+        return userRepository.findByIdIn(ids);
     }
 
     @Transactional(readOnly = true)

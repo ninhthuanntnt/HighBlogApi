@@ -3,6 +3,12 @@
         xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
         xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog https://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.3.xsd">
+    <property name="now" value="now(3)"/>
 
-    <include file="config/liquibase/changelog/20210326151200_changelog.xml" relativeToChangelogFile="false"/>
+    <changeSet id="HB-20210326151200-1" author="ninhthuanntnt">
+        <sql>
+            CREATE FULLTEXT INDEX fulltext_idx_posts_title_content
+            ON hb_posts(title, summary, content)
+        </sql>
+    </changeSet>
 </databaseChangeLog>

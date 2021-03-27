@@ -17,18 +17,15 @@ import lombok.Setter;
 public class RegisterReq {
 // TODO: Add validate for necessary fields
     @NonNull
-    @JsonProperty("first_name")
     private String firstName;
 
     @NonNull
-    @JsonProperty("last_name")
     private String lastName;
 
     @NonNull
     private String email;
 
     @NonNull
-    @JsonProperty("gender_type")
     private GenderType genderType;
 
     @NonNull
@@ -38,6 +35,5 @@ public class RegisterReq {
     private String password;
 
     @NonNull
-    @JsonProperty("return_url")
     private String returnUrl;
 }

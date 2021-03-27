@@ -1,14 +1,11 @@
 package com.high.highblog.model.dto.response;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
-import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-
-import java.util.List;
 
 @Getter
 @Setter
@@ -16,15 +13,11 @@ import java.util.List;
 @NoArgsConstructor
 @Builder
 @JsonInclude(JsonInclude.Include.NON_NULL)
-public class BasePaginationRes {
+public class UserInPostRes {
 
-    private Long totalItems;
+    private String firstName;
 
-    private Integer totalPage;
+    private String lastName;
 
-    private Integer pageSize;
-
-    private Integer page;
-
-    private List<?> items;
+    private String imagePath;
 }

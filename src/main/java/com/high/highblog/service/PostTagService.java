@@ -9,8 +9,10 @@ import org.apache.commons.lang3.ObjectUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
+import java.util.Set;
 
 @Slf4j
 @Service
@@ -55,7 +57,7 @@ public class PostTagService {
     }
 
     @Transactional(readOnly = true)
-    public List<PostTag> fetchPostTagsByPostIdIn(List<Long> postIds) {
+    public Collection<PostTag> fetchByPostIdIn(Collection<Long> postIds) {
         log.info("Fetch post tags by postId in #{}", postIds);
 
         if(ObjectUtils.isEmpty(postIds))

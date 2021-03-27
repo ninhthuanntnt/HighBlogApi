@@ -1,19 +1,19 @@
 package com.high.highblog.mapper;
 
+import com.high.highblog.helper.DateTimeHelper;
 import com.high.highblog.model.dto.request.PostCreateReq;
 import com.high.highblog.model.dto.request.PostUpdateReq;
 import com.high.highblog.model.dto.response.PostDetailRes;
+import com.high.highblog.model.dto.response.PostDetailToUpdateRes;
 import com.high.highblog.model.dto.response.PostRes;
-import com.high.highblog.model.dto.response.UserPostDetailRes;
 import com.high.highblog.model.entity.Post;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.MappingTarget;
 import org.mapstruct.ReportingPolicy;
 import org.mapstruct.factory.Mappers;
-import org.springframework.data.domain.Page;
 
-import java.util.List;
+import java.time.Instant;
 
 @Mapper(unmappedTargetPolicy = ReportingPolicy.IGNORE, uses = {PostTagMapper.class, TagMapper.class})
 public interface PostMapper {
@@ -27,12 +27,16 @@ public interface PostMapper {
     Post toPost(PostUpdateReq postUpdateReq, @MappingTarget Post post);
 
     @Mapping(target = "tagsRes", source = "postTags")
-    UserPostDetailRes toUserPostDetailRes(Post post);
+    PostDetailToUpdateRes toPostDetailToUpdateRes(Post post);
 
     @Mapping(target = "tagsRes", source = "postTags")
     PostDetailRes toPostDetailRes(Post post);
 
     @Mapping(target = "tagsRes", source = "postTags")
+    @Mapping(target = "userInPostRes", source = "user")
     PostRes toPostRes(Post posts);
 
+    default Long toLongfromInstant(Instant instant) {
+        return DateTimeHelper.toMilli(instant);
+    }
 }

@@ -21,6 +21,13 @@ spring:
         properties.mail.smtp:
             auth: true
             starttls.enable: true
+
+server:
+    servlet:
+        encoding:
+            charset: UTF-8
+            force: true
+
 application:
     jwt:
         secret-key: ${HB_JWT_SECRET_KEY}

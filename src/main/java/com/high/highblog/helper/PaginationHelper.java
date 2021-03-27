@@ -3,10 +3,18 @@ package com.high.highblog.helper;
 import com.high.highblog.error.exception.ValidatorException;
 import com.high.highblog.model.dto.request.BasePaginationReq;
 import com.high.highblog.model.dto.response.BasePaginationRes;
+import org.apache.commons.collections4.CollectionUtils;
+import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.ObjectUtils;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Map;
 
 public class PaginationHelper {
 
@@ -14,43 +22,52 @@ public class PaginationHelper {
         return BasePaginationRes.builder()
                                 .items(page.toList())
                                 .totalItems(page.getTotalElements())
-                                .lastPage(page.getTotalPages())
+                                .totalPage(page.getTotalPages())
                                 .pageSize(page.getNumberOfElements())
-                                .page(page.getNumber())
+                                .page(page.getNumber() + 1)
                                 .build();
 
-    }
-
-    public static PageRequest generatePageRequest(final Integer page,
-                                                  final Integer pageSize,
-                                                  final String[] sorts) {
-        if (ObjectUtils.isEmpty(sorts)) {
-            return PageRequest.of(page, pageSize);
-        } else {
-            return PageRequest.of(page, pageSize, generateSort(sorts));
-        }
     }
 
     public static PageRequest generatePageRequest(final BasePaginationReq req) {
         return generatePageRequest(req.getPage(), req.getPageSize(), req.getSorts());
     }
 
+    public static PageRequest generatePageRequestWithDefaultSort(final BasePaginationReq req,
+                                                                 final String defaultSort) {
+        return generatePageRequest(req.getPage(),
+                                   req.getPageSize(),
+                                   ObjectUtils.isEmpty(req.getSorts())
+                                           ? ArrayUtils.toArray(defaultSort)
+                                           : req.getSorts());
+    }
+
+    public static PageRequest generatePageRequest(final Integer page,
+                                                  final Integer pageSize,
+                                                  final String[] sorts) {
+        if (ObjectUtils.isEmpty(sorts)) {
+            return PageRequest.of(page - 1, pageSize, Sort.by(Sort.Order.desc("id")));
+        } else {
+            return PageRequest.of(page - 1, pageSize, generateSort(sorts));
+        }
+    }
+
     private static Sort generateSort(final String[] sorts) {
-        Sort sortResult = Sort.unsorted();
+        List<Sort.Order> orders = new ArrayList<>();
+
         for (String sortExpression : sorts) {
 
             char prefix = sortExpression.charAt(0);
             String columnName = sortExpression.substring(1);
 
             if (prefix == '+')
-                sortResult.and(Sort.Order.asc(columnName));
+                orders.add(Sort.Order.asc(columnName));
             else if (prefix == '-')
-                sortResult.and(Sort.Order.desc(columnName));
+                orders.add(Sort.Order.desc(columnName));
             else
-                throw new ValidatorException("Invalid sort rerquest", "sorts");
-
+                throw new ValidatorException("Invalid sort request", "sorts");
         }
 
-        return sortResult;
+        return Sort.by(orders);
     }
 }
