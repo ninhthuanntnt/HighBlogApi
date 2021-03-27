@@ -3,7 +3,6 @@ package com.high.highblog.helper;
 import com.high.highblog.error.exception.ValidatorException;
 import com.high.highblog.model.dto.request.BasePaginationReq;
 import com.high.highblog.model.dto.response.BasePaginationRes;
-import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.ObjectUtils;
 import org.springframework.data.domain.Page;
@@ -11,10 +10,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.LinkedHashMap;
 import java.util.List;
-import java.util.Map;
 
 public class PaginationHelper {
 
