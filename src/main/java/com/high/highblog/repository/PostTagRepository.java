@@ -7,6 +7,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
+import java.util.Collection;
 import java.util.List;
 
 @Repository
@@ -20,5 +21,5 @@ public interface PostTagRepository
 
     List<PostTag> findByPostId(Long postId);
 
-    List<PostTag> findByPostIdIn(List<Long> postId);
+    List<PostTag> findByPostIdIn(Collection<Long> postId);
 }

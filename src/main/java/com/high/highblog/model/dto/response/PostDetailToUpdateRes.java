@@ -20,9 +20,8 @@ import java.util.List;
 @NoArgsConstructor
 @Builder
 @JsonInclude(JsonInclude.Include.NON_NULL)
-public class UserPostDetailRes {
+public class PostDetailToUpdateRes {
     @NotNull
-    @JsonProperty("category_id")
     private Long categoryId;
 
     @NotNull
@@ -35,11 +34,9 @@ public class UserPostDetailRes {
     @NotEmpty
     private String content;
 
-    @JsonProperty("cover_image_path")
     private String coverImagePath;
 
     @NotNull
-    @JsonProperty("post_type")
     private PostType postType;
 
     @JsonProperty("tags")

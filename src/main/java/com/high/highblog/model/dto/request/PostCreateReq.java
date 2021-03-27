@@ -21,7 +21,6 @@ import java.util.List;
 public class PostCreateReq {
 
     @NotNull
-    @JsonProperty("category_id")
     private Long categoryId;
 
     @NotNull
@@ -34,11 +33,9 @@ public class PostCreateReq {
     @NotEmpty
     private String content;
 
-    @JsonProperty("cover_image_path")
     private String coverImagePath;
 
     @NotNull
-    @JsonProperty("post_type")
     private PostType postType;
 
     @JsonProperty("tags")

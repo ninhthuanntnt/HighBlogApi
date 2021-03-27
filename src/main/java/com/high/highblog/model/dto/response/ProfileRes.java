@@ -19,15 +19,11 @@ import java.util.List;
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class ProfileRes {
 
-    @JsonProperty("first_name")
     private String firstName;
 
-    @JsonProperty("last_name")
     private String lastName;
 
-    @JsonProperty("image_path")
     private String imagePath;
 
-    @JsonProperty("role_types")
     private List<RoleType> roleTypes;
 }

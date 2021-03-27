@@ -4,7 +4,7 @@ import com.high.highblog.bloc.PostCrudBloc;
 import com.high.highblog.mapper.PostMapper;
 import com.high.highblog.model.dto.request.PostCreateReq;
 import com.high.highblog.model.dto.request.PostUpdateReq;
-import com.high.highblog.model.dto.response.UserPostDetailRes;
+import com.high.highblog.model.dto.response.PostDetailToUpdateRes;
 import com.high.highblog.model.entity.Post;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -35,11 +35,11 @@ public class PostCrudController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<UserPostDetailRes> getPostDetailForCurrentUser(@PathVariable Long id) {
+    public ResponseEntity<PostDetailToUpdateRes> getPostDetailForCurrentUser(@PathVariable Long id) {
 
         Post post = postCrudBloc.getPostDetailForCurrentUser(id);
 
-        return ResponseEntity.ok(PostMapper.INSTANCE.toUserPostDetailRes(post));
+        return ResponseEntity.ok(PostMapper.INSTANCE.toPostDetailToUpdateRes(post));
     }
 
     @PutMapping("/{id}")

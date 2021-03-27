@@ -58,7 +58,7 @@ public class Post
     @Builder.Default
     @NotNull
     @Column(name = "number_of_votes")
-    private Long numberOfVote = 0L;
+    private Long numberOfVotes = 0L;
 
     @Column(name = "thumbnail_image_path")
     private String thumbnailImagePath;
@@ -72,4 +72,7 @@ public class Post
 
     @Transient
     private List<PostTag> postTags;
+
+    @Transient
+    private User user;
 }

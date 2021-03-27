@@ -6,18 +6,24 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import lombok.experimental.SuperBuilder;
+
+import javax.persistence.MappedSuperclass;
 
 @Getter
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-@Builder
+@SuperBuilder
+@MappedSuperclass
 public class BasePaginationReq {
 
-    private Integer page;
+    @Builder.Default
+    private Integer page = 1;
 
+    @Builder.Default
     @JsonProperty("page_size")
-    private Integer pageSize;
+    private Integer pageSize = 10;
 
     private String[] sorts;
 }

@@ -29,7 +29,6 @@ public class PostDetailRes {
     @NotEmpty
     private String content;
 
-    @JsonProperty("cover_image_path")
     private String coverImagePath;
 
     @JsonProperty("tags")

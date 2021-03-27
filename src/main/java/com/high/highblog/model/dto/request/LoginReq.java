@@ -24,6 +24,5 @@ public class LoginReq {
     @Size(min = 8, max = 255)
     private String password;
 
-    @JsonProperty("remember_me")
     private boolean rememberMe = true;
 }
