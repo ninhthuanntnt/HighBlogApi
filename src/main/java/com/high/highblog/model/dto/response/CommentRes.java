@@ -8,9 +8,6 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import javax.validation.constraints.NotEmpty;
-import javax.validation.constraints.NotNull;
-
 import java.util.List;
 
 @Getter
@@ -18,25 +15,17 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-@JsonInclude(JsonInclude.Include.NON_NULL)
-public class PostRes {
+@JsonInclude(value = JsonInclude.Include.NON_NULL)
+public class CommentRes {
 
     private Long id;
 
-    @NotNull
-    @NotEmpty
-    private String title;
-
-    private String summary;
-
-    private String coverImagePath;
+    private String content;
 
     private Long numberOfVotes;
 
-    private Long createdDate;
-
-    @JsonProperty("tags")
-    private List<TagRes> tagsRes;
+    @JsonProperty("childComments")
+    private List<CommentRes> childCommentsRes;
 
     @JsonProperty("user")
     private UserRes userRes;

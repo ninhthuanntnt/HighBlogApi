@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog https://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.3.xsd">
+    <property name="now" value="now(3)"/>
+
+    <changeSet id="HB-20210328143200-1" author="ninhthuanntnt">
+        <createTable tableName="hb_comments">
+            <column name="id" type="bigint" autoIncrement="true">
+                <constraints primaryKey="true" primaryKeyName="pk_posts"/>
+            </column>
+            <column name="parent_id" type="bigint"/>
+            <column name="post_id" type="bigint">
+                <constraints nullable="false"/>
+            </column>
+            <column name="user_id" type="bigint">
+                <constraints nullable="false"/>
+            </column>
+            <column name="content" type="text"/>
+            <column name="number_of_votes" type="bigint" defaultValue="0">
+                <constraints nullable="false"/>
+            </column>
+            <column name="created_by" type="varchar(50)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="created_date" type="timestamp(3)" defaultValueComputed="${now}">
+                <constraints nullable="false"/>
+            </column>
+            <column name="last_modified_by" type="varchar(50)"/>
+            <column name="last_modified_date" type="timestamp(3)"/>
+        </createTable>
+        <createIndex tableName="hb_comments" indexName="idx_posts_parent_id">
+            <column name="parent_id" type="bigint"/>
+        </createIndex>
+        <createIndex tableName="hb_comments" indexName="idx_comments_post_id">
+            <column name="post_id" type="bigint"/>
+        </createIndex>
+        <createIndex tableName="hb_comments" indexName="idx_comments_user_id">
+            <column name="user_id" type="bigint"/>
+        </createIndex>
+    </changeSet>
+</databaseChangeLog>
