@@ -73,7 +73,7 @@ public class PostListBloc {
     }
 
     private void includeUserToPosts(Page<Post> posts) {
-        Map<Long, List<User>> userIdUserMap = userService.fetchByIdIn(posts.map(Post::getUserId).toList())
+        Map<Long, List<User>> userIdUserMap = userService.fetchByIdIn(posts.map(Post::getUserId).toSet())
                                                          .stream()
                                                          .collect(Collectors.groupingBy(User::getId));
 

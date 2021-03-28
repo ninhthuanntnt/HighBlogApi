@@ -118,6 +118,7 @@ public class JwtBloc {
                    .setIssuedAt(new Date());
     }
 
+    @SuppressWarnings("unchecked")
     public Optional<CustomUserDetails> getUserDetailsFromToken(String token) {
         try {
             Claims claims = Jwts.parser()

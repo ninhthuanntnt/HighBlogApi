@@ -33,7 +33,7 @@ public interface PostMapper {
     PostDetailRes toPostDetailRes(Post post);
 
     @Mapping(target = "tagsRes", source = "postTags")
-    @Mapping(target = "userInPostRes", source = "user")
+    @Mapping(target = "userRes", source = "user")
     PostRes toPostRes(Post posts);
 
     default Long toLongfromInstant(Instant instant) {
