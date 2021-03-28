@@ -44,8 +44,9 @@ public class Comment
     @Column(columnDefinition = "text", nullable = false)
     private String content;
 
+    @Builder.Default
     @Column(name = "number_of_votes")
-    private Long numberOfVotes;
+    private Long numberOfVotes = 0L;
 
     @Transient
     private List<Comment> childComments;
