@@ -8,6 +8,7 @@ import com.high.highblog.model.dto.response.PostDetailToUpdateRes;
 import com.high.highblog.model.entity.Post;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -45,7 +46,15 @@ public class PostCrudController {
     @PutMapping("/{id}")
     public ResponseEntity<?> updatePost(@PathVariable final Long id,
                                         @RequestBody final PostUpdateReq postUpdateReq) {
-        postCrudBloc.updatePost(id, postUpdateReq);
+        postCrudBloc.updatePostForCurrentUser(id, postUpdateReq);
+        return ResponseEntity.noContent().build();
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<?> deletePost(@PathVariable final Long id) {
+
+        postCrudBloc.deletePostForCurrentUser(id);
+
         return ResponseEntity.noContent().build();
     }
 }
