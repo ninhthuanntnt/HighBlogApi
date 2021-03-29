@@ -2,6 +2,7 @@ package com.high.highblog.service;
 
 import com.high.highblog.error.exception.ObjectNotFoundException;
 import com.high.highblog.error.exception.ValidatorException;
+import com.high.highblog.helper.SecurityHelper;
 import com.high.highblog.model.entity.Post;
 import com.high.highblog.repository.PostRepository;
 import lombok.extern.slf4j.Slf4j;
@@ -73,10 +74,14 @@ public class PostService {
     private void validatePostBeforeSaveNew(final Post post) {
         if (ObjectUtils.isNotEmpty(post.getId()))
             throw new ValidatorException("Invalid post id", "id");
+        if (post.getUserId() != SecurityHelper.getUserId())
+            throw new ValidatorException("Invalid user id", "userId");
     }
 
     private void validatePostBeforeSave(final Post post) {
         if (ObjectUtils.isEmpty(post.getId()))
             throw new ValidatorException("Invalid post id", "id");
+        if (post.getUserId() != SecurityHelper.getUserId())
+            throw new ValidatorException("Invalid user id", "userId");
     }
 }
