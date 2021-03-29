@@ -69,7 +69,7 @@ public class PostCrudBloc {
     }
 
     @Transactional
-    public void updatePost(final Long id, final PostUpdateReq postUpdateReq) {
+    public void updatePostForCurrentUser(final Long id, final PostUpdateReq postUpdateReq) {
 
         Post dbPost = postService.getByIdAndUserId(id, SecurityHelper.getUserId());
         Post newPost = PostMapper.INSTANCE.toPost(postUpdateReq, dbPost);
@@ -80,5 +80,14 @@ public class PostCrudBloc {
         postTags.forEach(postTag -> postTag.setPostId(id));
 
         postTagService.deleteOldAndSaveNew(newPost.getId(), postTags);
+    }
+
+    @Transactional
+    public void deletePostForCurrentUser(final Long id) {
+        Long userId = SecurityHelper.getUserId();
+        log.info("Delete post by id #{} with userId #{}", id, userId);
+
+        postService.delete(id, userId);
+        postTagService.deleteAll(id);
     }
 }

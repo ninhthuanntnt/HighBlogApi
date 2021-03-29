@@ -58,10 +58,19 @@ public class PostTagService {
     public Collection<PostTag> fetchByPostIdIn(Collection<Long> postIds) {
         log.info("Fetch post tags by postId in #{}", postIds);
 
-        if(ObjectUtils.isEmpty(postIds))
+        if (ObjectUtils.isEmpty(postIds))
             return Collections.emptyList();
 
         return repository.findByPostIdIn(postIds);
+    }
+
+    @Transactional
+    public void deleteAll(final Long postId) {
+        log.info("Delete post tag by post id #{}", postId);
+
+        List<PostTag> postTags = repository.findByPostId(postId);
+
+        repository.deleteAll(postTags);
     }
 
     private void validatePostBeforeSaveNew(final PostTag postTag) {

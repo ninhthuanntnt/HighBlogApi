@@ -60,7 +60,7 @@ public class PostService {
         return repository.findAll(pageRequest);
     }
 
-    @Transactional
+    @Transactional(readOnly = true)
     public Page<Post> searchPostsByKeywordWithPageRequest(final String keyword,
                                                           final PageRequest pageRequest) {
         log.info("Search post with keyword #{}", keyword);
@@ -69,6 +69,16 @@ public class PostService {
             return repository.searchPosts(keyword, pageRequest);
         else
             return repository.searchFullTextPosts(keyword, pageRequest);
+    }
+
+    @Transactional
+    public void delete(final Long id, final Long userId) {
+        log.info("Delete post by id #{} with userId #{}", id, userId);
+
+        Post post = repository.findByIdAndUserId(id, userId)
+                              .orElseThrow(() -> new ObjectNotFoundException("post"));
+
+        repository.delete(post);
     }
 
     private void validatePostBeforeSaveNew(final Post post) {
