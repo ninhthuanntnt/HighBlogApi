@@ -5,6 +5,8 @@ import com.high.highblog.model.dto.request.CommentCreateReq;
 import com.high.highblog.model.dto.request.CommentUpdateReq;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -29,10 +31,19 @@ public class CommentCrudController {
         return ResponseEntity.status(HttpStatus.CREATED).body(commentId);
     }
 
-    @PutMapping
-    public ResponseEntity<?> updateComment(@RequestBody final CommentUpdateReq commentUpdateReq) {
+    @PutMapping("/{id}")
+    public ResponseEntity<?> updateComment(@PathVariable Long id,
+                                           @RequestBody final CommentUpdateReq commentUpdateReq) {
 
-        commentBloc.updateCommentForCurrentUser(commentUpdateReq);
+        commentBloc.updateCommentForCurrentUser(id, commentUpdateReq);
+
+        return ResponseEntity.noContent().build();
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<?> deleteComment(@PathVariable Long id) {
+
+        commentBloc.deleteCommentForCurrentUser(id);
 
         return ResponseEntity.noContent().build();
     }
