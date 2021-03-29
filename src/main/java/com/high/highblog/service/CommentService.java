@@ -1,5 +1,6 @@
 package com.high.highblog.service;
 
+import com.high.highblog.error.exception.ObjectNotFoundException;
 import com.high.highblog.error.exception.ValidatorException;
 import com.high.highblog.helper.SecurityHelper;
 import com.high.highblog.model.entity.Comment;
@@ -34,7 +35,7 @@ public class CommentService {
         log.info("Get comment by id #{} and userId #{}", id, userId);
 
         return repository.findByIdAndUserId(id, userId)
-                         .orElseThrow(() -> new ValidatorException("Invalid comment to update", "comment"));
+                         .orElseThrow(() -> new ObjectNotFoundException("comment"));
     }
 
     @Transactional
@@ -53,6 +54,16 @@ public class CommentService {
         repository.save(comment);
     }
 
+    @Transactional
+    public void delete(final Long id, final Long userId) {
+        log.info("Delete comment by id #{} with userId #{}", id, userId);
+
+        Comment comment = repository.findByIdAndUserId(id, userId)
+                                    .orElseThrow(() -> new ObjectNotFoundException("comment"));
+
+        repository.delete(comment);
+    }
+
 
     private void validateCommentBeforeSaveNew(final Comment comment) {
         if (ObjectUtils.isNotEmpty(comment.getId()))
@@ -60,6 +71,7 @@ public class CommentService {
         if (ObjectUtils.isEmpty(comment.getUserId()) && comment.getUserId() != SecurityHelper.getUserId())
             throw new ValidatorException("Invalid user id", "userId");
     }
+
     private void validateCommentBeforeSave(final Comment comment) {
         if (ObjectUtils.isEmpty(comment.getId()))
             throw new ValidatorException("Invalid comment id", "id");

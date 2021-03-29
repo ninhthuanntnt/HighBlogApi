@@ -59,17 +59,23 @@ public class CommentBloc {
     }
 
     @Transactional
-    public void updateCommentForCurrentUser(final CommentUpdateReq commentUpdateReq) {
+    public void updateCommentForCurrentUser(final Long id, final CommentUpdateReq commentUpdateReq) {
         Long userId = SecurityHelper.getUserId();
-        log.info("Update comment by comment id #{} for current user with user id #{}",
-                 commentUpdateReq.getId(),
-                 userId);
+        log.info("Update comment by comment id #{} for current user with user id #{}", id, userId);
 
-        Comment comment = commentService.getByIdAndUserId(commentUpdateReq.getId(), userId);
+        Comment comment = commentService.getByIdAndUserId(id, userId);
 
         comment.setContent(commentUpdateReq.getContent());
 
         commentService.save(comment);
+    }
+
+    @Transactional
+    public void deleteCommentForCurrentUser(final Long id) {
+        Long userId = SecurityHelper.getUserId();
+        log.info("Delete comment by id #{} with userId #{}", id, userId);
+
+        commentService.delete(id, userId);
     }
 
     private void includeUserToComments(List<Comment> comments) {

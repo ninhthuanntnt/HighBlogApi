@@ -15,10 +15,6 @@ import javax.validation.constraints.NotNull;
 @NoArgsConstructor
 @Builder
 public class CommentUpdateReq {
-
-    @NotNull
-    private Long id;
-
     @NotNull
     @NotEmpty
     private String content;
