@@ -5,6 +5,7 @@ import com.high.highblog.helper.SecurityHelper;
 import com.high.highblog.mapper.CommentMapper;
 import com.high.highblog.model.dto.request.CommentCreateReq;
 import com.high.highblog.model.dto.request.CommentListReq;
+import com.high.highblog.model.dto.request.CommentUpdateReq;
 import com.high.highblog.model.entity.Comment;
 import com.high.highblog.model.entity.User;
 import com.high.highblog.service.CommentService;
@@ -32,6 +33,19 @@ public class CommentBloc {
         this.userService = userService;
     }
 
+    @Transactional
+    public Long createCommentForCurrentUser(final CommentCreateReq commentCreateReq) {
+        log.info("Create comment with data #{}", commentCreateReq);
+
+        Comment comment = CommentMapper.INSTANCE.toComment(commentCreateReq);
+
+        comment.setUserId(SecurityHelper.getUserId());
+
+        commentService.saveNew(comment);
+
+        return comment.getId();
+    }
+
     @Transactional(readOnly = true)
     public List<Comment> fetchCommentsByPostId(final CommentListReq commentListReq) {
         log.info("Fetch comments with data #{}", commentListReq);
@@ -45,14 +59,17 @@ public class CommentBloc {
     }
 
     @Transactional
-    public void createCommentForCurrentUser(final CommentCreateReq commentCreateReq) {
-        log.info("Create comment with data #{}", commentCreateReq);
+    public void updateCommentForCurrentUser(final CommentUpdateReq commentUpdateReq) {
+        Long userId = SecurityHelper.getUserId();
+        log.info("Update comment by comment id #{} for current user with user id #{}",
+                 commentUpdateReq.getId(),
+                 userId);
 
-        Comment comment = CommentMapper.INSTANCE.toComment(commentCreateReq);
+        Comment comment = commentService.getByIdAndUserId(commentUpdateReq.getId(), userId);
 
-        comment.setUserId(SecurityHelper.getUserId());
+        comment.setContent(commentUpdateReq.getContent());
 
-        commentService.saveNew(comment);
+        commentService.save(comment);
     }
 
     private void includeUserToComments(List<Comment> comments) {

@@ -1,10 +1,12 @@
 package com.high.highblog.mapper;
 
 import com.high.highblog.model.dto.request.CommentCreateReq;
+import com.high.highblog.model.dto.request.CommentUpdateReq;
 import com.high.highblog.model.dto.response.CommentRes;
 import com.high.highblog.model.entity.Comment;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
+import org.mapstruct.MappingTarget;
 import org.mapstruct.Mappings;
 import org.mapstruct.factory.Mappers;
 

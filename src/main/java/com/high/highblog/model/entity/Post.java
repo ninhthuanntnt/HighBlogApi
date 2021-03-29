@@ -51,8 +51,8 @@ public class Post
     @Column(columnDefinition = "text")
     private String content;
 
-    @NotNull
     @Builder.Default
+    @NotNull
     private boolean donated = false;
 
     @Builder.Default
@@ -66,9 +66,10 @@ public class Post
     @Column(name = "cover_image_path")
     private String coverImagePath;
 
+    @Builder.Default
     @NotNull
-    @Column(name = "post_type")
-    private PostType postType;
+    @Column(name = "post_type", nullable = false)
+    private PostType postType = PostType.DRAFT;
 
     @Transient
     private List<PostTag> postTags;
