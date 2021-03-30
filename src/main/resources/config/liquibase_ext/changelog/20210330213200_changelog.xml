@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog https://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.3.xsd">
+    <property name="now" value="now(3)"/>
+
+    <changeSet id="HB-20210330213200-1" author="ninhthuanntnt">
+        <createTable tableName="hb_posts_votes">
+            <column name="id" type="bigint" autoIncrement="true">
+                <constraints primaryKey="true" primaryKeyName="pk_posts"/>
+            </column>
+            <column name="user_id" type="bigint">
+                <constraints nullable="false"/>
+            </column>
+            <column name="post_id" type="bigint">
+                <constraints nullable="false"/>
+            </column>
+            <column name="vote_type" type="varchar(50)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="created_by" type="varchar(50)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="created_date" type="timestamp(3)" defaultValueComputed="${now}">
+                <constraints nullable="false"/>
+            </column>
+            <column name="last_modified_by" type="varchar(50)"/>
+            <column name="last_modified_date" type="timestamp(3)"/>
+        </createTable>
+        <createIndex tableName="hb_posts_votes" indexName="idx_posts_votes_user_id">
+            <column name="user_id" type="bigint"/>
+        </createIndex>
+        <createIndex tableName="hb_posts_votes" indexName="idx_posts_votes_post_id">
+            <column name="post_id" type="bigint"/>
+        </createIndex>
+    </changeSet>
+</databaseChangeLog>

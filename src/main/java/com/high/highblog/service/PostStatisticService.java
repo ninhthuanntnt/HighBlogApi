@@ -1,5 +1,7 @@
 package com.high.highblog.service;
 
+import com.high.highblog.enums.VoteType;
+import com.high.highblog.error.exception.ObjectNotFoundException;
 import com.high.highblog.error.exception.ValidatorException;
 import com.high.highblog.helper.SecurityHelper;
 import com.high.highblog.model.entity.Post;
@@ -37,6 +39,23 @@ public class PostStatisticService {
 
         repository.save(postStatistic);
     }
+
+    @Transactional
+    public void saveNumberOfVoteBaseOnPostIdAndVoteType(final Long postId, final VoteType voteType) {
+        log.info("Save number of vote by voteType #{}", voteType);
+
+        PostStatistic postStatistic = repository.findByPostId(postId)
+                                                .orElseThrow(() -> new ObjectNotFoundException("postStatistic"));
+
+        switch (voteType) {
+            case UP:
+                postStatistic.setNumberOfVotes(postStatistic.getNumberOfVotes() + 1);
+                break;
+            case DOWN:
+                postStatistic.setNumberOfVotes(postStatistic.getNumberOfVotes() - 1);
+        }
+    }
+
     private void validatePostBeforeSaveNew(final PostStatistic postStatistic) {
         if (ObjectUtils.isNotEmpty(postStatistic.getId()))
             throw new ValidatorException("Invalid post statistic id", "id");
