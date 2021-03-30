@@ -31,9 +31,11 @@ public class PostRes {
 
     private String coverImagePath;
 
-    private Long numberOfVotes;
-
     private Long createdDate;
+
+    private Long lastModifiedDate;
+
+    private Long numberOfVotes;
 
     @JsonProperty("tags")
     private List<TagRes> tagsRes;

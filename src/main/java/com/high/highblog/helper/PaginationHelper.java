@@ -51,10 +51,14 @@ public class PaginationHelper {
     private static Sort generateSort(final String[] sorts) {
         List<Sort.Order> orders = new ArrayList<>();
 
+        boolean isContainId = false;
+
         for (String sortExpression : sorts) {
 
             char prefix = sortExpression.charAt(0);
             String columnName = sortExpression.substring(1);
+            if(columnName.equals("id"))
+                isContainId = true;
 
             if (prefix == '+')
                 orders.add(Sort.Order.asc(columnName));
@@ -63,6 +67,9 @@ public class PaginationHelper {
             else
                 throw new ValidatorException("Invalid sort request", "sorts");
         }
+
+        if(!isContainId)
+            orders.add(Sort.Order.desc("id"));
 
         return Sort.by(orders);
     }

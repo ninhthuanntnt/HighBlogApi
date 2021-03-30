@@ -46,7 +46,7 @@ public class ExceptionHandlerFilter
         }
         long endTime = System.currentTimeMillis();
 
-        log.debug("Time to handle request with url #{} is in #{}", request.getPathInfo(), endTime - startTime);
+        log.info("Time to handle request with url #{} is in #{}", request.getPathInfo(), endTime - startTime);
     }
 
     private void responseError(final String message,

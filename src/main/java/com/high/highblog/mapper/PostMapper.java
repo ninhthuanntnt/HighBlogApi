@@ -32,11 +32,12 @@ public interface PostMapper {
     @Mapping(target = "tagsRes", source = "postTags")
     PostDetailRes toPostDetailRes(Post post);
 
+    @Mapping(target = "numberOfVotes", source = "postStatistic.numberOfVotes")
     @Mapping(target = "tagsRes", source = "postTags")
     @Mapping(target = "userRes", source = "user")
     PostRes toPostRes(Post posts);
 
-    default Long toLongfromInstant(Instant instant) {
+    default Long toLongFromInstant(Instant instant) {
         return DateTimeHelper.toMilli(instant);
     }
 }

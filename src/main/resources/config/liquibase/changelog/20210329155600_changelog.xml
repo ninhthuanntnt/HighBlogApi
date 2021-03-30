@@ -3,7 +3,9 @@
         xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
         xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog https://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.3.xsd">
+    <property name="now" value="now(3)"/>
 
-    <include file="config/liquibase/changelog/20210326151200_changelog.xml" relativeToChangelogFile="false"/>
-    <include file="config/liquibase/changelog/20210329155600_changelog.xml" relativeToChangelogFile="false"/>
+    <changeSet id="HB-20210326151200-1" author="ninhthuanntnt">
+        <dropColumn tableName="hb_posts" columnName="number_of_votes"/>
+    </changeSet>
 </databaseChangeLog>

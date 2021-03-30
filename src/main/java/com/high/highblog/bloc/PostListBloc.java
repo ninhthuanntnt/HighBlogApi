@@ -4,9 +4,11 @@ import com.high.highblog.helper.PaginationHelper;
 import com.high.highblog.model.dto.request.BasePaginationReq;
 import com.high.highblog.model.dto.request.PostSearchReq;
 import com.high.highblog.model.entity.Post;
+import com.high.highblog.model.entity.PostStatistic;
 import com.high.highblog.model.entity.PostTag;
 import com.high.highblog.model.entity.User;
 import com.high.highblog.service.PostService;
+import com.high.highblog.service.PostStatisticService;
 import com.high.highblog.service.PostTagService;
 import com.high.highblog.service.UserService;
 import lombok.extern.slf4j.Slf4j;
@@ -26,37 +28,49 @@ public class PostListBloc {
     private final PostService postService;
     private final PostTagService postTagService;
     private final UserService userService;
+    private final PostStatisticService postStatisticService;
 
     public PostListBloc(final PostService postService,
                         final PostTagService postTagService,
-                        final UserService userService) {
+                        final UserService userService,
+                        final PostStatisticService postStatisticService) {
         this.postService = postService;
         this.postTagService = postTagService;
         this.userService = userService;
+        this.postStatisticService = postStatisticService;
     }
 
+    @Transactional(readOnly = true)
     public Page<Post> fetchPosts(final BasePaginationReq req) {
         // TODO: add binding data to convert string of default sort to an object
-        PageRequest pageRequest = PaginationHelper.generatePageRequestWithDefaultSort(req, "-numberOfVotes");
+        PageRequest pageRequest = PaginationHelper.generatePageRequestWithDefaultSort(req,
+                                                                                      "-ps.numberOfVotes");
 
         Page<Post> posts = postService.fetchPostsWithPageRequest(pageRequest);
 
+        // Should use include to make bester performance
         includePostTagsToPosts(posts);
         includeUserToPosts(posts);
 
         return posts;
     }
 
-    @Transactional
+    @Transactional(readOnly = true)
     public Page<Post> searchPosts(final PostSearchReq req) {
         log.info("Search post with keyword #{}", req);
 
         // TODO: add binding data to convert string of default sort to an object
-        PageRequest pageRequest = PaginationHelper.generatePageRequestWithDefaultSort(req, "-numberOfVotes");
-
-        Page<Post> posts = postService.searchPostsByKeywordWithPageRequest(req.getKeyword(), pageRequest);
+        Page<Post> posts;
+        if(req.getKeyword().length() <= 2){
+            PageRequest pageRequest = PaginationHelper.generatePageRequestWithDefaultSort(req, "-ps.numberOfVotes");
+            posts = postService.searchPostsByKeywordLikeWithPageRequest(req.getKeyword(), pageRequest);
+        }else{
+            PageRequest pageRequest = PaginationHelper.generatePageRequestWithDefaultSort(req, "-ps.number_of_votes");
+            posts = postService.searchFullTextPostsByKeywordWithPageRequest(req.getKeyword(), pageRequest);
+        }
 
         includePostTagsToPosts(posts);
+        includePostStatisticToPosts(posts);
         includeUserToPosts(posts);
 
         return posts;
@@ -73,10 +87,20 @@ public class PostListBloc {
     }
 
     private void includeUserToPosts(Page<Post> posts) {
-        Map<Long, List<User>> userIdUserMap = userService.fetchByIdIn(posts.map(Post::getUserId).toSet())
-                                                         .stream()
-                                                         .collect(Collectors.groupingBy(User::getId));
+        Map<Long, User> userIdUserMap = userService.fetchByIdIn(posts.map(Post::getUserId).toSet())
+                                                   .stream()
+                                                   .collect(Collectors.toMap(User::getId, user -> user));
 
-        posts.forEach(post -> post.setUser(userIdUserMap.get(post.getUserId()).get(0)));
+        posts.forEach(post -> post.setUser(userIdUserMap.get(post.getUserId())));
+    }
+
+    private void includePostStatisticToPosts(Page<Post> posts) {
+        Map<Long, PostStatistic> postIdPostStatisticMap =
+                postStatisticService.fetchByPostIdIn(posts.map(Post::getId).toSet())
+                                    .stream()
+                                    .collect(Collectors.toMap(PostStatistic::getPostId,
+                                                              postStatistic -> postStatistic));
+
+        posts.forEach(post -> post.setPostStatistic(postIdPostStatisticMap.get(post.getId())));
     }
 }
