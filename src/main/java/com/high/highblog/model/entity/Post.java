@@ -55,11 +55,6 @@ public class Post
     @NotNull
     private boolean donated = false;
 
-    @Builder.Default
-    @NotNull
-    @Column(name = "number_of_votes")
-    private Long numberOfVotes = 0L;
-
     @Column(name = "thumbnail_image_path")
     private String thumbnailImagePath;
 
@@ -76,4 +71,27 @@ public class Post
 
     @Transient
     private User user;
+
+    @Transient
+    private PostStatistic postStatistic;
+
+    public Post(final Post post, final PostStatistic postStatistic) {
+        this.id = post.id;
+        this.userId = post.userId;
+        this.categoryId = post.categoryId;
+        this.title = post.title;
+        this.summary = post.summary;
+        this.content = post.content;
+        this.donated = post.donated;
+        this.thumbnailImagePath = post.thumbnailImagePath;
+        this.coverImagePath = post.coverImagePath;
+        this.postType = post.postType;
+        this.postTags = post.postTags;
+        this.setCreatedBy(post.getCreatedBy());
+        this.setCreatedDate(post.getCreatedDate());
+        this.setLastModifiedBy(post.getLastModifiedBy());
+        this.setLastModifiedDate(post.getLastModifiedDate());
+
+        this.postStatistic = postStatistic;
+    }
 }

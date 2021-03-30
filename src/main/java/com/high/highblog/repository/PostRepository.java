@@ -18,14 +18,20 @@ public interface PostRepository
 
     Optional<Post> findByIdAndUserId(Long id, Long userId);
 
-    @Query(value = "SELECT p.* FROM hb_posts AS p"
+    @Query(value = "SELECT * FROM hb_posts AS p"
+                + " INNER JOIN hb_post_statistics AS ps ON ps.post_id = p.id"
                 + " WHERE MATCH (p.title, p.summary, p.content) AGAINST (:keyword IN NATURAL LANGUAGE MODE)",
             nativeQuery = true)
     Page<Post> searchFullTextPosts(@Param("keyword") String keyword, Pageable pageable);
 
     @Query(value = "SELECT p FROM Post p"
+                + " JOIN PostStatistic ps ON ps.postId = p.id"
                 + " WHERE p.title LIKE %:keyword%"
                 + " OR p.summary LIKE %:keyword%"
                 + " OR p.content LIKE %:keyword%")
     Page<Post> searchPosts(@Param("keyword") String keyword, Pageable pageable);
+
+    @Query("SELECT new Post(p, ps) FROM Post p"
+        + " JOIN PostStatistic ps ON ps.postId = p.id")
+    Page<Post> fetchListPosts(Pageable pageable);
 }

@@ -5,8 +5,10 @@ import com.high.highblog.mapper.PostMapper;
 import com.high.highblog.model.dto.request.PostCreateReq;
 import com.high.highblog.model.dto.request.PostUpdateReq;
 import com.high.highblog.model.entity.Post;
+import com.high.highblog.model.entity.PostStatistic;
 import com.high.highblog.model.entity.PostTag;
 import com.high.highblog.service.PostService;
+import com.high.highblog.service.PostStatisticService;
 import com.high.highblog.service.PostTagService;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.collections4.CollectionUtils;
@@ -21,11 +23,14 @@ public class PostCrudBloc {
 
     private final PostService postService;
     private final PostTagService postTagService;
+    private final PostStatisticService postStatisticService;
 
     public PostCrudBloc(final PostService postService,
-                        final PostTagService postTagService) {
+                        final PostTagService postTagService,
+                        final PostStatisticService postStatisticService) {
         this.postService = postService;
         this.postTagService = postTagService;
+        this.postStatisticService = postStatisticService;
     }
 
     @Transactional
@@ -41,6 +46,10 @@ public class PostCrudBloc {
         postTags.forEach(postTag -> postTag.setPostId(post.getId()));
 
         postTagService.saveNew(postTags);
+
+        postStatisticService.saveNew(PostStatistic.builder()
+                                                  .postId(post.getId())
+                                                  .build());
     }
 
     @Transactional(readOnly = true)

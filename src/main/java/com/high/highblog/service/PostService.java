@@ -57,19 +57,27 @@ public class PostService {
     public Page<Post> fetchPostsWithPageRequest(final PageRequest pageRequest) {
         log.info("Fetch post by page request");
 
-        return repository.findAll(pageRequest);
+        return repository.fetchListPosts(pageRequest);
     }
 
     @Transactional(readOnly = true)
-    public Page<Post> searchPostsByKeywordWithPageRequest(final String keyword,
-                                                          final PageRequest pageRequest) {
-        log.info("Search post with keyword #{}", keyword);
+    public Page<Post> searchFullTextPostsByKeywordWithPageRequest(final String keyword,
+                                                                  final PageRequest pageRequest) {
+        log.info("Search full text post with keyword #{}", keyword);
 
         if (keyword.length() <= 2)
             return repository.searchPosts(keyword, pageRequest);
         else
             return repository.searchFullTextPosts(keyword, pageRequest);
     }
+
+    public Page<Post> searchPostsByKeywordLikeWithPageRequest(final String keyword,
+                                                              final PageRequest pageRequest) {
+        log.info("Search post with keyword #{}", keyword);
+
+        return repository.searchPosts(keyword, pageRequest);
+    }
+
 
     @Transactional
     public void delete(final Long id, final Long userId) {
