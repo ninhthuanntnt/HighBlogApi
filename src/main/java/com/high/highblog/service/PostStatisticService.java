@@ -3,8 +3,6 @@ package com.high.highblog.service;
 import com.high.highblog.enums.VoteType;
 import com.high.highblog.error.exception.ObjectNotFoundException;
 import com.high.highblog.error.exception.ValidatorException;
-import com.high.highblog.helper.SecurityHelper;
-import com.high.highblog.model.entity.Post;
 import com.high.highblog.model.entity.PostStatistic;
 import com.high.highblog.repository.PostStatisticRepository;
 import lombok.extern.slf4j.Slf4j;
@@ -41,8 +39,8 @@ public class PostStatisticService {
     }
 
     @Transactional
-    public void saveNumberOfVoteBaseOnPostIdAndVoteType(final Long postId, final VoteType voteType) {
-        log.info("Save number of vote by voteType #{}", voteType);
+    public void saveNumberOfVoteAfterVote(final Long postId, final VoteType voteType) {
+        log.info("Save number of vote after vote by voteType #{}", voteType);
 
         PostStatistic postStatistic = repository.findByPostId(postId)
                                                 .orElseThrow(() -> new ObjectNotFoundException("postStatistic"));
@@ -53,6 +51,22 @@ public class PostStatisticService {
                 break;
             case DOWN:
                 postStatistic.setNumberOfVotes(postStatistic.getNumberOfVotes() - 1);
+        }
+    }
+
+    @Transactional
+    public void saveNumberOfVoteAfterDelete(final Long postId, final VoteType voteType){
+        log.info("Save number of vote after delete");
+
+        PostStatistic postStatistic = repository.findByPostId(postId)
+                                                .orElseThrow(() -> new ObjectNotFoundException("postStatistic"));
+
+        switch (voteType) {
+            case UP:
+                postStatistic.setNumberOfVotes(postStatistic.getNumberOfVotes() - 1);
+                break;
+            case DOWN:
+                postStatistic.setNumberOfVotes(postStatistic.getNumberOfVotes() + 1);
         }
     }
 

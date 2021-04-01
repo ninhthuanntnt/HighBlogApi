@@ -2,9 +2,11 @@ package com.high.highblog.api.user;
 
 import com.high.highblog.bloc.PostVoteCrudBloc;
 import com.high.highblog.model.dto.request.PostVoteCreateReq;
+import com.high.highblog.model.dto.request.PostVoteDeleteReq;
 import com.high.highblog.model.dto.request.PostVoteUpdateReq;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -33,6 +35,14 @@ public class PostVoteCrudController {
     public ResponseEntity<?> updatePostVote(@RequestBody final PostVoteUpdateReq postVoteUpdateReq) {
 
         postVoteCrudBloc.updatePostVoteForCurrentUser(postVoteUpdateReq);
+
+        return ResponseEntity.noContent().build();
+    }
+
+    @DeleteMapping
+    public ResponseEntity<?> updatePostVote(@RequestBody PostVoteDeleteReq postVoteDeleteReq){
+
+        postVoteCrudBloc.deletePostVoteForCurrentUser(postVoteDeleteReq);
 
         return ResponseEntity.noContent().build();
     }
