@@ -1,10 +1,12 @@
 package com.high.highblog.bloc;
 
 import com.high.highblog.constant.AppErrorCode;
+import com.high.highblog.error.exception.ObjectNotFoundException;
 import com.high.highblog.error.exception.ValidatorException;
 import com.high.highblog.helper.SecurityHelper;
 import com.high.highblog.mapper.PostVoteMapper;
 import com.high.highblog.model.dto.request.PostVoteCreateReq;
+import com.high.highblog.model.dto.request.PostVoteDeleteReq;
 import com.high.highblog.model.dto.request.PostVoteUpdateReq;
 import com.high.highblog.model.entity.PostVote;
 import com.high.highblog.service.PostStatisticService;
@@ -38,8 +40,8 @@ public class PostVoteCrudBloc {
         postVote.setUserId(userId);
         postVoteService.saveNew(postVote);
 
-        postStatisticService.saveNumberOfVoteBaseOnPostIdAndVoteType(postVoteCreateReq.getPostId(),
-                                                                     postVoteCreateReq.getVoteType());
+        postStatisticService.saveNumberOfVoteAfterVote(postVoteCreateReq.getPostId(),
+                                                       postVoteCreateReq.getVoteType());
     }
 
     @Transactional
@@ -55,8 +57,24 @@ public class PostVoteCrudBloc {
 
         postVoteService.save(newPostVote);
 
-        postStatisticService.saveNumberOfVoteBaseOnPostIdAndVoteType(postVoteUpdateReq.getPostId(),
-                                                                     postVoteUpdateReq.getVoteType());
+        postStatisticService.saveNumberOfVoteAfterVote(postVoteUpdateReq.getPostId(),
+                                                       postVoteUpdateReq.getVoteType());
+    }
+
+    @Transactional
+    public void deletePostVoteForCurrentUser(final PostVoteDeleteReq postVoteDeleteReq) {
+        Long userId = SecurityHelper.getUserId();
+        log.info("Delete post vote with data #{} for current user #{}", postVoteDeleteReq, userId);
+
+        PostVote currentPostVote = postVoteService.getByPostIdAndUserId(postVoteDeleteReq.getPostId(), userId);
+
+        validateCurrentPostVoteAndPostVoteDeleteReq(currentPostVote, postVoteDeleteReq);
+
+        postVoteService.delete(currentPostVote);
+
+        postStatisticService.saveNumberOfVoteAfterDelete(postVoteDeleteReq.getPostId(),
+                                                         postVoteDeleteReq.getPreviousVoteType());
+
     }
 
     private void validatePostVoteCreateReq(final PostVoteCreateReq postVoteCreateReq) {
@@ -74,5 +92,14 @@ public class PostVoteCrudBloc {
             throw new ValidatorException("Not created vote", AppErrorCode.DEFAULT_VALIDATOR);
         else if (currentPostVote.getVoteType().equals(postVoteUpdateReq.getVoteType()))
             throw new ValidatorException("Already vote", AppErrorCode.DEFAULT_VALIDATOR);
+    }
+
+    private void validateCurrentPostVoteAndPostVoteDeleteReq(final PostVote currentPostVote,
+                                                             final PostVoteDeleteReq postVoteDeleteReq) {
+
+        if (ObjectUtils.isEmpty(currentPostVote))
+            throw new ObjectNotFoundException("Not found postVote");
+        else if (!currentPostVote.getVoteType().equals(postVoteDeleteReq.getPreviousVoteType()))
+            throw new ValidatorException("Not is the same vote type", AppErrorCode.DEFAULT_VALIDATOR);
     }
 }

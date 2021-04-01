@@ -21,14 +21,6 @@ public class PostVoteService {
     }
 
     @Transactional(readOnly = true)
-    public PostVote getByIdAndUserId(final Long id, final Long userId) {
-        log.info("Get post vote by id #{} and user id #{}", id, userId);
-
-        return repository.findByIdAndUserId(id, userId)
-                         .orElseThrow(() -> new ObjectNotFoundException("postVote"));
-    }
-
-    @Transactional(readOnly = true)
     public PostVote getByPostIdAndUserId(final Long id, final Long userId) {
         log.info("Get post vote by id #{} and user id #{}", id, userId);
 
@@ -50,6 +42,13 @@ public class PostVoteService {
         validatePostVoteBeforeSave(postVote);
 
         repository.save(postVote);
+    }
+
+    @Transactional
+    public void delete(final PostVote postVote){
+        log.info("Delete post vote with data #{}", postVote);
+
+        repository.delete(postVote);
     }
 
     private void validatePostVoteBeforeSaveNew(final PostVote postVote) {
