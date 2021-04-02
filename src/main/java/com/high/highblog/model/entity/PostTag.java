@@ -45,4 +45,10 @@ public class PostTag
         this.tagId = tagId;
         this.name = name;
     }
+
+    public PostTag(final Long tagId, final Long postId, final String name) {
+        this.tagId = tagId;
+        this.postId = postId;
+        this.name = name;
+    }
 }

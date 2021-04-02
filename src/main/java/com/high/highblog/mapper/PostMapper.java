@@ -10,12 +10,14 @@ import com.high.highblog.model.entity.Post;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.MappingTarget;
+import org.mapstruct.Mappings;
 import org.mapstruct.ReportingPolicy;
 import org.mapstruct.factory.Mappers;
 
 import java.time.Instant;
 
-@Mapper(unmappedTargetPolicy = ReportingPolicy.IGNORE, uses = {PostTagMapper.class, TagMapper.class})
+@Mapper(unmappedTargetPolicy = ReportingPolicy.IGNORE, uses = {PostTagMapper.class,
+                                                               TagMapper.class})
 public interface PostMapper {
     PostMapper INSTANCE = Mappers.getMapper(PostMapper.class);
 
@@ -29,7 +31,10 @@ public interface PostMapper {
     @Mapping(target = "tagsRes", source = "postTags")
     PostDetailToUpdateRes toPostDetailToUpdateRes(Post post);
 
+    @Mapping(target = "numberOfVotes", source = "postStatistic.numberOfVotes")
     @Mapping(target = "tagsRes", source = "postTags")
+    @Mapping(target = "postVoteRes", source = "postVote")
+    @Mapping(target = "userRes", source = "user")
     PostDetailRes toPostDetailRes(Post post);
 
     @Mapping(target = "numberOfVotes", source = "postStatistic.numberOfVotes")

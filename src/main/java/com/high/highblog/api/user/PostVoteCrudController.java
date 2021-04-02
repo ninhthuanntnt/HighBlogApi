@@ -40,7 +40,7 @@ public class PostVoteCrudController {
     }
 
     @DeleteMapping
-    public ResponseEntity<?> updatePostVote(@RequestBody PostVoteDeleteReq postVoteDeleteReq){
+    public ResponseEntity<?> deletePostVote(@RequestBody PostVoteDeleteReq postVoteDeleteReq){
 
         postVoteCrudBloc.deletePostVoteForCurrentUser(postVoteDeleteReq);
 

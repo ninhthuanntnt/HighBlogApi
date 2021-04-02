@@ -38,10 +38,10 @@ public class PostTagService {
     }
 
     @Transactional(readOnly = true)
-    public List<PostTag> getByPostId(final Long postId) {
+    public List<PostTag> fetchByPostId(final Long postId) {
         log.info("Get post tag by postId #{}", postId);
 
-        return repository.getByPostId(postId);
+        return repository.fetchByPostId(postId);
     }
 
     @Transactional
@@ -61,7 +61,7 @@ public class PostTagService {
         if (ObjectUtils.isEmpty(postIds))
             return Collections.emptyList();
 
-        return repository.findByPostIdIn(postIds);
+        return repository.fetchByPostIdIn(postIds);
     }
 
     @Transactional
