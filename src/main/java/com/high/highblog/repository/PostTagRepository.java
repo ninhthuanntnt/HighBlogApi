@@ -17,9 +17,12 @@ public interface PostTagRepository
     @Query("SELECT new PostTag(pt.tagId, t.name) FROM PostTag pt"
             + " JOIN Tag t ON t.id = pt.tagId"
             + " WHERE pt.postId = :postId")
-    List<PostTag> getByPostId(@Param("postId") Long postId);
+    List<PostTag> fetchByPostId(@Param("postId") Long postId);
 
     List<PostTag> findByPostId(Long postId);
 
-    List<PostTag> findByPostIdIn(Collection<Long> postId);
+    @Query("SELECT new PostTag(pt.tagId, pt.postId, t.name) FROM PostTag pt"
+            + " JOIN Tag t ON t.id = pt.tagId"
+            + " WHERE pt.postId IN (:postId)")
+    List<PostTag> fetchByPostIdIn(Collection<Long> postId);
 }

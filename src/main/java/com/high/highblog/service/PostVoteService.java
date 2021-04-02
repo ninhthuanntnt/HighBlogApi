@@ -1,6 +1,5 @@
 package com.high.highblog.service;
 
-import com.high.highblog.error.exception.ObjectNotFoundException;
 import com.high.highblog.error.exception.ValidatorException;
 import com.high.highblog.helper.SecurityHelper;
 import com.high.highblog.model.entity.PostVote;

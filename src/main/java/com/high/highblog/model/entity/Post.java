@@ -70,6 +70,9 @@ public class Post
     private List<PostTag> postTags;
 
     @Transient
+    private PostVote postVote;
+
+    @Transient
     private User user;
 
     @Transient
