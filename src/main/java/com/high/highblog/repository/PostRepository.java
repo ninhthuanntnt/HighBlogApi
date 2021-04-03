@@ -34,4 +34,10 @@ public interface PostRepository
     @Query("SELECT new Post(p, ps) FROM Post p"
         + " JOIN PostStatistic ps ON ps.postId = p.id")
     Page<Post> fetchListPosts(Pageable pageable);
+
+    @Query("SELECT new Post(p, ps) FROM Post p"
+        + " JOIN PostStatistic ps ON ps.postId = p.id"
+        + " WHERE p.userId = :userId")
+    Page<Post> fetchListPostsByUserId(@Param("userId") Long userId, Pageable pageable);
+
 }

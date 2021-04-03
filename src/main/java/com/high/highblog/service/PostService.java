@@ -55,9 +55,16 @@ public class PostService {
 
     @Transactional(readOnly = true)
     public Page<Post> fetchPostsWithPageRequest(final PageRequest pageRequest) {
-        log.info("Fetch post by page request");
+        log.info("Fetch posts with pageRequest");
 
         return repository.fetchListPosts(pageRequest);
+    }
+
+    @Transactional(readOnly = true)
+    public Page<Post> fetchPostsByUserIdWithPageRequest(final Long userId, final PageRequest pageRequest) {
+        log.info("Fetch posts by user id with pageRequest");
+
+        return repository.fetchListPostsByUserId(userId, pageRequest);
     }
 
     @Transactional(readOnly = true)

@@ -48,10 +48,21 @@ public class PostListBloc {
 
         Page<Post> posts = postService.fetchPostsWithPageRequest(pageRequest);
 
-        // Should use include to make bester performance
+        // Should use include to make better performance
         includePostTagsToPosts(posts);
         includeUserToPosts(posts);
 
+        return posts;
+    }
+
+    public Page<Post> fetchPostsByUserId(final Long userId, BasePaginationReq req) {
+        PageRequest pageRequest = PaginationHelper.generatePageRequestWithDefaultSort(req,
+                                                                                      "-ps.numberOfVotes");
+
+        Page<Post> posts = postService.fetchPostsByUserIdWithPageRequest(userId, pageRequest);
+
+        includePostTagsToPosts(posts);
+        includeUserToPosts(posts);
         return posts;
     }
 
@@ -61,10 +72,10 @@ public class PostListBloc {
 
         // TODO: add binding data to convert string of default sort to an object
         Page<Post> posts;
-        if(req.getKeyword().length() <= 2){
+        if (req.getKeyword().length() <= 2) {
             PageRequest pageRequest = PaginationHelper.generatePageRequestWithDefaultSort(req, "-ps.numberOfVotes");
             posts = postService.searchPostsByKeywordLikeWithPageRequest(req.getKeyword(), pageRequest);
-        }else{
+        } else {
             PageRequest pageRequest = PaginationHelper.generatePageRequestWithDefaultSort(req, "-ps.number_of_votes");
             posts = postService.searchFullTextPostsByKeywordWithPageRequest(req.getKeyword(), pageRequest);
         }
