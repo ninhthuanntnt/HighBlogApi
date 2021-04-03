@@ -1,5 +1,6 @@
 package com.high.highblog.api.common;
 
+import com.fasterxml.jackson.databind.ser.Serializers;
 import com.high.highblog.bloc.PostListBloc;
 import com.high.highblog.helper.PaginationHelper;
 import com.high.highblog.mapper.PostMapper;
@@ -11,6 +12,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
@@ -32,6 +34,17 @@ public class PostListController {
         ));
     }
 
+    @GetMapping(params = "userId")
+    public ResponseEntity<?> fetchListPost(@RequestParam final Long userId,
+                                           final BasePaginationReq req) {
+
+        Page<Post> posts = postListBloc.fetchPostsByUserId(userId, req);
+
+        return ResponseEntity.ok(PaginationHelper.buildBasePaginationRes(
+                posts.map(PostMapper.INSTANCE::toPostRes)
+        ));
+    }
+
     @GetMapping("/search")
     public ResponseEntity<?> searchPosts(final PostSearchReq req) {
         Page<Post> posts = postListBloc.searchPosts(req);
@@ -40,5 +53,4 @@ public class PostListController {
                 posts.map(PostMapper.INSTANCE::toPostRes)
         ));
     }
-
 }
