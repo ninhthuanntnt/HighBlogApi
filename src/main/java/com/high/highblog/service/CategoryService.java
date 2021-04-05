@@ -20,7 +20,6 @@ public class CategoryService {
     @Transactional
     public List<Category> fetchAllCategories() {
         log.info("Fetch all categories");
-
         return repository.findAll();
     }
 }
