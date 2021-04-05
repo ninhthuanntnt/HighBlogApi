@@ -17,7 +17,7 @@ public class CategoryListBloc {
         this.categoryService = categoryService;
     }
 
-    @Transactional
+    @Transactional(readOnly = true)
     public List<Category> fetchAllCategories() {
         log.info("Fetch all categories");
 
