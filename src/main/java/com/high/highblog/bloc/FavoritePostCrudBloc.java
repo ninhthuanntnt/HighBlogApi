@@ -22,4 +22,11 @@ public class FavoritePostCrudBloc {
 
         favoritePostService.saveNew(req.getPostId(), SecurityHelper.getUserId());
     }
+
+    @Transactional
+    public void deleteFavoritePostForCurrentUser(final Long postId) {
+        log.info("Delete favorite post for current user with postId #{}", postId);
+
+        favoritePostService.delete(postId, SecurityHelper.getUserId());
+    }
 }

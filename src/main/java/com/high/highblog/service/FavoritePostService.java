@@ -1,5 +1,6 @@
 package com.high.highblog.service;
 
+import com.high.highblog.error.exception.ObjectNotFoundException;
 import com.high.highblog.error.exception.ValidatorException;
 import com.high.highblog.helper.SecurityHelper;
 import com.high.highblog.model.entity.FavoritePost;
@@ -33,6 +34,17 @@ public class FavoritePostService {
                             .postId(postId)
                             .userId(userId)
                             .build());
+    }
+
+    @Transactional
+    public void delete(final Long postId, final Long userId) {
+        log.info("Delete post by postId #{} and userId #{}", postId, userId);
+
+        FavoritePost favoritePost = repository.findByPostIdAndUserId(postId, userId)
+                                              .orElseThrow(() -> new ObjectNotFoundException("post"));
+
+
+        repository.delete(favoritePost);
     }
 
     private void validateFavoritePostBeforeSaveNew(final FavoritePost favoritePost) {
