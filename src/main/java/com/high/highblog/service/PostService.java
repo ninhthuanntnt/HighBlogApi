@@ -12,6 +12,8 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Collection;
+
 @Slf4j
 @Service
 public class PostService {
@@ -78,6 +80,7 @@ public class PostService {
             return repository.searchFullTextPosts(keyword, pageRequest);
     }
 
+    @Transactional(readOnly = true)
     public Page<Post> searchPostsByKeywordLikeWithPageRequest(final String keyword,
                                                               final PageRequest pageRequest) {
         log.info("Search post with keyword #{}", keyword);
@@ -85,6 +88,12 @@ public class PostService {
         return repository.searchPosts(keyword, pageRequest);
     }
 
+    @Transactional(readOnly = true)
+    public Page<Post> fetchFavoritePostByUserIdWithPageRequest(final Long userId, final PageRequest pageRequests) {
+        log.info("Fetch favorite posts with page request #{}", pageRequests);
+
+        return repository.fetchListFavoritePostsByUserId(userId, pageRequests);
+    }
 
     @Transactional
     public void delete(final Long id, final Long userId) {
