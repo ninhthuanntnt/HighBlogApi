@@ -20,6 +20,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.lang3.ObjectUtils;
 import org.apache.commons.lang3.StringUtils;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
@@ -60,6 +62,7 @@ public class FileService {
         return fileRepository.save(file);
     }
 
+    @Transactional
     public String saveNewImageToStorage(MultipartFile multipartFile) {
         try {
             validateImage(multipartFile);
@@ -78,6 +81,13 @@ public class FileService {
             throw new ValidatorException("Unsuccessful", "image");
         }
 
+    }
+
+    @Transactional
+    public Page<File> fetchListImagesByUserIdWithPageRequest(final Long userId, final PageRequest pageRequest) {
+        log.info("Fetch list images by userId #{}", userId);
+
+        return fileRepository.findByUserId(userId, pageRequest);
     }
 
     private void validateImage(MultipartFile multipartFile) {

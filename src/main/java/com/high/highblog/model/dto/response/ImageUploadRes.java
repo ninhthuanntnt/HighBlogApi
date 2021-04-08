@@ -14,5 +14,6 @@ import lombok.Setter;
 @Builder
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class ImageUploadRes {
+    private String name;
     private String path;
 }

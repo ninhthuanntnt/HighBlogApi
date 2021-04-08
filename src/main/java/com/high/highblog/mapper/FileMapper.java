@@ -12,5 +12,5 @@ public interface FileMapper {
 
     FileMapper INSTANCE = Mappers.getMapper(FileMapper.class);
 
-    ImageUploadRes toFileRes(File file);
+    ImageUploadRes toImageUploadRes(File file);
 }

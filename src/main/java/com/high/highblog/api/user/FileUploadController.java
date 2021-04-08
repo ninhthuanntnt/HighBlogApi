@@ -27,7 +27,7 @@ public class FileUploadController {
     @PostMapping("/images")
     public ResponseEntity<ImageUploadRes> uploadImage(final ImageUploadReq imageUploadReqs) {
         File image = fileUploadBloc.uploadImage(imageUploadReqs);
-        return ResponseEntity.ok(FileMapper.INSTANCE.toFileRes(image));
+        return ResponseEntity.ok(FileMapper.INSTANCE.toImageUploadRes(image));
     }
 
     @PostMapping("/ck/images")
