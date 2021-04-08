@@ -38,3 +38,6 @@ out/
 
 ### Git ###
 .git
+
+### ENV ###
+config.env
