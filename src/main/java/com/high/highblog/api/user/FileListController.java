@@ -1,6 +1,6 @@
 package com.high.highblog.api.user;
 
-import com.high.highblog.bloc.FileUploadListBloc;
+import com.high.highblog.bloc.FileListBloc;
 import com.high.highblog.helper.PaginationHelper;
 import com.high.highblog.mapper.FileMapper;
 import com.high.highblog.model.dto.request.BasePaginationReq;
@@ -14,17 +14,17 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping("/api/v1/user/files")
-public class FileUploadListController {
+public class FileListController {
 
-    private final FileUploadListBloc fileUploadListBloc;
+    private final FileListBloc fileListBloc;
 
-    public FileUploadListController(final FileUploadListBloc fileUploadListBloc) {
-        this.fileUploadListBloc = fileUploadListBloc;
+    public FileListController(final FileListBloc fileListBloc) {
+        this.fileListBloc = fileListBloc;
     }
 
     @GetMapping("/images")
     public ResponseEntity<BasePaginationRes> fetchListImages(final BasePaginationReq basePaginationReq){
-        Page<File> images = fileUploadListBloc.fetchListImagesForCurrentUser(basePaginationReq);
+        Page<File> images = fileListBloc.fetchListImagesForCurrentUser(basePaginationReq);
 
         return ResponseEntity.ok(PaginationHelper.buildBasePaginationRes(images.map(FileMapper.INSTANCE::toImageUploadRes)));
     }

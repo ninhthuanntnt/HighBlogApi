@@ -1,6 +1,6 @@
 package com.high.highblog.api.user;
 
-import com.high.highblog.bloc.FileUploadBloc;
+import com.high.highblog.bloc.FileCrudBloc;
 import com.high.highblog.helper.FileHelper;
 import com.high.highblog.model.dto.request.ImageUploadReq;
 import com.high.highblog.model.dto.response.CkImageUploadRes;
@@ -16,23 +16,23 @@ import org.springframework.web.multipart.MultipartFile;
 
 @RestController
 @RequestMapping("/api/v1/user/files")
-public class FileUploadController {
+public class FileCrudController {
 
-    private final FileUploadBloc fileUploadBloc;
+    private final FileCrudBloc fileCrudBloc;
 
-    public FileUploadController(final FileUploadBloc fileUploadBloc) {
-        this.fileUploadBloc = fileUploadBloc;
+    public FileCrudController(final FileCrudBloc fileCrudBloc) {
+        this.fileCrudBloc = fileCrudBloc;
     }
 
     @PostMapping("/images")
     public ResponseEntity<ImageUploadRes> uploadImage(final ImageUploadReq imageUploadReqs) {
-        File image = fileUploadBloc.uploadImage(imageUploadReqs);
+        File image = fileCrudBloc.uploadImage(imageUploadReqs);
         return ResponseEntity.ok(FileMapper.INSTANCE.toImageUploadRes(image));
     }
 
     @PostMapping("/ck/images")
     public ResponseEntity<CkImageUploadRes> ckUploadImage(@RequestParam("upload") MultipartFile multipartFile) {
-        File image = fileUploadBloc.ckUploadImage(multipartFile);
+        File image = fileCrudBloc.ckUploadImage(multipartFile);
         return ResponseEntity.ok(new CkImageUploadRes(FileHelper.appendDomainToPath(image.getPath())));
     }
 }
