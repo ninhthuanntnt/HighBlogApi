@@ -88,6 +88,7 @@ public class PostCrudBloc {
 
         post.setPostTags(postTagService.fetchByPostId(post.getId()));
         post.setUser(userService.getById(post.getUserId()));
+        post.setPostStatistic(postStatisticService.getByPostId(post.getId()));
 
         includeExtraInfoForPostDetailIfUserLogined(post);
 

@@ -6,13 +6,16 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
+import java.util.Optional;
+
 @Repository
 public interface SubscriptionRepository
         extends JpaRepository<Subscription, Long> {
     @Query("SELECT CASE WHEN count(sub) > 0 THEN TRUE ELSE FALSE END "
             + " FROM Subscription sub"
-            + " JOIN User u ON u.id = sub.followerId"
-            + " WHERE sub.userId = :userId AND u.nickName = :nickName")
-    boolean existsByUserIdAndNickName(@Param("userId") Long userId, @Param("nickName") String nickName);
+            + " WHERE sub.userId = :userId AND sub.followerId = :followerId")
+    boolean existsByUserIdAndFollowerId(@Param("userId") Long userId, @Param("followerId") Long followerId);
 
+
+    Optional<Subscription> findByUserIdAndFollowerId(Long userId, Long followerId);
 }

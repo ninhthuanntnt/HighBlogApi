@@ -1,5 +1,6 @@
 package com.high.highblog.service;
 
+import com.high.highblog.error.exception.ObjectNotFoundException;
 import com.high.highblog.error.exception.ValidatorException;
 import com.high.highblog.helper.SecurityHelper;
 import com.high.highblog.model.entity.Subscription;
@@ -17,13 +18,6 @@ public class SubscriptionService {
 
     public SubscriptionService(final SubscriptionRepository repository) {
         this.repository = repository;
-    }
-
-    @Transactional(readOnly = true)
-    public boolean existsByUserIdAndNickName(final Long userId, final String nickName) {
-        log.info("Exists by userId #{} and nickName #{}", userId, nickName);
-
-        return repository.existsByUserIdAndNickName(userId, nickName);
     }
 
     @Transactional
@@ -45,11 +39,23 @@ public class SubscriptionService {
                             .build());
     }
 
+    @Transactional
+    public void delete(final Long userId, final Long followerId) {
+        log.info("Delete subscription with userId #{} and followerId #{}", userId, followerId);
+
+        Subscription subscription = repository.findByUserIdAndFollowerId(userId, followerId)
+                                              .orElseThrow(() -> new ObjectNotFoundException("subscription"));
+
+        repository.delete(subscription);
+    }
+
     private void validatePostVoteBeforeSaveNew(final Subscription subscription) {
         if (ObjectUtils.isNotEmpty(subscription.getId()))
             throw new ValidatorException("Invalid post id", "id");
-        if (subscription.getUserId() != SecurityHelper.getUserId())
-            throw new ValidatorException("Invalid user id", "userId");
+        if (subscription.getFollowerId() != SecurityHelper.getUserId())
+            throw new ValidatorException("Invalid follower id", "followerId");
+        if (repository.existsByUserIdAndFollowerId(subscription.getUserId(), subscription.getFollowerId()))
+            throw new ValidatorException("Already exists", "subscription");
     }
 
 }

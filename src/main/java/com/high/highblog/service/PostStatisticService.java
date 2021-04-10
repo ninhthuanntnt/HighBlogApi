@@ -30,6 +30,14 @@ public class PostStatisticService {
         return repository.findByPostIdIn(postIds);
     }
 
+    @Transactional(readOnly = true)
+    public PostStatistic getByPostId(Long postId) {
+        log.info("Fetch list post statistics by postId #{}", postId);
+
+        return repository.findByPostId(postId)
+                         .orElseThrow(()-> new ObjectNotFoundException("postStatistic"));
+    }
+
     @Transactional
     public void saveNew(PostStatistic postStatistic) {
         log.info("Save new post statistic with data #{}", postStatistic);

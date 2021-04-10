@@ -12,8 +12,6 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.Collection;
-
 @Slf4j
 @Service
 public class PostService {
@@ -63,10 +61,10 @@ public class PostService {
     }
 
     @Transactional(readOnly = true)
-    public Page<Post> fetchPostsByUserIdWithPageRequest(final Long userId, final PageRequest pageRequest) {
-        log.info("Fetch posts by user id with pageRequest");
+    public Page<Post> fetchPostsByNickNameWithPageRequest(final String nickName, final PageRequest pageRequest) {
+        log.info("Fetch posts by nickName #{} with pageRequest #{}", nickName, pageRequest);
 
-        return repository.fetchListPostsByUserId(userId, pageRequest);
+        return repository.fetchListPostsByNickName(nickName, pageRequest);
     }
 
     @Transactional(readOnly = true)
