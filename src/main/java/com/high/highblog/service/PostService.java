@@ -68,6 +68,13 @@ public class PostService {
     }
 
     @Transactional(readOnly = true)
+    public Page<Post> fetchPostsByFollowerIdWithPageRequest(final Long followerId, final PageRequest pageRequest) {
+        log.info("Fetch posts by followerId #{} with pageRequest #{}", followerId, pageRequest);
+
+        return repository.fetchListPostsByFollowerId(followerId, pageRequest);
+    }
+
+    @Transactional(readOnly = true)
     public Page<Post> searchFullTextPostsByKeywordWithPageRequest(final String keyword,
                                                                   final PageRequest pageRequest) {
         log.info("Search full text post with keyword #{}", keyword);

@@ -11,11 +11,11 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping("/api/v1/users")
-public class GetUserDetailController {
+public class UserCrudController {
 
     private final UserDetailBloc userDetailBloc;
 
-    public GetUserDetailController(final UserDetailBloc userDetailBloc) {
+    public UserCrudController(final UserDetailBloc userDetailBloc) {
         this.userDetailBloc = userDetailBloc;
     }
 

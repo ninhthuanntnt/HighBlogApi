@@ -45,4 +45,10 @@ public interface PostRepository
         + " JOIN PostStatistic ps ON ps.postId = p.id"
         + " WHERE u.nickName = :nickName")
     Page<Post> fetchListPostsByNickName(@Param("nickName") String nickName, Pageable pageable);
+
+    @Query("SELECT new Post(p, ps) FROM Post p"
+            + " JOIN Subscription sub ON sub.userId = p.userId"
+            + " JOIN PostStatistic ps ON ps.postId = p.id"
+            + " WHERE sub.followerId = :followerId")
+    Page<Post> fetchListPostsByFollowerId(@Param("followerId") Long followerId, Pageable pageable);
 }

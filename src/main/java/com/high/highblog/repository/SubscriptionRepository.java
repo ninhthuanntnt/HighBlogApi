@@ -6,6 +6,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
 import java.util.Optional;
 
 @Repository
@@ -16,6 +17,7 @@ public interface SubscriptionRepository
             + " WHERE sub.userId = :userId AND sub.followerId = :followerId")
     boolean existsByUserIdAndFollowerId(@Param("userId") Long userId, @Param("followerId") Long followerId);
 
-
     Optional<Subscription> findByUserIdAndFollowerId(Long userId, Long followerId);
+
+    List<Subscription> findDistinctByFollowerId(Long followerId);
 }
