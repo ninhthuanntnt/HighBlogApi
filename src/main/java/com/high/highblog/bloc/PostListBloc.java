@@ -55,11 +55,12 @@ public class PostListBloc {
         return posts;
     }
 
-    public Page<Post> fetchPostsByUserId(final Long userId, BasePaginationReq req) {
+    public Page<Post> fetchPostsByNickName(final String nickName, BasePaginationReq req) {
+        log.info("Fetch list posts by nickName #{} with req #{}", nickName, req);
         PageRequest pageRequest = PaginationHelper.generatePageRequestWithDefaultSort(req,
                                                                                       "-ps.numberOfVotes");
 
-        Page<Post> posts = postService.fetchPostsByUserIdWithPageRequest(userId, pageRequest);
+        Page<Post> posts = postService.fetchPostsByNickNameWithPageRequest(nickName, pageRequest);
 
         includePostTagsToPosts(posts);
         includeUserToPosts(posts);

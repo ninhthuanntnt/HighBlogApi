@@ -1,6 +1,5 @@
 package com.high.highblog.api.common;
 
-import com.fasterxml.jackson.databind.ser.Serializers;
 import com.high.highblog.bloc.PostListBloc;
 import com.high.highblog.helper.PaginationHelper;
 import com.high.highblog.mapper.PostMapper;
@@ -34,11 +33,11 @@ public class PostListController {
         ));
     }
 
-    @GetMapping(params = "userId")
-    public ResponseEntity<?> fetchListPost(@RequestParam final Long userId,
+    @GetMapping(params = "nickName")
+    public ResponseEntity<?> fetchListPost(@RequestParam final String nickName,
                                            final BasePaginationReq req) {
 
-        Page<Post> posts = postListBloc.fetchPostsByUserId(userId, req);
+        Page<Post> posts = postListBloc.fetchPostsByNickName(nickName, req);
 
         return ResponseEntity.ok(PaginationHelper.buildBasePaginationRes(
                 posts.map(PostMapper.INSTANCE::toPostRes)

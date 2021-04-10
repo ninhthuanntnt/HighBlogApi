@@ -1,6 +1,5 @@
 package com.high.highblog.bloc;
 
-import com.high.highblog.error.exception.ValidatorException;
 import com.high.highblog.helper.SecurityHelper;
 import com.high.highblog.model.entity.User;
 import com.high.highblog.service.SubscriptionService;
@@ -26,18 +25,21 @@ public class SubscriptionCrudBloc {
     public void createSubscriptionForCurrentUser(final String nickName) {
         log.info("Create subscription for current user");
 
-        Long userId = SecurityHelper.getUserId();
+        Long followerId = SecurityHelper.getUserId();
 
-        validateUserIdAndNickName(userId, nickName);
+        User user = userService.getByNickName(nickName);
 
-        User follower = userService.getByNickName(nickName);
-
-        subscriptionService.saveNew(userId, follower.getId());
+        subscriptionService.saveNew(user.getId(), followerId);
     }
 
-    private void validateUserIdAndNickName(final Long userId, final String nickName) {
+    @Transactional
+    public void deleteSubscriptionForCurrentUser(final String nickName) {
+        log.info("Delete subscription for current user");
 
-        if(subscriptionService.existsByUserIdAndNickName(userId, nickName))
-            throw new ValidatorException("Already exists subscription", "subscription");
+        Long followerId = SecurityHelper.getUserId();
+
+        User user = userService.getByNickName(nickName);
+
+        subscriptionService.delete(user.getId(), followerId);
     }
 }

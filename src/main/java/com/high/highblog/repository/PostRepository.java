@@ -41,8 +41,8 @@ public interface PostRepository
     Page<Post> fetchListFavoritePostsByUserId(@Param("userId") Long userId, Pageable pageable);
 
     @Query("SELECT new Post(p, ps) FROM Post p"
+        + " JOIN User u ON u.id = p.userId"
         + " JOIN PostStatistic ps ON ps.postId = p.id"
-        + " WHERE p.userId = :userId")
-    Page<Post> fetchListPostsByUserId(@Param("userId") Long userId, Pageable pageable);
-
+        + " WHERE u.nickName = :nickName")
+    Page<Post> fetchListPostsByNickName(@Param("nickName") String nickName, Pageable pageable);
 }
