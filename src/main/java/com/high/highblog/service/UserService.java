@@ -39,6 +39,14 @@ public class UserService {
                              .orElseThrow(() -> new ObjectNotFoundException("user"));
     }
 
+    @Transactional(readOnly = true)
+    public User getByNickName(final String nickName) {
+        log.info("Get user by id");
+
+        return userRepository.findByNickName(nickName)
+                             .orElseThrow(() -> new ObjectNotFoundException("user"));
+    }
+
     @Transactional
     public void saveNew(final User user) {
         log.info("Save new user with info #{}", user);

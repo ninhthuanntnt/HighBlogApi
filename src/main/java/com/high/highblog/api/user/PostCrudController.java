@@ -28,11 +28,11 @@ public class PostCrudController {
     }
 
     @PostMapping
-    public ResponseEntity<?> createPost(@RequestBody final PostCreateReq postCreateReq) {
+    public ResponseEntity<Long> createPost(@RequestBody final PostCreateReq postCreateReq) {
 
-        postCrudBloc.createPost(postCreateReq);
+        Long id = postCrudBloc.createPost(postCreateReq);
 
-        return ResponseEntity.status(HttpStatus.CREATED).build();
+        return ResponseEntity.status(HttpStatus.CREATED).body(id);
     }
 
     @GetMapping("/{id}")

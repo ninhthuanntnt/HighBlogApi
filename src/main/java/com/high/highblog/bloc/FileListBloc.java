@@ -14,10 +14,10 @@ import org.springframework.stereotype.Component;
 
 @Slf4j
 @Component
-public class FileUploadListBloc {
+public class FileListBloc {
     private final FileService fileService;
 
-    public FileUploadListBloc(final FileService fileService) {
+    public FileListBloc(final FileService fileService) {
         this.fileService = fileService;
     }
 

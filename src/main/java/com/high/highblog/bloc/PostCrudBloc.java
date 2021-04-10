@@ -47,7 +47,7 @@ public class PostCrudBloc {
     }
 
     @Transactional
-    public void createPost(final PostCreateReq postCreateReq) {
+    public Long createPost(final PostCreateReq postCreateReq) {
         log.info("Create new post with data #{}", postCreateReq);
 
         Post post = PostMapper.INSTANCE.toPost(postCreateReq);
@@ -63,6 +63,8 @@ public class PostCrudBloc {
         postStatisticService.saveNew(PostStatistic.builder()
                                                   .postId(post.getId())
                                                   .build());
+
+        return post.getId();
     }
 
     @Transactional(readOnly = true)
