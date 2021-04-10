@@ -1,6 +1,7 @@
 package com.high.highblog.bloc;
 
 import com.high.highblog.helper.PaginationHelper;
+import com.high.highblog.helper.SecurityHelper;
 import com.high.highblog.model.dto.request.BasePaginationReq;
 import com.high.highblog.model.dto.request.PostSearchReq;
 import com.high.highblog.model.entity.Post;
@@ -10,6 +11,7 @@ import com.high.highblog.model.entity.User;
 import com.high.highblog.service.PostService;
 import com.high.highblog.service.PostStatisticService;
 import com.high.highblog.service.PostTagService;
+import com.high.highblog.service.SubscriptionService;
 import com.high.highblog.service.UserService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
@@ -55,7 +57,7 @@ public class PostListBloc {
         return posts;
     }
 
-    public Page<Post> fetchPostsByNickName(final String nickName, BasePaginationReq req) {
+    public Page<Post> fetchPostsByNickName(final String nickName, final BasePaginationReq req) {
         log.info("Fetch list posts by nickName #{} with req #{}", nickName, req);
         PageRequest pageRequest = PaginationHelper.generatePageRequestWithDefaultSort(req,
                                                                                       "-ps.numberOfVotes");
@@ -64,6 +66,19 @@ public class PostListBloc {
 
         includePostTagsToPosts(posts);
         includeUserToPosts(posts);
+        return posts;
+    }
+
+    public Page<Post> fetchSubscriptionPostsForCurrentUser(final BasePaginationReq req) {
+        log.info("Fetch list subscription posts for current user");
+
+        PageRequest pageRequest = PaginationHelper.generatePageRequest(req);
+
+        Page<Post> posts = postService.fetchPostsByFollowerIdWithPageRequest(SecurityHelper.getUserId(), pageRequest);
+
+        includePostTagsToPosts(posts);
+        includeUserToPosts(posts);
+
         return posts;
     }
 

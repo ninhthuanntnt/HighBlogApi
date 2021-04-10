@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping("/api/v1/user/users/{nickName}/subscriptions")
+@RequestMapping("/api/v1/user/subscriptions/users/{nickName}")
 public class SubscriptionCrudController {
     private final SubscriptionCrudBloc subscriptionCrudBloc;
 
