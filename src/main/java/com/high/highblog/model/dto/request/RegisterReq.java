@@ -1,6 +1,5 @@
 package com.high.highblog.model.dto.request;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
 import com.high.highblog.enums.GenderType;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -9,6 +8,8 @@ import lombok.NoArgsConstructor;
 import lombok.NonNull;
 import lombok.Setter;
 
+import javax.validation.constraints.Pattern;
+
 @Getter
 @Setter
 @AllArgsConstructor
@@ -16,6 +17,11 @@ import lombok.Setter;
 @Builder
 public class RegisterReq {
 // TODO: Add validate for necessary fields
+
+    @NonNull
+    @Pattern(regexp = "[A-Za-z0-9_]")
+    private String nickName;
+
     @NonNull
     private String firstName;
 
@@ -29,6 +35,7 @@ public class RegisterReq {
     private GenderType genderType;
 
     @NonNull
+    @Pattern(regexp = "[A-Za-z0-9_]")
     private String username;
 
     @NonNull
