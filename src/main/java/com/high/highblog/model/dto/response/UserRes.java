@@ -17,6 +17,8 @@ public class UserRes {
 
     private Long id;
 
+    private String nickName;
+
     private String firstName;
 
     private String lastName;
