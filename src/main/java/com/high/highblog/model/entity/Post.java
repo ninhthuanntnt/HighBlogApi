@@ -10,6 +10,8 @@ import lombok.ToString;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -63,6 +65,7 @@ public class Post
 
     @Builder.Default
     @NotNull
+    @Enumerated(EnumType.STRING)
     @Column(name = "post_type", nullable = false)
     private PostType postType = PostType.DRAFT;
 

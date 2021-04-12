@@ -1,5 +1,4 @@
 id;user_id;username;password;email;created_by
-1;34;user1;$2a$10$VEjxo0jq2YG9Rbk2HmX9S.k1uZBGYUHdUcid3g/vfiEl7lwWgOH/K;siuorio0@dmoz.org;system
 2;977;user2;$2a$10$VEjxo0jq2YG9Rbk2HmX9S.k1uZBGYUHdUcid3g/vfiEl7lwWgOH/K;fmclaggan1@mediafire.com;system
 3;403;user3;$2a$10$VEjxo0jq2YG9Rbk2HmX9S.k1uZBGYUHdUcid3g/vfiEl7lwWgOH/K;itrebble2@scribd.com;system
 4;600;user4;$2a$10$VEjxo0jq2YG9Rbk2HmX9S.k1uZBGYUHdUcid3g/vfiEl7lwWgOH/K;tdoggett3@hexun.com;system
