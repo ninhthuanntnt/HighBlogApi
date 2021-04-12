@@ -46,3 +46,7 @@ application:
         registration-email-template: classpath:./templates/registration_email_template.html
     cors:
         allowed-origin: ${HB_ALLOWED_ORIGIN}
+    paypal:
+        client-id: ${HB_PAYPAL_CLIENT_ID}
+        client-secret: ${HB_PAYPAL_CLIENT_SECRET}
+        environment: ${HB_PAYPAL_ENVIRONMENT}

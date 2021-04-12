@@ -32,7 +32,9 @@ dependencies {
     implementation "io.springfox:springfox-swagger-ui:${spring_fox_swagger_ui_version}"
     implementation "commons-io:commons-io:${commons_io_version}"
     implementation "org.apache.commons:commons-lang3:${commons_lang3_version}"
-    implementation "org.apache.commons:commons-collections4:4.4"
+    implementation "org.apache.commons:commons-collections4:${commons_collections4_version}"
+    implementation "com.paypal.sdk:checkout-sdk:${paypal_checkout_sdk_version}"
+    implementation "org.json:json:${org_json_version}"
 
     compileOnly "org.projectlombok:lombok"
     developmentOnly "org.springframework.boot:spring-boot-devtools"
