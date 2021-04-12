@@ -32,7 +32,7 @@ public class AccountService {
     }
 
     @Transactional(readOnly = true)
-    public boolean isExistAccountByEmail(final String email) {
+    public boolean existAccountByEmail(final String email) {
         log.info("Check whether exists account with email #{}", email);
 
         return accountRepository.findByUsername(email)

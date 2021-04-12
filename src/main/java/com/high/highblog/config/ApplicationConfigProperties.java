@@ -19,6 +19,7 @@ public class ApplicationConfigProperties {
     private FileUpload fileUpload;
     private ResourceTemplate resourceTemplate;
     private Cors cors;
+    private Paypal paypal;
 
     @Getter
     @Setter
@@ -47,5 +48,13 @@ public class ApplicationConfigProperties {
     @Setter
     public static class Cors {
         private String allowedOrigin;
+    }
+
+    @Getter
+    @Setter
+    public static class Paypal{
+        private String clientId;
+        private String clientSecret;
+        private String environment;
     }
 }

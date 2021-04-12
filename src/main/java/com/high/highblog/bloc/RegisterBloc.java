@@ -164,7 +164,7 @@ public class RegisterBloc {
     private void validateRegisterReq(final RegisterReq registerReq) {
         if (accountService.isExistAccountByUsername(registerReq.getUsername()))
             throw new ValidatorException("Duplicate username", "username");
-        else if (accountService.isExistAccountByEmail(registerReq.getEmail()))
+        else if (accountService.existAccountByEmail(registerReq.getEmail()))
             throw new ValidatorException("Duplicate email", "email");
 
     }
