@@ -1,7 +1,7 @@
 package com.high.highblog.api.common;
 
 
-import com.high.highblog.bloc.UserDetailBloc;
+import com.high.highblog.bloc.UserCrudBloc;
 import com.high.highblog.model.entity.User;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -13,15 +13,15 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/api/v1/users")
 public class UserCrudController {
 
-    private final UserDetailBloc userDetailBloc;
+    private final UserCrudBloc userCrudBloc;
 
-    public UserCrudController(final UserDetailBloc userDetailBloc) {
-        this.userDetailBloc = userDetailBloc;
+    public UserCrudController(final UserCrudBloc userCrudBloc) {
+        this.userCrudBloc = userCrudBloc;
     }
 
     @GetMapping("/{nickName}")
     public ResponseEntity<?> getUserDetail(@PathVariable String nickName) {
-        User user = userDetailBloc.getUserDetail(nickName);
+        User user = userCrudBloc.getUserDetail(nickName);
         return ResponseEntity.ok(user);
     }
 }
