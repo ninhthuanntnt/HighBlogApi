@@ -20,6 +20,13 @@ public class SubscriptionService {
         this.repository = repository;
     }
 
+    @Transactional(readOnly = true)
+    public boolean existsByUserIdAndFollowerId(final Long userId, final Long followerId){
+        log.info("Exists by userId #{} and followerId #{}", userId, followerId);
+
+        return repository.existsByUserIdAndFollowerId(userId, followerId);
+    }
+
     @Transactional
     public void saveNew(final Subscription subscription) {
         log.info("Save new subscription with data #{}", subscription);

@@ -33,6 +33,8 @@ public class PostDetailRes {
 
     private String numberOfVotes;
 
+    private Boolean addedToFavorite;
+
     @JsonProperty("tags")
     private List<TagRes> tagsRes;
 

@@ -8,10 +8,12 @@ import com.high.highblog.model.entity.Post;
 import com.high.highblog.model.entity.PostStatistic;
 import com.high.highblog.model.entity.PostTag;
 import com.high.highblog.model.entity.User;
+import com.high.highblog.service.FavoritePostService;
 import com.high.highblog.service.PostService;
 import com.high.highblog.service.PostStatisticService;
 import com.high.highblog.service.PostTagService;
 import com.high.highblog.service.PostVoteService;
+import com.high.highblog.service.SubscriptionService;
 import com.high.highblog.service.UserService;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.collections4.CollectionUtils;
@@ -33,17 +35,23 @@ public class PostCrudBloc {
     private final PostStatisticService postStatisticService;
     private final PostVoteService postVoteService;
     private final UserService userService;
+    private final FavoritePostService favoritePostService;
+    private final SubscriptionService subscriptionService;
 
     public PostCrudBloc(final PostService postService,
                         final PostTagService postTagService,
                         final PostStatisticService postStatisticService,
                         final PostVoteService postVoteService,
-                        final UserService userService) {
+                        final UserService userService,
+                        final FavoritePostService favoritePostService,
+                        final SubscriptionService subscriptionService) {
         this.postService = postService;
         this.postTagService = postTagService;
         this.postStatisticService = postStatisticService;
         this.postVoteService = postVoteService;
         this.userService = userService;
+        this.favoritePostService = favoritePostService;
+        this.subscriptionService = subscriptionService;
     }
 
     @Transactional
@@ -123,6 +131,12 @@ public class PostCrudBloc {
             Long userId = SecurityHelper.getUserId();
             if (ObjectUtils.isNotEmpty(userId)) {
                 post.setPostVote(postVoteService.getByPostIdAndUserId(post.getId(), userId));
+
+                post.setAddedToFavorite(favoritePostService.existsByPostIdAndUserId(post.getId(), userId));
+
+                User postOwner = post.getUser();
+
+                postOwner.setFollowed(subscriptionService.existsByUserIdAndFollowerId(postOwner.getId(), userId));
             }
         }catch (Exception ex){
             log.info("Extra info of post detail is not set");

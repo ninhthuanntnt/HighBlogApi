@@ -10,4 +10,6 @@ import java.util.Optional;
 public interface FavoritePostRepository extends JpaRepository<FavoritePost, Long> {
 
     Optional<FavoritePost> findByPostIdAndUserId(Long postId, Long userId);
+
+    boolean existsByPostIdAndUserId(Long postId, Long userId);
 }
