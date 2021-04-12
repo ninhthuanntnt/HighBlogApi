@@ -70,6 +70,9 @@ public class Post
     private PostType postType = PostType.DRAFT;
 
     @Transient
+    private Boolean addedToFavorite;
+
+    @Transient
     private List<PostTag> postTags;
 
     @Transient

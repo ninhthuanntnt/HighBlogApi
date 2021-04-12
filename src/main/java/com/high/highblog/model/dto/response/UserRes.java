@@ -24,4 +24,6 @@ public class UserRes {
     private String lastName;
 
     private String imagePath;
+
+    private Boolean followed;
 }

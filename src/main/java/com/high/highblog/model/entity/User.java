@@ -16,6 +16,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
+import javax.persistence.Transient;
 import javax.validation.constraints.NotNull;
 
 @Entity
@@ -52,4 +53,7 @@ public class User
 
     @Column(name = "background_path")
     private String backgroundPath;
+
+    @Transient
+    private Boolean followed;
 }

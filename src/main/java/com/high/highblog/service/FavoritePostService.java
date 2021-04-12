@@ -19,6 +19,14 @@ public class FavoritePostService {
         this.repository = repository;
     }
 
+
+    @Transactional(readOnly = true)
+    public boolean existsByPostIdAndUserId(final Long postId, final Long userId) {
+        log.info("Exists by postId #{} and userId #{}", postId, userId);
+
+        return repository.existsByPostIdAndUserId(postId, userId);
+    }
+
     @Transactional
     public void saveNew(final FavoritePost favoritePost) {
         log.info("Save new favorite post with data #{}", favoritePost);
@@ -42,7 +50,6 @@ public class FavoritePostService {
 
         FavoritePost favoritePost = repository.findByPostIdAndUserId(postId, userId)
                                               .orElseThrow(() -> new ObjectNotFoundException("post"));
-
 
         repository.delete(favoritePost);
     }
