@@ -16,6 +16,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
+import javax.validation.constraints.NotNull;
 
 import java.time.Instant;
 import java.time.temporal.ChronoField;
@@ -40,15 +41,20 @@ public class ConfirmationCode
     @Column(name = "account_id")
     private Long accountId;
 
-    @Column(nullable = false)
+    @NotNull
     private String code;
 
     @Column
     private Long expiration;
 
+    @NotNull
     @Enumerated(EnumType.STRING)
-    @Column(name = "code_type", nullable = false)
+    @Column(name = "code_type")
     private CodeType codeType;
+
+    @NotNull
+    @Builder.Default
+    private boolean activated = true;
 
     public boolean isExpired() {
         long expirationDate = this.getExpiration() + this.getCreatedDate().toEpochMilli();

@@ -8,10 +8,10 @@ import org.springframework.transaction.annotation.Transactional;
 
 @Slf4j
 @Component
-public class UserDetailBloc {
+public class UserCrudBloc {
     private final UserService userService;
 
-    public UserDetailBloc(final UserService userService) {
+    public UserCrudBloc(final UserService userService) {
         this.userService = userService;
     }
 

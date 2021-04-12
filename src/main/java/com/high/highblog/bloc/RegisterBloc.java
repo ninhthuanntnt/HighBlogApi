@@ -4,12 +4,13 @@ import com.high.highblog.enums.CodeType;
 import com.high.highblog.enums.RoleType;
 import com.high.highblog.error.exception.ObjectNotFoundException;
 import com.high.highblog.error.exception.ValidatorException;
+import com.high.highblog.helper.SecurityHelper;
 import com.high.highblog.model.dto.request.RegisterReq;
+import com.high.highblog.model.dto.request.ResendEmailReq;
 import com.high.highblog.model.entity.Account;
 import com.high.highblog.model.entity.ConfirmationCode;
 import com.high.highblog.model.entity.Role;
 import com.high.highblog.model.entity.User;
-import com.high.highblog.helper.SecurityHelper;
 import com.high.highblog.service.AccountRoleService;
 import com.high.highblog.service.AccountService;
 import com.high.highblog.service.ConfirmationCodeService;
@@ -21,8 +22,8 @@ import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Collections;
+import java.util.List;
 import java.util.Objects;
-import java.util.UUID;
 
 @Slf4j
 @Component
@@ -52,11 +53,12 @@ public class RegisterBloc {
     }
 
     @Transactional
-    public void register(final RegisterReq registerReq) {
+    public Long register(final RegisterReq registerReq) {
 
         validateRegisterReq(registerReq);
 
         User user = User.builder()
+                        .nickName(registerReq.getNickName())
                         .firstName(registerReq.getFirstName()).lastName(registerReq.getLastName())
                         .genderType(registerReq.getGenderType())
                         .build();
@@ -74,12 +76,13 @@ public class RegisterBloc {
         accountRoleService.saveNew(account.getId(), Collections.singletonList(role.getId()));
 
         ConfirmationCode confirmationCode = confirmationCodeService.saveNew(account.getId(),
-                                                                            generateUUID(),
                                                                             CodeType.REGISTRATION);
 
-        mailBloc.sendConfirmRegistrationMailTo("ninhthuan1999@gmail.com",
+        mailBloc.sendConfirmRegistrationMailTo(registerReq.getEmail(),
                                                registerReq.getReturnUrl(),
                                                confirmationCode);
+
+        return confirmationCode.getId();
     }
 
     @Transactional
@@ -91,7 +94,45 @@ public class RegisterBloc {
                                                                                           CodeType.REGISTRATION);
         validateConfirmationCode(confirmationCode);
 
-        this.activate(confirmationCode.getAccountId());
+        Role role = roleService.getRoleByRoleType(RoleType.ROLE_USER);
+        accountRoleService.deleteOldAndSaveNew(confirmationCode.getAccountId(),
+                                               Collections.singletonList(role.getId()));
+
+        confirmationCodeService.inactivateConfirmationCode(confirmationCodeId);
+    }
+
+    @Transactional
+    public void resendConfirmRegistration(final Long previousConfirmationCodeId,
+                                          final ResendEmailReq resendEmailReq) {
+        log.info("Resend confirm registration email by previousConfirmationCodeId #{}", previousConfirmationCodeId);
+
+        Account account;
+        if (previousConfirmationCodeId == null) {
+            Long accountId = SecurityHelper.getAccountId();
+            account = accountService.getAccountById(SecurityHelper.getAccountId());
+
+            List<ConfirmationCode> previousCodes = confirmationCodeService.fetchByAccountIdAndCodeType(accountId,
+                                                                                                       CodeType.REGISTRATION);
+
+            confirmationCodeService.inactivateListConfirmationCode(previousCodes);
+
+        } else {
+            ConfirmationCode previousConfirmationCode = confirmationCodeService
+                    .getByIdAndType(previousConfirmationCodeId,
+                                    CodeType.REGISTRATION);
+            validatePreviousConfirmationCode(previousConfirmationCode);
+
+            confirmationCodeService.inactivateConfirmationCode(previousConfirmationCodeId);
+
+            account = accountService.getAccountById(previousConfirmationCode.getAccountId());
+        }
+
+
+        ConfirmationCode newConfirmationCode = confirmationCodeService.saveNew(account.getId(),
+                                                                               CodeType.REGISTRATION);
+        mailBloc.sendConfirmRegistrationMailTo(account.getEmail(),
+                                               resendEmailReq.getReturnUrl(),
+                                               newConfirmationCode);
     }
 
     private void validateConfirmationCode(final ConfirmationCode confirmationCode) {
@@ -104,7 +145,19 @@ public class RegisterBloc {
             // For use-case user login into system then activate account
             throw new ValidatorException("Mismatch account id", "accountId");
         } else if (confirmationCode.isExpired()) {
-            throw new ValidatorException("Expired confimation code", "confirmationCode");
+            throw new ValidatorException("Expired confirmation code", "confirmationCode");
+        } else if (confirmationCode.isActivated()) {
+            throw new ValidatorException("Inactivated confirmation code", "confirmationCode");
+        }
+    }
+
+    private void validatePreviousConfirmationCode(final ConfirmationCode confirmationCode) {
+        Long accountId = confirmationCode.getAccountId();
+
+        if (ObjectUtils.isEmpty(accountId)) {
+            throw new ObjectNotFoundException("accountId");
+        } else if (!confirmationCode.isExpired()) {
+            throw new ValidatorException("Unexpired confirmation code", "confirmationCode");
         }
     }
 
@@ -116,12 +169,4 @@ public class RegisterBloc {
 
     }
 
-    private void activate(final Long accountId) {
-        Role role = roleService.getRoleByRoleType(RoleType.ROLE_USER);
-        accountRoleService.deleteOldAndSaveNew(accountId, Collections.singletonList(role.getId()));
-    }
-
-    private String generateUUID() {
-        return UUID.randomUUID().toString().replace("-", "");
-    }
 }
