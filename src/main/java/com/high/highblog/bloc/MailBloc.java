@@ -29,7 +29,7 @@ public class MailBloc {
         this.registrationEmailTemplate = registrationEmailTemplate;
     }
 
-    @Async
+    @Async("taskExecutor")
     public void sendConfirmRegistrationMailTo(final String email,
                                               final String returnUrl,
                                               final ConfirmationCode confirmationCode) {

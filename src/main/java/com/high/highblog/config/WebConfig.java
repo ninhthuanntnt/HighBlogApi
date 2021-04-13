@@ -3,11 +3,15 @@ package com.high.highblog.config;
 import com.high.highblog.helper.FileHelper;
 import com.high.highblog.model.entity.File;
 import liquibase.pro.packaged.B;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.ResourceLoader;
+import org.springframework.core.task.TaskExecutor;
+import org.springframework.scheduling.annotation.EnableAsync;
+import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
 import org.springframework.util.ResourceUtils;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;
 import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
@@ -18,8 +22,10 @@ import springfox.documentation.spi.DocumentationType;
 import springfox.documentation.spring.web.plugins.Docket;
 import springfox.documentation.swagger2.annotations.EnableSwagger2;
 
+@Slf4j
 @Configuration
 @EnableSwagger2
+@EnableAsync(proxyTargetClass = true)
 public class WebConfig
         implements WebMvcConfigurer {
 
@@ -60,6 +66,18 @@ public class WebConfig
                 .allowedMethods("*")
                 .allowedOrigins(corsConfigProperties.getAllowedOrigin())
                 .maxAge(3600);
+    }
+
+    @Bean(name="taskExecutor")
+    public TaskExecutor taskExecutor() {
+        ThreadPoolTaskExecutor threadPoolTaskExecutor = new ThreadPoolTaskExecutor();
+        threadPoolTaskExecutor.setThreadNamePrefix("Async-");
+        threadPoolTaskExecutor.setCorePoolSize(3);
+        threadPoolTaskExecutor.setMaxPoolSize(3);
+        threadPoolTaskExecutor.setQueueCapacity(600);
+        threadPoolTaskExecutor.afterPropertiesSet();
+        log.info("ThreadPoolTaskExecutor set");
+        return threadPoolTaskExecutor;
     }
 
     @Bean

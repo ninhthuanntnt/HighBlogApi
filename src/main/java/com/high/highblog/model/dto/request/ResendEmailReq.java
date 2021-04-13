@@ -7,6 +7,8 @@ import lombok.NoArgsConstructor;
 import lombok.NonNull;
 import lombok.Setter;
 
+import javax.validation.constraints.NotNull;
+
 @Getter
 @Setter
 @AllArgsConstructor
@@ -14,6 +16,6 @@ import lombok.Setter;
 @Builder
 public class ResendEmailReq {
 
-    @NonNull
+    @NotNull
     private String returnUrl;
 }

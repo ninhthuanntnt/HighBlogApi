@@ -8,6 +8,7 @@ import lombok.NoArgsConstructor;
 import lombok.NonNull;
 import lombok.Setter;
 
+import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
 
 @Getter
@@ -18,30 +19,30 @@ import javax.validation.constraints.Pattern;
 public class RegisterReq {
 // TODO: Add validate for necessary fields
 
-    @NonNull
+    @NotNull
     @Pattern(regexp = "[A-Za-z0-9_]")
     private String nickName;
 
-    @NonNull
+    @NotNull
     private String firstName;
 
-    @NonNull
+    @NotNull
     private String lastName;
 
-    @NonNull
+    @NotNull
     @Pattern(regexp = "^[\\w-\\.]+@([\\w-]+\\.)+[\\w-]{2,4}$")
     private String email;
 
-    @NonNull
+    @NotNull
     private GenderType genderType;
 
-    @NonNull
+    @NotNull
     @Pattern(regexp = "[A-Za-z0-9_]")
     private String username;
 
-    @NonNull
+    @NotNull
     private String password;
 
-    @NonNull
+    @NotNull
     private String returnUrl;
 }
