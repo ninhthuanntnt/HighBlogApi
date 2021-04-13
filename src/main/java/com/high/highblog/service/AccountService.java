@@ -35,7 +35,7 @@ public class AccountService {
     public boolean existAccountByEmail(final String email) {
         log.info("Check whether exists account with email #{}", email);
 
-        return accountRepository.findByUsername(email)
+        return accountRepository.findByEmail(email)
                                 .isPresent();
     }
 

@@ -38,12 +38,15 @@ public class User
     @Column(name = "nick_name")
     private String nickName;
 
+    @NotNull
     @Column(name = "first_name")
     private String firstName;
 
+    @NotNull
     @Column(name = "last_name")
     private String lastName;
 
+    @NotNull
     @Enumerated(EnumType.STRING)
     @Column(name = "gender_type", length = 10)
     private GenderType genderType;
