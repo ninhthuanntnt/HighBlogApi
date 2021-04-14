@@ -14,5 +14,4 @@ import lombok.Setter;
 @Builder
 public class PostVoteDeleteReq {
     private Long postId;
-    private VoteType previousVoteType;
 }

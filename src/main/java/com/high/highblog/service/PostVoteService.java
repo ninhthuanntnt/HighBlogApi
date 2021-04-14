@@ -1,5 +1,6 @@
 package com.high.highblog.service;
 
+import com.high.highblog.error.exception.ObjectNotFoundException;
 import com.high.highblog.error.exception.ValidatorException;
 import com.high.highblog.helper.SecurityHelper;
 import com.high.highblog.model.entity.PostVote;
@@ -20,11 +21,19 @@ public class PostVoteService {
     }
 
     @Transactional(readOnly = true)
+    public PostVote getNullableByPostIdAndUserId(final Long id, final Long userId) {
+        log.info("Get nullable post vote by id #{} and user id #{}", id, userId);
+
+        return repository.findByPostIdAndUserId(id, userId)
+                         .orElse(null);
+    }
+
+    @Transactional(readOnly = true)
     public PostVote getByPostIdAndUserId(final Long id, final Long userId) {
         log.info("Get post vote by id #{} and user id #{}", id, userId);
 
         return repository.findByPostIdAndUserId(id, userId)
-                         .orElse(null);
+                         .orElseThrow(()-> new ObjectNotFoundException("postVote"));
     }
 
     @Transactional

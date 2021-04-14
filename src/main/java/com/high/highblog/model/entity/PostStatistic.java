@@ -1,5 +1,6 @@
 package com.high.highblog.model.entity;
 
+import com.high.highblog.enums.VoteType;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -35,4 +36,26 @@ public class PostStatistic
     @Builder.Default
     @Column(name = "number_of_votes", nullable = false)
     private Long numberOfVotes = 0L;
+
+    public void updateNumberOfVotes(final VoteType currentVoteType, final VoteType newVoteType) {
+        if (currentVoteType == VoteType.UP && newVoteType == VoteType.DOWN) {
+
+            numberOfVotes -= 2;
+
+        } else if (currentVoteType == VoteType.DOWN && newVoteType == VoteType.UP) {
+
+            numberOfVotes += 2;
+
+        } else if (currentVoteType == null && newVoteType == VoteType.UP
+                || (currentVoteType == VoteType.DOWN && newVoteType == null)) {
+
+            numberOfVotes += 1;
+
+        } else if ((currentVoteType == null && newVoteType == VoteType.DOWN)
+                || (currentVoteType == VoteType.UP && newVoteType == null)) {
+
+            numberOfVotes -= 1;
+
+        }
+    }
 }

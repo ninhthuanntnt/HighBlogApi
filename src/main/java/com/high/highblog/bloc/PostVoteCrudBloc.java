@@ -1,6 +1,7 @@
 package com.high.highblog.bloc;
 
 import com.high.highblog.constant.AppErrorCode;
+import com.high.highblog.enums.VoteType;
 import com.high.highblog.error.exception.ObjectNotFoundException;
 import com.high.highblog.error.exception.ValidatorException;
 import com.high.highblog.helper.SecurityHelper;
@@ -40,8 +41,10 @@ public class PostVoteCrudBloc {
         postVote.setUserId(userId);
         postVoteService.saveNew(postVote);
 
-        postStatisticService.saveNumberOfVoteAfterVote(postVoteCreateReq.getPostId(),
-                                                       postVoteCreateReq.getVoteType());
+
+        postStatisticService.saveNumberOfVotes(postVoteCreateReq.getPostId(),
+                                               null,
+                                               postVoteCreateReq.getVoteType());
     }
 
     @Transactional
@@ -50,15 +53,16 @@ public class PostVoteCrudBloc {
         log.info("Create post vote with data #{} for current user #{}", postVoteUpdateReq, userId);
 
         PostVote currentPostVote = postVoteService.getByPostIdAndUserId(postVoteUpdateReq.getPostId(), userId);
+        VoteType currentVoteType = currentPostVote.getVoteType();
 
         validateCurrentPostVoteAndPostVoteUpdateReq(currentPostVote, postVoteUpdateReq);
 
         PostVote newPostVote = PostVoteMapper.INSTANCE.toPostVote(postVoteUpdateReq, currentPostVote);
-
         postVoteService.save(newPostVote);
 
-        postStatisticService.saveNumberOfVoteAfterVote(postVoteUpdateReq.getPostId(),
-                                                       postVoteUpdateReq.getVoteType());
+        postStatisticService.saveNumberOfVotes(postVoteUpdateReq.getPostId(),
+                                               currentVoteType,
+                                               newPostVote.getVoteType());
     }
 
     @Transactional
@@ -66,40 +70,26 @@ public class PostVoteCrudBloc {
         Long userId = SecurityHelper.getUserId();
         log.info("Delete post vote with data #{} for current user #{}", postVoteDeleteReq, userId);
 
-        PostVote currentPostVote = postVoteService.getByPostIdAndUserId(postVoteDeleteReq.getPostId(), userId);
-
-        validateCurrentPostVoteAndPostVoteDeleteReq(currentPostVote, postVoteDeleteReq);
+        PostVote currentPostVote = postVoteService.getNullableByPostIdAndUserId(postVoteDeleteReq.getPostId(), userId);
 
         postVoteService.delete(currentPostVote);
 
-        postStatisticService.saveNumberOfVoteAfterDelete(postVoteDeleteReq.getPostId(),
-                                                         postVoteDeleteReq.getPreviousVoteType());
+        postStatisticService.saveNumberOfVotes(postVoteDeleteReq.getPostId(),
+                                               currentPostVote.getVoteType(),
+                                               null);
 
     }
 
     private void validatePostVoteCreateReq(final PostVoteCreateReq postVoteCreateReq) {
-        PostVote postVote = postVoteService.getByPostIdAndUserId(postVoteCreateReq.getPostId(),
-                                                                 SecurityHelper.getUserId());
-
+        PostVote postVote = postVoteService.getNullableByPostIdAndUserId(postVoteCreateReq.getPostId(),
+                                                                         SecurityHelper.getUserId());
         if (ObjectUtils.isNotEmpty(postVote))
             throw new ValidatorException("Already vote", AppErrorCode.DEFAULT_VALIDATOR);
     }
 
     private void validateCurrentPostVoteAndPostVoteUpdateReq(final PostVote currentPostVote,
                                                              final PostVoteUpdateReq postVoteUpdateReq) {
-
-        if (ObjectUtils.isEmpty(currentPostVote))
-            throw new ValidatorException("Not created vote", AppErrorCode.DEFAULT_VALIDATOR);
-        else if (currentPostVote.getVoteType().equals(postVoteUpdateReq.getVoteType()))
+        if (currentPostVote.getVoteType().equals(postVoteUpdateReq.getVoteType()))
             throw new ValidatorException("Already vote", AppErrorCode.DEFAULT_VALIDATOR);
-    }
-
-    private void validateCurrentPostVoteAndPostVoteDeleteReq(final PostVote currentPostVote,
-                                                             final PostVoteDeleteReq postVoteDeleteReq) {
-
-        if (ObjectUtils.isEmpty(currentPostVote))
-            throw new ObjectNotFoundException("Not found postVote");
-        else if (!currentPostVote.getVoteType().equals(postVoteDeleteReq.getPreviousVoteType()))
-            throw new ValidatorException("Not is the same vote type", AppErrorCode.DEFAULT_VALIDATOR);
     }
 }

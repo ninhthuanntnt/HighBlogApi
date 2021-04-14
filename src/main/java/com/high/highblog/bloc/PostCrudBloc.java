@@ -18,13 +18,10 @@ import com.high.highblog.service.UserService;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.ObjectUtils;
-import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
-import java.util.Map;
-import java.util.stream.Collectors;
 
 @Slf4j
 @Component
@@ -130,7 +127,7 @@ public class PostCrudBloc {
         try {
             Long userId = SecurityHelper.getUserId();
             if (ObjectUtils.isNotEmpty(userId)) {
-                post.setPostVote(postVoteService.getByPostIdAndUserId(post.getId(), userId));
+                post.setPostVote(postVoteService.getNullableByPostIdAndUserId(post.getId(), userId));
 
                 post.setAddedToFavorite(favoritePostService.existsByPostIdAndUserId(post.getId(), userId));
 
