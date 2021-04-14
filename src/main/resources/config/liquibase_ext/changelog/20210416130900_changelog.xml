@@ -1,0 +1,145 @@
+<?xml version="1.0" encoding="utf-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog https://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.3.xsd">
+    <property name="now" value="now(3)"/>
+
+    <changeSet id="HB-20210416130900-1" author="ninhthuanntnt">
+        <createTable tableName="hb_user_transactions">
+            <column name="id" type="bigint" autoIncrement="true">
+                <constraints primaryKey="true" primaryKeyName="pk_user_transactions"/>
+            </column>
+            <column name="user_id" type="bigint">
+                <constraints nullable="false"/>
+            </column>
+            <column name="transaction_no" type="varchar(100)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="amount" type="decimal(18,5)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="status" type="varchar(50)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="payment_method" type="varchar(50)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="payment_type" type="varchar(50)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="balance" type="decimal(18,5)">
+                <constraints nullable="false"/>
+            </column>
+
+            <column name="created_by" type="varchar(50)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="created_date" type="timestamp(3)" defaultValueComputed="${now}">
+                <constraints nullable="false"/>
+            </column>
+            <column name="last_modified_by" type="varchar(50)"/>
+            <column name="last_modified_date" type="timestamp(3)"/>
+        </createTable>
+        <createIndex tableName="hb_user_transactions" indexName="idx_user_transaction_user_id">
+            <column name="user_id" type="bigint"/>
+        </createIndex>
+    </changeSet>
+
+    <changeSet id="HB-20210416130900-2" author="ninhthuanntnt">
+        <createTable tableName="hb_third_party_transactions">
+            <column name="id" type="bigint" autoIncrement="true">
+                <constraints primaryKey="true" primaryKeyName="pk_user_transactions"/>
+            </column>
+            <column name="payment_id" type="varchar(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="amount" type="decimal(18,5)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="currency_type" type="varchar(5)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="status" type="varchar(50)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="fee" type="float"/>
+            <column name="additional_params" type="JSON"/>
+
+            <column name="created_by" type="varchar(50)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="created_date" type="timestamp(3)" defaultValueComputed="${now}">
+                <constraints nullable="false"/>
+            </column>
+            <column name="last_modified_by" type="varchar(50)"/>
+            <column name="last_modified_date" type="timestamp(3)"/>
+        </createTable>
+    </changeSet>
+
+    <changeSet id="HB-20210416130900-3" author="ninhthuanntnt">
+        <createTable tableName="hb_system_transactions">
+            <column name="id" type="bigint" autoIncrement="true">
+                <constraints primaryKey="true" primaryKeyName="pk_system_transactions"/>
+            </column>
+            <column name="sender_transaction_id" type="bigint">
+                <constraints nullable="false"/>
+            </column>
+            <column name="receiver_transaction_id" type="bigint"/>
+            <column name="third_party_transaction_id" type="bigint"/>
+            <column name="amount" type="decimal(18,5)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="status" type="varchar(50)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="fee_rate" type="float">
+                <constraints nullable="false"/>
+            </column>
+
+            <column name="created_by" type="varchar(50)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="created_date" type="timestamp(3)" defaultValueComputed="${now}">
+                <constraints nullable="false"/>
+            </column>
+            <column name="last_modified_by" type="varchar(50)"/>
+            <column name="last_modified_date" type="timestamp(3)"/>
+        </createTable>
+        <createIndex tableName="hb_system_transactions" indexName="idx_system_transaction_sender_transaction_id">
+            <column name="sender_transaction_id" type="bigint"/>
+        </createIndex>
+        <createIndex tableName="hb_system_transactions" indexName="idx_system_transaction_receiver_transaction_id">
+            <column name="receiver_transaction_id" type="bigint"/>
+        </createIndex>
+        <createIndex tableName="hb_system_transactions" indexName="idx_system_transaction_third_party_transaction">
+            <column name="third_party_transaction_id" type="bigint"/>
+        </createIndex>
+    </changeSet>
+    
+    <changeSet id="HB-20210416130900-4" author="ninhthuanntnt">
+        <createTable tableName="hb_wallets">
+            <column name="id" type="bigint" autoIncrement="true">
+                <constraints primaryKey="true" primaryKeyName="pk_wallets"/>
+            </column>
+            <column name="user_id" type="bigint">
+                <constraints nullable="false"/>
+            </column>
+            <column name="balance" type="decimal(18,5)">
+                <constraints nullable="false"/>
+            </column>
+
+            <column name="created_by" type="varchar(50)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="created_date" type="timestamp(3)" defaultValueComputed="${now}">
+                <constraints nullable="false"/>
+            </column>
+            <column name="last_modified_by" type="varchar(50)"/>
+            <column name="last_modified_date" type="timestamp(3)"/>
+        </createTable>
+        <createIndex tableName="hb_wallets" indexName="idx_wallet_user_id">
+            <column name="user_id" type="bigint"/>
+        </createIndex>
+    </changeSet>
+</databaseChangeLog>

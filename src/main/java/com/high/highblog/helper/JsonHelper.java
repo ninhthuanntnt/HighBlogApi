@@ -7,6 +7,7 @@ import org.springframework.http.MediaType;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.Map;
 
 import static com.fasterxml.jackson.annotation.JsonInclude.Include.NON_EMPTY;
 import static com.fasterxml.jackson.databind.DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES;
@@ -43,6 +44,12 @@ public final class JsonHelper {
         throws IOException {
 
         return MAPPER.writeValueAsString(object);
+    }
+
+    public static String convertMapToString(final Map<String, Object> map)
+            throws IOException {
+
+        return MAPPER.writeValueAsString(map);
     }
 
     public static <T> T convertValue(final Object fromValue, final Class<T> toValueType) {

@@ -5,25 +5,21 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import lombok.ToString;
 
 import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Size;
+
+import java.math.BigDecimal;
 
 @Getter
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class LoginReq {
-    @NotNull
-    @Size(min = 6, max = 100)
-    private String username;
+@ToString
+public class PaymentCreateReq {
 
     @NotNull
-    @Size(min = 8, max = 255)
-    private String password;
+    private BigDecimal amount;
 
-    @Builder.Default
-    @NotNull
-    private boolean rememberMe = true;
 }
