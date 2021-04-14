@@ -35,7 +35,7 @@ public class PostStatisticService {
         log.info("Fetch list post statistics by postId #{}", postId);
 
         return repository.findByPostId(postId)
-                         .orElseThrow(()-> new ObjectNotFoundException("postStatistic"));
+                         .orElseThrow(() -> new ObjectNotFoundException("postStatistic"));
     }
 
     @Transactional
@@ -47,35 +47,16 @@ public class PostStatisticService {
     }
 
     @Transactional
-    public void saveNumberOfVoteAfterVote(final Long postId, final VoteType voteType) {
-        log.info("Save number of vote after vote by voteType #{}", voteType);
+    public void saveNumberOfVotes(final Long postId, final VoteType currentVoteType, final VoteType newVoteType) {
+        log.info("Save numberOfVote for postId #{} by previousVoteType #{} and newVoteType #{}",
+                 postId,
+                 currentVoteType,
+                 newVoteType);
 
         PostStatistic postStatistic = repository.findByPostId(postId)
                                                 .orElseThrow(() -> new ObjectNotFoundException("postStatistic"));
-
-        switch (voteType) {
-            case UP:
-                postStatistic.setNumberOfVotes(postStatistic.getNumberOfVotes() + 1);
-                break;
-            case DOWN:
-                postStatistic.setNumberOfVotes(postStatistic.getNumberOfVotes() - 1);
-        }
-    }
-
-    @Transactional
-    public void saveNumberOfVoteAfterDelete(final Long postId, final VoteType voteType){
-        log.info("Save number of vote after delete");
-
-        PostStatistic postStatistic = repository.findByPostId(postId)
-                                                .orElseThrow(() -> new ObjectNotFoundException("postStatistic"));
-
-        switch (voteType) {
-            case UP:
-                postStatistic.setNumberOfVotes(postStatistic.getNumberOfVotes() - 1);
-                break;
-            case DOWN:
-                postStatistic.setNumberOfVotes(postStatistic.getNumberOfVotes() + 1);
-        }
+        postStatistic.updateNumberOfVotes(currentVoteType, newVoteType);
+        repository.save(postStatistic);
     }
 
     private void validatePostBeforeSaveNew(final PostStatistic postStatistic) {
