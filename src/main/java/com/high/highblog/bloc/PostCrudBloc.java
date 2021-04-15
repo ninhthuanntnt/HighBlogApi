@@ -137,6 +137,7 @@ public class PostCrudBloc {
             }
         }catch (Exception ex){
             log.info("Extra info of post detail is not set");
+            log.error(ex.getMessage());
         }
     }
 }
