@@ -21,10 +21,10 @@ public class PostVoteService {
     }
 
     @Transactional(readOnly = true)
-    public PostVote getNullableByPostIdAndUserId(final Long id, final Long userId) {
-        log.info("Get nullable post vote by id #{} and user id #{}", id, userId);
+    public PostVote getNullableByPostIdAndUserId(final Long postId, final Long userId) {
+        log.info("Get nullable post vote by id #{} and user id #{}", postId, userId);
 
-        return repository.findByPostIdAndUserId(id, userId)
+        return repository.findByPostIdAndUserId(postId, userId)
                          .orElse(null);
     }
 

@@ -32,7 +32,7 @@ public class FavoritePostCrudBloc {
     }
 
     private void validateFavoritePostCreateReq(final FavoritePostCreateReq req) {
-        if (!favoritePostService.existsByPostIdAndUserId(req.getPostId(), SecurityHelper.getUserId())){
+        if (favoritePostService.existsByPostIdAndUserId(req.getPostId(), SecurityHelper.getUserId())){
             throw new ValidatorException("Already added to favorite", "favoritePost");
         }
     }
