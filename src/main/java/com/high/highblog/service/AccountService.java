@@ -2,6 +2,7 @@ package com.high.highblog.service;
 
 import com.high.highblog.error.exception.ObjectNotFoundException;
 import com.high.highblog.error.exception.ValidatorException;
+import com.high.highblog.helper.SecurityHelper;
 import com.high.highblog.model.entity.Account;
 import com.high.highblog.repository.AccountRepository;
 import com.high.highblog.repository.AccountRoleRepository;
@@ -21,6 +22,7 @@ public class AccountService {
                           final PasswordEncoder passwordEncoder) {
         this.accountRepository = accountRepository;
         this.passwordEncoder = passwordEncoder;
+
     }
 
     @Transactional(readOnly = true)
@@ -61,5 +63,16 @@ public class AccountService {
     private void validateAccountBeforeSaveNew(final Account account) {
         if(ObjectUtils.isNotEmpty(account.getId()))
             throw new ValidatorException("Invalid account id", "id");
+    }
+
+    @Transactional
+    public void savePassword(final Long accountId, final String newPassword){
+        log.info("Save password by accountId #{}", accountId);
+
+        Account account = accountRepository.findById(accountId)
+                                           .orElseThrow(()->new ObjectNotFoundException("account"));
+
+        account.setPassword(passwordEncoder.encode(newPassword));
+        accountRepository.save(account);
     }
 }
