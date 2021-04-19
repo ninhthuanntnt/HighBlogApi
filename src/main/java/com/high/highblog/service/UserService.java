@@ -2,6 +2,7 @@ package com.high.highblog.service;
 
 import com.high.highblog.error.exception.ObjectNotFoundException;
 import com.high.highblog.error.exception.ValidatorException;
+import com.high.highblog.helper.SecurityHelper;
 import com.high.highblog.model.entity.User;
 import com.high.highblog.repository.UserRepository;
 import lombok.extern.slf4j.Slf4j;
@@ -60,5 +61,26 @@ public class UserService {
         if (ObjectUtils.isNotEmpty(user.getId())) {
             throw new ValidatorException("Invalid user id", "id");
         }
+    }
+
+    @Transactional
+    public void save(final User user) {
+        log.info("Save user with info #{}", user);
+
+        validateUserBeforeSave(user);
+
+        userRepository.save(user);
+    }
+
+    @Transactional(readOnly = true)
+    public boolean existsByNickName(final String nickName){
+        log.info("Exists by nick name #{}", nickName);
+
+        return userRepository.existsByNickName(nickName);
+    }
+
+    private void validateUserBeforeSave(final  User user) {
+        if (user.getId() != SecurityHelper.getUserId())
+            throw new ValidatorException("Invalid user id", "userId");
     }
 }
