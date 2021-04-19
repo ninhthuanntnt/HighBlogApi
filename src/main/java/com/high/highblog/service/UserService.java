@@ -33,7 +33,7 @@ public class UserService {
 
     @Transactional(readOnly = true)
     public User getById(Long id) {
-        log.info("Get user by id");
+        log.info("Get user by id #{}", id);
 
         return userRepository.findById(id)
                              .orElseThrow(() -> new ObjectNotFoundException("user"));
