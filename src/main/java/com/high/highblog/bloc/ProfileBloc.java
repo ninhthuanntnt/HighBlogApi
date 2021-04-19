@@ -33,6 +33,7 @@ public class ProfileBloc {
         List<Role> roles = roleService.fetchByAccountId(accountId);
 
         return ProfileRes.builder()
+                         .id(user.getId())
                          .firstName(user.getFirstName())
                          .lastName(user.getLastName())
                          .imagePath(user.getImagePath())
