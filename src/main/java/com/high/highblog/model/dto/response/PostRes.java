@@ -37,6 +37,10 @@ public class PostRes {
 
     private Long numberOfVotes;
 
+    private Long numberOfComments;
+
+    private Long numberOfFavorites;
+
     @JsonProperty("tags")
     private List<TagRes> tagsRes;
 

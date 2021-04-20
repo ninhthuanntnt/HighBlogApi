@@ -81,6 +81,28 @@ public class PostStatisticService {
         repository.save(postStatistic);
     }
 
+    @Transactional
+    public void increaseNumberOfComments(final Long postId) {
+        log.info("Increase numberOfComments");
+        PostStatistic postStatistic = repository.findByPostId(postId)
+                                                .orElseThrow(()->new ObjectNotFoundException("postStatistic"));
+
+        postStatistic.setNumberOfComments(postStatistic.getNumberOfComments() + 1);
+
+        repository.save(postStatistic);
+    }
+
+    @Transactional
+    public void decreaseNumberOfComments(final Long postId) {
+        log.info("Decrease numberOfFavorites");
+        PostStatistic postStatistic = repository.findByPostId(postId)
+                                                .orElseThrow(()->new ObjectNotFoundException("postStatistic"));
+
+        postStatistic.setNumberOfComments(postStatistic.getNumberOfComments() - 1);
+
+        repository.save(postStatistic);
+    }
+
     private void validatePostBeforeSaveNew(final PostStatistic postStatistic) {
         if (ObjectUtils.isNotEmpty(postStatistic.getId()))
             throw new ValidatorException("Invalid post statistic id", "id");

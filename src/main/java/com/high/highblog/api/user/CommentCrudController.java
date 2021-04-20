@@ -1,6 +1,6 @@
 package com.high.highblog.api.user;
 
-import com.high.highblog.bloc.CommentBloc;
+import com.high.highblog.bloc.CommentCrudBloc;
 import com.high.highblog.model.dto.request.CommentCreateReq;
 import com.high.highblog.model.dto.request.CommentUpdateReq;
 import org.springframework.http.HttpStatus;
@@ -17,16 +17,16 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/api/v1/user/comments")
 public class CommentCrudController {
 
-    private final CommentBloc commentBloc;
+    private final CommentCrudBloc commentCrudBloc;
 
-    public CommentCrudController(final CommentBloc commentBloc) {
-        this.commentBloc = commentBloc;
+    public CommentCrudController(final CommentCrudBloc commentCrudBloc) {
+        this.commentCrudBloc = commentCrudBloc;
     }
 
     @PostMapping
     public ResponseEntity<?> createComment(@RequestBody final CommentCreateReq commentCreateReq) {
 
-        Long commentId = commentBloc.createCommentForCurrentUser(commentCreateReq);
+        Long commentId = commentCrudBloc.createCommentForCurrentUser(commentCreateReq);
 
         return ResponseEntity.status(HttpStatus.CREATED).body(commentId);
     }
@@ -35,7 +35,7 @@ public class CommentCrudController {
     public ResponseEntity<?> updateComment(@PathVariable Long id,
                                            @RequestBody final CommentUpdateReq commentUpdateReq) {
 
-        commentBloc.updateCommentForCurrentUser(id, commentUpdateReq);
+        commentCrudBloc.updateCommentForCurrentUser(id, commentUpdateReq);
 
         return ResponseEntity.noContent().build();
     }
@@ -43,7 +43,7 @@ public class CommentCrudController {
     @DeleteMapping("/{id}")
     public ResponseEntity<?> deleteComment(@PathVariable Long id) {
 
-        commentBloc.deleteCommentForCurrentUser(id);
+        commentCrudBloc.deleteCommentForCurrentUser(id);
 
         return ResponseEntity.noContent().build();
     }
