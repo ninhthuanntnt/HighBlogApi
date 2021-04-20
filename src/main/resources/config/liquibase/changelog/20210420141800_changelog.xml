@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog https://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.3.xsd">
+    <property name="now" value="now(3)"/>
+
+    <changeSet id="HB-20210420141800" author="ninhthuanntnt">
+        <addColumn tableName="hb_post_statistics">
+            <column name="number_of_comments" type="bigint" defaultValue="0" afterColumn="number_of_votes">
+                <constraints nullable="false"/>
+            </column>
+            <column name="number_of_favorites" type="bigint" defaultValue="0" afterColumn="number_of_comments">
+                <constraints nullable="false"/>
+            </column>
+        </addColumn>
+    </changeSet>
+</databaseChangeLog>

@@ -14,6 +14,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
+import javax.validation.constraints.NotNull;
 
 @Entity
 @Table(name = "hb_post_statistics")
@@ -30,12 +31,24 @@ public class PostStatistic
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "post_id", nullable = false)
+    @NotNull
+    @Column(name = "post_id")
     private Long postId;
 
     @Builder.Default
-    @Column(name = "number_of_votes", nullable = false)
+    @NotNull
+    @Column(name = "number_of_votes")
     private Long numberOfVotes = 0L;
+
+    @Builder.Default
+    @NotNull
+    @Column(name = "number_of_comments")
+    private Long numberOfComments = 0L;
+
+    @Builder.Default
+    @NotNull
+    @Column(name = "number_of_favorites")
+    private Long numberOfFavorites = 0L;
 
     public void updateNumberOfVotes(final VoteType currentVoteType, final VoteType newVoteType) {
         if (currentVoteType == VoteType.UP && newVoteType == VoteType.DOWN) {
