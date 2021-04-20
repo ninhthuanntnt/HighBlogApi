@@ -11,7 +11,10 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
 import java.util.Objects;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
+import com.high.highblog.constant.Constant;
 import org.apache.commons.io.FilenameUtils;
 import org.springframework.core.io.DefaultResourceLoader;
 import org.springframework.core.io.Resource;
@@ -37,15 +40,6 @@ public class FileHelper {
         Files.copy(multipartFile.getInputStream(), path, StandardCopyOption.REPLACE_EXISTING);
 
         return fileName;
-    }
-
-    public static String getExtension(final String fileName) {
-        int indexOfDot = fileName.lastIndexOf('.');
-
-        if (indexOfDot > 1) {
-            return fileName.substring(indexOfDot + 1);
-        }
-        return null;
     }
 
     public static String generateNormalizeFileNameWithDate(final String file) {
@@ -75,5 +69,12 @@ public class FileHelper {
     public static String appendDomainToPath(final String path) {
         String url = ServletUriComponentsBuilder.fromCurrentContextPath().path("").toUriString();
         return url + "/" + path;
+    }
+
+    public static boolean isValidFilename(final String filename) {
+        Pattern pattern = Pattern.compile(Constant.FILE_NAME_REGEX);
+        Matcher matcher = pattern.matcher(filename);
+
+        return matcher.find();
     }
 }

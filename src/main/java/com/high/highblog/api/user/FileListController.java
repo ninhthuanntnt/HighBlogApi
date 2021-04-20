@@ -26,6 +26,6 @@ public class FileListController {
     public ResponseEntity<BasePaginationRes> fetchListImages(final BasePaginationReq basePaginationReq){
         Page<File> images = fileListBloc.fetchListImagesForCurrentUser(basePaginationReq);
 
-        return ResponseEntity.ok(PaginationHelper.buildBasePaginationRes(images.map(FileMapper.INSTANCE::toImageUploadRes)));
+        return ResponseEntity.ok(PaginationHelper.buildBasePaginationRes(images.map(FileMapper.INSTANCE::toFileRes)));
     }
 }

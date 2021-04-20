@@ -59,7 +59,7 @@ public class PaypalDepositBloc {
 
         saveUserAndSystemTransaction(thirdPartyTransaction);
 
-        Wallet wallet = walletService.getByUserId(SecurityHelper.getUserId());
+        Wallet wallet = walletService.getToSaveByUserId(SecurityHelper.getUserId());
         BigDecimal newBalance = wallet.getBalance()
                                       .add(thirdPartyTransaction.getAmount())
                                       .subtract(thirdPartyTransaction.getFee());
@@ -103,7 +103,7 @@ public class PaypalDepositBloc {
     private UserTransaction buildUserTransaction(final ThirdPartyTransaction thirdPartyTransaction,
                                                  final UserTransactionStatus userTransactionStatus) {
         Long userId = SecurityHelper.getUserId();
-        Wallet wallet = walletService.getByUserId(userId);
+        Wallet wallet = walletService.getToSaveByUserId(userId);
 
         return UserTransaction.builder()
                               .userId(userId)

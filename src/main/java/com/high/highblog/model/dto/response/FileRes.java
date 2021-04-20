@@ -13,7 +13,8 @@ import lombok.Setter;
 @NoArgsConstructor
 @Builder
 @JsonInclude(JsonInclude.Include.NON_NULL)
-public class ImageUploadRes {
+public class FileRes {
+    private Long id;
     private String name;
     private String path;
 }
