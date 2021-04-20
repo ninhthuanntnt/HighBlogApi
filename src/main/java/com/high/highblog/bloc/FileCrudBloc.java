@@ -1,7 +1,7 @@
 package com.high.highblog.bloc;
 
 import com.high.highblog.helper.SecurityHelper;
-import com.high.highblog.model.dto.request.ImageUploadReq;
+import com.high.highblog.model.dto.request.FileReq;
 import com.high.highblog.model.entity.File;
 import com.high.highblog.service.FileService;
 import lombok.extern.slf4j.Slf4j;
@@ -22,15 +22,15 @@ public class FileCrudBloc {
 
 
     @Transactional
-    public File uploadImage(final ImageUploadReq imageUploadReq) {
+    public File uploadImage(final FileReq fileReq) {
 
-        String path = fileService.saveNewImageToStorage(imageUploadReq.getImage());
+        String path = fileService.saveNewImageToStorage(fileReq.getImage());
 
-        String name = imageUploadReq.getName();
+        String name = fileReq.getName();
 
         log.info("Upload image with path #{}", path);
         if (ObjectUtils.isEmpty(name)) {
-            name = imageUploadReq.getImage().getOriginalFilename();
+            name = fileReq.getImage().getOriginalFilename();
         }
 
         return fileService.saveNew(buildFileToSaveNew(name, path));
@@ -55,5 +55,15 @@ public class FileCrudBloc {
                    .name(name)
                    .path(path)
                    .build();
+    }
+
+    @Transactional
+    public void deleteImageForCurrentUser(final Long id) {
+        log.info("Delete image for current user by id #{}", id);
+
+        Long userId = SecurityHelper.getUserId();
+
+        fileService.deleteImageFromStorageByIdAndUserId(id, userId);
+        fileService.deleteByIdAndUserId(id, userId);
     }
 }

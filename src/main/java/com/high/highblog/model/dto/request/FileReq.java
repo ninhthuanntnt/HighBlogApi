@@ -15,7 +15,7 @@ import java.util.Objects;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class ImageUploadReq {
+public class FileReq {
 
     private String name;
 

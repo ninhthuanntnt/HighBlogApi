@@ -17,6 +17,7 @@ import java.nio.file.Paths;
 import javax.annotation.PostConstruct;
 
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.lang3.ObjectUtils;
 import org.apache.commons.lang3.StringUtils;
@@ -32,12 +33,14 @@ public class FileService {
 
     private final FileUpload fileUploadConfigProperties;
     private final FileRepository fileRepository;
+    private final String imagesRootDir;
     private final String imageSubDir;
 
     public FileService(final ApplicationConfigProperties applicationConfigProperties,
                        final FileRepository fileRepository) {
         this.fileUploadConfigProperties = applicationConfigProperties.getFileUpload();
         this.fileRepository = fileRepository;
+        this.imagesRootDir = applicationConfigProperties.getFileUpload().getRootDir();
         this.imageSubDir = applicationConfigProperties.getFileUpload().getImagesSubDir();
     }
 
@@ -49,8 +52,16 @@ public class FileService {
         try {
             Files.createDirectories(path);
         } catch (IOException e) {
-            log.info("Can't create directories #{}", path.toString());
+            log.info("Can't create directories #{}", path);
         }
+    }
+
+    @Transactional(readOnly = true)
+    public File getByIdAndUserId(final Long id, final Long userId) {
+        log.info("Get file by id #{}", id);
+
+        return fileRepository.findByIdAndUserId(id, userId)
+                             .orElseThrow(() -> new ObjectNotFoundException("file"));
     }
 
     @Transactional
@@ -63,31 +74,53 @@ public class FileService {
     }
 
     @Transactional
-    public String saveNewImageToStorage(MultipartFile multipartFile) {
-        try {
-            validateImage(multipartFile);
+    public Page<File> fetchListImagesByUserIdWithPageRequest(final Long userId, final PageRequest pageRequest) {
+        log.info("Fetch list images by userId #{}", userId);
 
+        return fileRepository.findByUserId(userId, pageRequest);
+    }
+
+    public String saveNewImageToStorage(final MultipartFile multipartFile) {
+        validateImage(multipartFile);
+        try {
             String imagesDir = fileUploadConfigProperties.getRootDir()
                     + "/"
                     + this.imageSubDir;
 
             String fileName = FileHelper.saveFile(imagesDir, multipartFile);
 
-            return fileUploadConfigProperties.getImagesSubDir() + "/" + fileName;
+            return this.imageSubDir + "/" + fileName;
         } catch (IOException e) {
             log.error("Cannot save file #{} by #{}",
                       multipartFile.getOriginalFilename(),
                       e.getMessage());
             throw new ValidatorException("Unsuccessful", "image");
         }
-
     }
 
     @Transactional
-    public Page<File> fetchListImagesByUserIdWithPageRequest(final Long userId, final PageRequest pageRequest) {
-        log.info("Fetch list images by userId #{}", userId);
+    public void deleteImageFromStorageByIdAndUserId(final Long id, Long userId) {
+        log.info("Delete image from storage by id #{} and userId #{}", id, userId);
 
-        return fileRepository.findByUserId(userId, pageRequest);
+        File file = getByIdAndUserId(id, userId);
+
+        String storagePath = this.imagesRootDir + "/" + file.getPath();
+
+        try {
+            FileUtils.forceDelete(new java.io.File(storagePath));
+        } catch (IOException e) {
+            log.error("Cannot delete file at storage path #{}", storagePath);
+            e.printStackTrace();
+            throw new ValidatorException("Can't delete image", "image");
+        }
+    }
+
+    @Transactional
+    public void deleteByIdAndUserId(final Long id, final Long userId) {
+        log.info("Delete image by id #{} and userId #{}", id, userId);
+        File file = getByIdAndUserId(id, userId);
+
+        fileRepository.delete(file);
     }
 
     private void validateImage(MultipartFile multipartFile) {
@@ -95,6 +128,10 @@ public class FileService {
 
         if (StringUtils.isEmpty(fileName)) {
             throw new ValidatorException("Invalid", "image");
+        } else if (!FileHelper.isValidFilename(fileName)) {
+
+            throw new ValidatorException("Invalid file name", "image");
+
         } else {
             String ext = FilenameUtils.getExtension(multipartFile.getOriginalFilename());
 

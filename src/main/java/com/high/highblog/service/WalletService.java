@@ -1,10 +1,8 @@
 package com.high.highblog.service;
 
-import com.high.highblog.enums.UserTransactionStatus;
 import com.high.highblog.error.exception.ObjectNotFoundException;
 import com.high.highblog.error.exception.ValidatorException;
 import com.high.highblog.helper.SecurityHelper;
-import com.high.highblog.model.entity.UserTransaction;
 import com.high.highblog.model.entity.Wallet;
 import com.high.highblog.repository.WalletRepository;
 import lombok.extern.slf4j.Slf4j;
@@ -25,10 +23,10 @@ public class WalletService {
     }
 
     @Transactional(readOnly = true)
-    public Wallet getByUserId(final Long userId) {
-        log.info("Get wallet by userId #{}", userId);
+    public Wallet getToSaveByUserId(final Long userId) {
+        log.info("Get to save wallet by userId #{}", userId);
 
-        return repository.findByUserId(userId)
+        return repository.findToSaveByUserId(userId)
                          .orElseThrow(() -> new ObjectNotFoundException("userWallet"));
     }
 
@@ -36,7 +34,7 @@ public class WalletService {
     public void saveBalance(final Long userId, final BigDecimal newBalance) {
         log.info("Save user wallet by userId #{} and newBalance #{}", userId, newBalance);
 
-        Wallet wallet = repository.findByUserId(userId)
+        Wallet wallet = repository.findToSaveByUserId(userId)
                                   .orElseThrow(() -> new ObjectNotFoundException("userWallet"));
 
         validateBeforeSaveBalance(wallet);
@@ -49,7 +47,8 @@ public class WalletService {
     public void validateBeforeSaveBalance(final Wallet wallet) {
         if (ObjectUtils.isEmpty(wallet.getId())) {
             throw new ValidatorException("Invalid wallet", "wallet");
-        }if(SecurityHelper.getUserId() != wallet.getUserId()){
+        }
+        if (SecurityHelper.getUserId() != wallet.getUserId()) {
             throw new ValidatorException("Invalid user id", "userId");
         }
     }
