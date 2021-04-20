@@ -3,13 +3,16 @@ package com.high.highblog.service;
 import com.high.highblog.error.exception.ObjectNotFoundException;
 import com.high.highblog.error.exception.ValidatorException;
 import com.high.highblog.helper.SecurityHelper;
+import com.high.highblog.model.entity.File;
 import com.high.highblog.model.entity.User;
 import com.high.highblog.repository.UserRepository;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang3.ObjectUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.io.IOException;
 import java.util.Collection;
 import java.util.Collections;
 
@@ -82,5 +85,11 @@ public class UserService {
     private void validateUserBeforeSave(final  User user) {
         if (user.getId() != SecurityHelper.getUserId())
             throw new ValidatorException("Invalid user id", "userId");
+    }
+    @Transactional
+    public void saveAvatar(final Long id, String path){
+        User user = userRepository.findById(id).orElseThrow(() -> new ObjectNotFoundException("user"));
+        user.setImagePath(path);
+        userRepository.save(user);
     }
 }

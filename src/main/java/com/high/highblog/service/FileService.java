@@ -114,6 +114,20 @@ public class FileService {
             throw new ValidatorException("Can't delete image", "image");
         }
     }
+    @Transactional
+    public void deleteImageFromStorageByPath(final String path) {
+        log.info("Delete image from storage by path #{} ", path);
+
+        String storagePath = this.imagesRootDir + "/" + path;
+
+        try {
+            FileUtils.forceDelete(new java.io.File(storagePath));
+        } catch (IOException e) {
+            log.error("Cannot delete file at storage path #{}", storagePath);
+            e.printStackTrace();
+            throw new ValidatorException("Can't delete image", "image");
+        }
+    }
 
     @Transactional
     public void deleteByIdAndUserId(final Long id, final Long userId) {
