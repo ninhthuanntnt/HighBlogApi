@@ -92,4 +92,10 @@ public class UserService {
         user.setImagePath(path);
         userRepository.save(user);
     }
+    @Transactional
+    public void saveBackground(Long id, String path) {
+        User user = userRepository.findById(id).orElseThrow(() -> new ObjectNotFoundException("user"));
+        user.setBackgroundPath(path);
+        userRepository.save(user);
+    }
 }

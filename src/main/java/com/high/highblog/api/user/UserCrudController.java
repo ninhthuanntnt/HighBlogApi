@@ -31,4 +31,9 @@ public class UserCrudController {
         String path = userCrudBloc.uploadAvatar(avatarReq);
         return ResponseEntity.ok(new ImageUploadRes((FileHelper.appendDomainToPath(path))));
     }
+    @PutMapping("/background")
+    public ResponseEntity<?> updateBackground(@RequestParam("upload") MultipartFile backgroundReq){
+        String path = userCrudBloc.updateBackground(backgroundReq);
+        return ResponseEntity.ok(new ImageUploadRes((FileHelper.appendDomainToPath(path))));
+    }
 }

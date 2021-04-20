@@ -52,7 +52,7 @@ public class UserCrudBloc {
         if (userService.existsByNickName(newNickname))
             throw new ValidatorException("NickName already exists", "nickName");
     }
-
+    @Transactional
     public String uploadAvatar(MultipartFile  avatarReq) {
         Long currentUserId = SecurityHelper.getUserId();
         User currentUser = userService.getById(currentUserId);
@@ -62,6 +62,19 @@ public class UserCrudBloc {
             fileService.deleteImageFromStorageByPath(currentUser.getImagePath());
         }
         userService.saveAvatar(currentUserId,path);
+
+        return path;
+    }
+    @Transactional
+    public String updateBackground(MultipartFile backgroundReq) {
+        Long currentUserId = SecurityHelper.getUserId();
+        User currentUser = userService.getById(currentUserId);
+        String path = fileService.saveNewImageToStorage(backgroundReq);
+
+        if(currentUser.getBackgroundPath()!= null){
+            fileService.deleteImageFromStorageByPath(currentUser.getBackgroundPath());
+        }
+        userService.saveBackground(currentUserId,path);
 
         return path;
     }
