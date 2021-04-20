@@ -31,7 +31,11 @@ public class PostDetailRes {
 
     private Long lastModifiedDate;
 
-    private String numberOfVotes;
+    private Long numberOfVotes;
+
+    private Long numberOfComments;
+
+    private Long numberOfFavorites;
 
     private Boolean addedToFavorite;
 

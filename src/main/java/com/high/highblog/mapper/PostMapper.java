@@ -32,12 +32,16 @@ public interface PostMapper {
     PostDetailToUpdateRes toPostDetailToUpdateRes(Post post);
 
     @Mapping(target = "numberOfVotes", source = "postStatistic.numberOfVotes")
+    @Mapping(target = "numberOfComments", source = "postStatistic.numberOfComments")
+    @Mapping(target = "numberOfFavorites", source = "postStatistic.numberOfFavorites")
     @Mapping(target = "tagsRes", source = "postTags")
     @Mapping(target = "postVoteRes", source = "postVote")
     @Mapping(target = "userRes", source = "user")
     PostDetailRes toPostDetailRes(Post post);
 
     @Mapping(target = "numberOfVotes", source = "postStatistic.numberOfVotes")
+    @Mapping(target = "numberOfComments", source = "postStatistic.numberOfComments")
+    @Mapping(target = "numberOfFavorites", source = "postStatistic.numberOfFavorites")
     @Mapping(target = "tagsRes", source = "postTags")
     @Mapping(target = "userRes", source = "user")
     PostRes toPostRes(Post posts);
