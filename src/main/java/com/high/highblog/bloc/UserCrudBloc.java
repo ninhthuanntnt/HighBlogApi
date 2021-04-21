@@ -3,19 +3,15 @@ package com.high.highblog.bloc;
 import com.high.highblog.error.exception.ValidatorException;
 import com.high.highblog.helper.SecurityHelper;
 import com.high.highblog.mapper.UserMapper;
-import com.high.highblog.model.dto.request.FileReq;
 import com.high.highblog.model.dto.request.UserUpdateReq;
-import com.high.highblog.model.entity.File;
 import com.high.highblog.model.entity.User;
 import com.high.highblog.service.FileService;
 import com.high.highblog.service.UserService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.awt.*;
 
 @Slf4j
 @Component
@@ -78,4 +74,5 @@ public class UserCrudBloc {
 
         return path;
     }
+
 }
