@@ -3,11 +3,8 @@ package com.high.highblog.api.user;
 
 import com.high.highblog.bloc.UserCrudBloc;
 import com.high.highblog.helper.FileHelper;
-import com.high.highblog.mapper.FileMapper;
-import com.high.highblog.model.dto.request.FileReq;
 import com.high.highblog.model.dto.request.UserUpdateReq;
 import com.high.highblog.model.dto.response.ImageUploadRes;
-import com.high.highblog.model.entity.File;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;

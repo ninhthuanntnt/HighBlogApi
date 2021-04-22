@@ -52,4 +52,9 @@ public class WalletService {
             throw new ValidatorException("Invalid user id", "userId");
         }
     }
+    @Transactional(readOnly = true)
+    public Wallet getBalance(final long userId){
+        return repository.findByUserId(userId).orElseThrow(() -> new ObjectNotFoundException("userWallet"));
+    }
+
 }
