@@ -82,8 +82,8 @@ public class DonationBloc {
 
                 systemTransactionService.saveNew(systemTransaction);
 
-                walletService.saveBalance(senderId, senderWallet.getBalance().subtract(amount));
-                walletService.saveBalance(receiverId, receiverWallet.getBalance().add(amount));
+                walletService.subtractBalanceIfSufficient(senderId, amount);
+                walletService.addBalance(receiverId, amount);
 
             } catch (PessimisticLockException ex) {
                 log.info("Pessimistic lock when transfer money from userId #{} to #{}", senderId, receiverId);

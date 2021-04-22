@@ -48,10 +48,11 @@ public class ThirdPartyTransaction
     @Column(name = "amount")
     private BigDecimal amount;
 
+    @Builder.Default
     @NotNull
     @Enumerated(EnumType.STRING)
     @Column(name = "currency_type")
-    private CurrencyType currencyType;
+    private CurrencyType currencyType = CurrencyType.USD;
 
     @NotNull
     @Enumerated(EnumType.STRING)

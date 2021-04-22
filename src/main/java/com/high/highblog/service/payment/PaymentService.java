@@ -8,4 +8,6 @@ public interface PaymentService {
     ThirdPartyTransaction createPayment(BigDecimal amount);
 
     ThirdPartyTransaction executePayment(String paymentId);
+
+    ThirdPartyTransaction withdraw(String email, BigDecimal amount);
 }

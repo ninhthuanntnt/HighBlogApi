@@ -23,12 +23,12 @@ public class PaypalDepositController {
     @PostMapping("/create")
     public ResponseEntity<PaymentCreateRes> createPayment(@RequestBody final PaymentCreateReq paymentCreateReq) {
 
-        return ResponseEntity.ok(paypalDepositBloc.createPayment(paymentCreateReq));
+        return ResponseEntity.ok(paypalDepositBloc.createDeposit(paymentCreateReq));
     }
 
     @PostMapping("/execute")
     public ResponseEntity<?> createPayment(@RequestBody final PaymentExecuteReq paymentExecuteReq) {
-        paypalDepositBloc.executePayment(paymentExecuteReq);
+        paypalDepositBloc.executeDeposit(paymentExecuteReq);
         return ResponseEntity.ok().build();
     }
 }
