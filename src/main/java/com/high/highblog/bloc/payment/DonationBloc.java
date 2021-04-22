@@ -4,6 +4,7 @@ import com.high.highblog.enums.PaymentMethod;
 import com.high.highblog.enums.PaymentType;
 import com.high.highblog.enums.SystemTransactionStatus;
 import com.high.highblog.enums.UserTransactionStatus;
+import com.high.highblog.error.exception.ValidatorException;
 import com.high.highblog.helper.CodeHelper;
 import com.high.highblog.helper.SecurityHelper;
 import com.high.highblog.model.dto.request.DonationReq;
@@ -62,6 +63,8 @@ public class DonationBloc {
                 Wallet receiverWallet = walletService.getToSaveByUserId(receiverId);
                 locked = false;
 
+                validateSenderWalletAndAmount(senderWallet, amount);
+
                 UserTransaction senderTransaction = buildUserTransaction(senderId,
                                                                          amount,
                                                                          senderWallet.getBalance());
@@ -92,6 +95,13 @@ public class DonationBloc {
                 }
                 locked = true;
             }
+        }
+    }
+
+    private void validateSenderWalletAndAmount(final Wallet senderWallet, final BigDecimal amount) {
+
+        if(senderWallet.getBalance().compareTo(amount) < 0){
+            throw new ValidatorException("Insufficient", "wallet");
         }
     }
 
