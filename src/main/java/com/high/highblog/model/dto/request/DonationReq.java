@@ -9,6 +9,9 @@ import lombok.ToString;
 
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Positive;
+
+import java.math.BigDecimal;
 
 @Getter
 @Setter
@@ -16,8 +19,13 @@ import javax.validation.constraints.NotNull;
 @NoArgsConstructor
 @Builder
 @ToString
-public class CommentUpdateReq {
+public class DonationReq {
+
     @NotNull
     @NotEmpty
-    private String content;
+    private String nickName;
+
+    @NotNull
+    @Positive
+    private BigDecimal amount;
 }

@@ -48,9 +48,6 @@ public class WalletService {
         if (ObjectUtils.isEmpty(wallet.getId())) {
             throw new ValidatorException("Invalid wallet", "wallet");
         }
-        if (SecurityHelper.getUserId() != wallet.getUserId()) {
-            throw new ValidatorException("Invalid user id", "userId");
-        }
     }
     @Transactional(readOnly = true)
     public Wallet getBalance(final long userId){

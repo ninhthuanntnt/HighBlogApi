@@ -24,9 +24,6 @@ import java.math.BigDecimal;
 import java.util.Collections;
 import java.util.HashMap;
 
-import static com.high.highblog.enums.ThirdPartyTransactionStatus.CREATED;
-import static com.high.highblog.enums.ThirdPartyTransactionStatus.valueOf;
-
 @Slf4j
 @Service
 public class PaypalPaymentService

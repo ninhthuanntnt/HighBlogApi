@@ -11,6 +11,7 @@ import com.high.highblog.model.entity.Account;
 import com.high.highblog.model.entity.ConfirmationCode;
 import com.high.highblog.model.entity.Role;
 import com.high.highblog.model.entity.User;
+import com.high.highblog.model.entity.Wallet;
 import com.high.highblog.service.AccountRoleService;
 import com.high.highblog.service.AccountService;
 import com.high.highblog.service.ConfirmationCodeService;

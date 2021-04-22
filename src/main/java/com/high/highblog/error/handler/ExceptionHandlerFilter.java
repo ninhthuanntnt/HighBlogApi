@@ -4,6 +4,7 @@ import com.high.highblog.constant.AppErrorCode;
 import com.high.highblog.error.exception.InvalidJwtToken;
 import com.high.highblog.helper.JsonHelper;
 import com.high.highblog.model.dto.response.ErrorMessageRes;
+import io.jsonwebtoken.ExpiredJwtException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.core.Ordered;
 import org.springframework.core.annotation.Order;
