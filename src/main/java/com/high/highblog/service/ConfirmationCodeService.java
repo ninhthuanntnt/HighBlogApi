@@ -101,7 +101,6 @@ public class ConfirmationCodeService {
         log.info("Inactive confirmation code by data #{}", confirmationCodes);
 
         confirmationCodes.forEach(confirmationCode -> {
-            validateConfirmationCodeBeforeInactive(confirmationCode);
             confirmationCode.setActivated(false);
         });
 

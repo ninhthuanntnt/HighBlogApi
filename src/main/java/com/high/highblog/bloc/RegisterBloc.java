@@ -11,12 +11,12 @@ import com.high.highblog.model.entity.Account;
 import com.high.highblog.model.entity.ConfirmationCode;
 import com.high.highblog.model.entity.Role;
 import com.high.highblog.model.entity.User;
-import com.high.highblog.model.entity.Wallet;
 import com.high.highblog.service.AccountRoleService;
 import com.high.highblog.service.AccountService;
 import com.high.highblog.service.ConfirmationCodeService;
 import com.high.highblog.service.RoleService;
 import com.high.highblog.service.UserService;
+import com.high.highblog.service.WalletService;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.ObjectUtils;
 import org.springframework.stereotype.Component;
@@ -34,6 +34,7 @@ public class RegisterBloc {
     private final AccountRoleService accountRoleService;
     private final RoleService roleService;
     private final ConfirmationCodeService confirmationCodeService;
+    private final WalletService walletService;
 
     private final MailBloc mailBloc;
     private final static RoleType DEFAULT_ACCOUNT_ROLE = RoleType.ROLE_INACTIVE_USER;
@@ -43,12 +44,14 @@ public class RegisterBloc {
                         final AccountRoleService accountRoleService,
                         final RoleService roleService,
                         final ConfirmationCodeService confirmationCodeService,
+                        final WalletService walletService,
                         final MailBloc mailBloc) {
         this.userService = userService;
         this.accountService = accountService;
         this.accountRoleService = accountRoleService;
         this.roleService = roleService;
         this.confirmationCodeService = confirmationCodeService;
+        this.walletService = walletService;
 
         this.mailBloc = mailBloc;
     }
@@ -100,6 +103,9 @@ public class RegisterBloc {
                                                Collections.singletonList(role.getId()));
 
         confirmationCodeService.inactivateConfirmationCode(confirmationCodeId);
+
+        User user = userService.getByAccountId(confirmationCode.getAccountId());
+        walletService.saveNew(user.getId());
     }
 
     @Transactional
@@ -118,9 +124,9 @@ public class RegisterBloc {
             confirmationCodeService.inactivateListConfirmationCode(previousCodes);
 
         } else {
-            ConfirmationCode previousConfirmationCode = confirmationCodeService
-                    .getByIdAndType(previousConfirmationCodeId,
-                                    CodeType.REGISTRATION);
+            ConfirmationCode previousConfirmationCode =
+                    confirmationCodeService.getByIdAndType(previousConfirmationCodeId,
+                                                           CodeType.REGISTRATION);
             validatePreviousConfirmationCode(previousConfirmationCode);
 
             confirmationCodeService.inactivateConfirmationCode(previousConfirmationCodeId);
@@ -147,7 +153,7 @@ public class RegisterBloc {
             throw new ValidatorException("Mismatch account id", "accountId");
         } else if (confirmationCode.isExpired()) {
             throw new ValidatorException("Expired confirmation code", "confirmationCode");
-        } else if (confirmationCode.isActivated()) {
+        } else if (!confirmationCode.isActivated()) {
             throw new ValidatorException("Inactivated confirmation code", "confirmationCode");
         }
     }
