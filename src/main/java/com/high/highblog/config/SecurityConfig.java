@@ -64,6 +64,10 @@ public class SecurityConfig
 
         http.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
 
+        http.requiresChannel()
+            .anyRequest()
+            .requiresSecure();
+
         http.authorizeRequests()
             .antMatchers("/api/*/auth/**",
                          "/api/*/auth/logout",
