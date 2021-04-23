@@ -28,6 +28,14 @@ server:
         encoding:
             charset: UTF-8
             force: true
+    ssl:
+        key-store: ${HB_SSL_KEY_STORE}
+        key-store-type: ${HB_SSL_KEY_STORE_TYPE}
+        key-store-password: ${HB_SSL_KEY_STORE_PASSWORD}
+        key-alias: ${HB_SSL_KEY_ALIAS}
+        enabled: true
+    port: 8443
+
 
 application:
     jwt:
