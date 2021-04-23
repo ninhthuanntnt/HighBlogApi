@@ -57,6 +57,15 @@ public class User
     @Column(name = "background_path")
     private String backgroundPath;
 
+    @Column(name = "website_url")
+    private String websiteUrl;
+
+    @Column(name = "location")
+    private String location;
+
+    @Column(name = "bio")
+    private String bio;
+
     @Transient
     private Boolean followed;
 }

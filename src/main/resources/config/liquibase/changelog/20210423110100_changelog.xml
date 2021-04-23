@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog https://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.3.xsd">
+    <property name="now" value="now(3)"/>
+
+    <changeSet id="HB-20210423110100" author="ducminhle">
+        <addColumn tableName="hb_users">
+            <column name="website_url" type="varchar(100)"  afterColumn="background_path"/>
+
+            <column name="location" type="varchar(100)"  afterColumn="website_url"/>
+
+            <column name="bio" type="varchar(500)"  afterColumn="location"/>
+
+        </addColumn>
+    </changeSet>
+</databaseChangeLog>

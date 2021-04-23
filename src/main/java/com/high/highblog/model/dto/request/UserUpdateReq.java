@@ -27,4 +27,10 @@ public class UserUpdateReq {
     @NotNull
     private GenderType genderType;
 
+    private String websiteUrl;
+
+    private String location;
+
+    private String bio;
+
 }
