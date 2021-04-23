@@ -25,11 +25,11 @@ public class UserTransactionService {
     }
 
     @Transactional(readOnly = true)
-    public UserTransaction getByPaymentId(final String paymentId) {
+    public UserTransaction getNullableByPaymentId(final String paymentId) {
         log.info("Get by paymentId #{}", paymentId);
 
         return repository.findByPaymentId(paymentId)
-                .orElseThrow(() -> new ObjectNotFoundException("userTransaction"));
+                         .orElse(null);
     }
 
     @Transactional
