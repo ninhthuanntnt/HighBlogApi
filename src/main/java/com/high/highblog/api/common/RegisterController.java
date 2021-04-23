@@ -49,8 +49,8 @@ public class RegisterController {
     }
 
     @PostMapping("/resend-email")
-    public ResponseEntity<?> resendEmail(@CookieValue(Constant.REGISTRATION_CONFIRMATION_CODE_ID_COOKIE)
-                                         final Long confirmationCodeId,
+    public ResponseEntity<?> resendEmail(@CookieValue(name = Constant.REGISTRATION_CONFIRMATION_CODE_ID_COOKIE,
+                                                      required = false) final Long confirmationCodeId,
                                          @RequestBody ResendEmailReq resendEmailReq) {
 
         registerBloc.resendConfirmRegistration(confirmationCodeId, resendEmailReq);

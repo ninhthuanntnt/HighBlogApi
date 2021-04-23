@@ -2,6 +2,8 @@ package com.high.highblog.repository;
 
 import com.high.highblog.model.entity.User;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import java.util.Collection;
@@ -16,4 +18,9 @@ public interface UserRepository extends JpaRepository<User, Long> {
     Optional<User> findByNickName(String nickName);
 
     boolean existsByNickName(String nickName);
+
+    @Query("SELECT u FROM User u"
+            + " JOIN Account acc ON acc.userId = u.id "
+            + "                  AND acc.id = :accountId")
+    Optional<User> getByAccountId(@Param("accountId") Long accountId);
 }

@@ -31,6 +31,17 @@ public class WalletService {
     }
 
     @Transactional
+    public Wallet saveNew(final Long userId){
+        log.info("Init wallet info for user have id #{}", userId);
+
+        Wallet wallet = new Wallet();
+        wallet.setUserId(userId);
+        wallet.setBalance(BigDecimal.ZERO);
+
+        return repository.save(wallet);
+    }
+
+    @Transactional
     public void saveBalance(final Long userId, final BigDecimal newBalance) {
         log.info("Save user wallet by userId #{} and newBalance #{}", userId, newBalance);
 

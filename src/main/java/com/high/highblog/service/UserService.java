@@ -44,6 +44,14 @@ public class UserService {
     }
 
     @Transactional(readOnly = true)
+    public User getByAccountId(final Long accountId){
+        log.info("Get user by accountId #{}", accountId);
+
+        return userRepository.getByAccountId(accountId)
+                .orElseThrow(()->new ObjectNotFoundException("user"));
+    }
+
+    @Transactional(readOnly = true)
     public User getByNickName(final String nickName) {
         log.info("Get user by id");
 
@@ -82,20 +90,22 @@ public class UserService {
         return userRepository.existsByNickName(nickName);
     }
 
-    private void validateUserBeforeSave(final  User user) {
-        if (user.getId() != SecurityHelper.getUserId())
-            throw new ValidatorException("Invalid user id", "userId");
-    }
     @Transactional
     public void saveAvatar(final Long id, String path){
         User user = userRepository.findById(id).orElseThrow(() -> new ObjectNotFoundException("user"));
         user.setImagePath(path);
         userRepository.save(user);
     }
+
     @Transactional
     public void saveBackground(Long id, String path) {
         User user = userRepository.findById(id).orElseThrow(() -> new ObjectNotFoundException("user"));
         user.setBackgroundPath(path);
         userRepository.save(user);
+    }
+
+    private void validateUserBeforeSave(final  User user) {
+        if (user.getId() != SecurityHelper.getUserId())
+            throw new ValidatorException("Invalid user id", "userId");
     }
 }
