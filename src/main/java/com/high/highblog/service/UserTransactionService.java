@@ -3,12 +3,17 @@ package com.high.highblog.service;
 import com.high.highblog.enums.UserTransactionStatus;
 import com.high.highblog.error.exception.ObjectNotFoundException;
 import com.high.highblog.error.exception.ValidatorException;
+import com.high.highblog.model.dto.request.BasePaginationReq;
 import com.high.highblog.model.entity.UserTransaction;
 import com.high.highblog.repository.UserTransactionRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.ObjectUtils;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
 
 @Slf4j
 @Service
@@ -24,7 +29,7 @@ public class UserTransactionService {
         log.info("Get by paymentId #{}", paymentId);
 
         return repository.findByPaymentId(paymentId)
-                         .orElseThrow(() -> new ObjectNotFoundException("userTransaction"));
+                .orElseThrow(() -> new ObjectNotFoundException("userTransaction"));
     }
 
     @Transactional
@@ -55,8 +60,14 @@ public class UserTransactionService {
     public void validateBeforeSaveStatus(final UserTransaction userTransaction) {
         if (ObjectUtils.isEmpty(userTransaction.getId())) {
             throw new ValidatorException("Invalid user transaction", "userTransaction");
-        }if(UserTransactionStatus.isFinalStatus(userTransaction.getStatus())){
+        }
+        if (UserTransactionStatus.isFinalStatus(userTransaction.getStatus())) {
             throw new ValidatorException("Transaction already completed", "userTransaction");
         }
+    }
+
+    @Transactional(readOnly = true)
+    public Page<UserTransaction> fetchAllByUserId(Long currentUserId, PageRequest pageRequest) {
+        return repository.findAllByUserId(currentUserId, pageRequest);
     }
 }
