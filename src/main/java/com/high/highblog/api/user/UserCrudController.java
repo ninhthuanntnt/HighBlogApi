@@ -24,13 +24,13 @@ public class UserCrudController {
         return ResponseEntity.noContent().build();
     }
     @PutMapping("/avatar")
-    public  ResponseEntity<?> updateAvatar(@RequestParam("upload") MultipartFile avatarReq){
+    public  ResponseEntity<ImageUploadRes> updateAvatar(@RequestParam("upload") MultipartFile avatarReq){
         String path = userCrudBloc.uploadAvatar(avatarReq);
-        return ResponseEntity.ok(new ImageUploadRes((FileHelper.appendDomainToPath(path))));
+        return ResponseEntity.ok(new ImageUploadRes(path));
     }
     @PutMapping("/background")
-    public ResponseEntity<?> updateBackground(@RequestParam("upload") MultipartFile backgroundReq){
+    public ResponseEntity<ImageUploadRes> updateBackground(@RequestParam("upload") MultipartFile backgroundReq){
         String path = userCrudBloc.updateBackground(backgroundReq);
-        return ResponseEntity.ok(new ImageUploadRes((FileHelper.appendDomainToPath(path))));
+        return ResponseEntity.ok(new ImageUploadRes(path));
     }
 }
