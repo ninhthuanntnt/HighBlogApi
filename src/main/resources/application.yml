@@ -29,7 +29,7 @@ server:
             charset: UTF-8
             force: true
     ssl:
-        key-store: ${HB_SSL_KEY_STORE}
+        key-store: ${HB_SSL_KEY_STORE:classpath:config/certificate/keystore.p12}
         key-store-type: ${HB_SSL_KEY_STORE_TYPE}
         key-store-password: ${HB_SSL_KEY_STORE_PASSWORD}
         key-alias: ${HB_SSL_KEY_ALIAS}
