@@ -32,8 +32,9 @@ public interface PostRepository
     Page<Post> searchPosts(@Param("keyword") String keyword, Pageable pageable);
 
     @Query("SELECT new Post(p, ps) FROM Post p"
-        + " JOIN PostStatistic ps ON ps.postId = p.id")
-    Page<Post> fetchListPosts(Pageable pageable);
+        + " JOIN PostStatistic ps ON ps.postId = p.id"
+        + " WHERE p.categoryId = :categoryId")
+    Page<Post> fetchListPosts(Long categoryId, Pageable pageable);
 
     @Query("SELECT p FROM Post p "
         + " JOIN FavoritePost fp ON fp.postId = p.id"
@@ -43,12 +44,21 @@ public interface PostRepository
     @Query("SELECT new Post(p, ps) FROM Post p"
         + " JOIN User u ON u.id = p.userId"
         + " JOIN PostStatistic ps ON ps.postId = p.id"
-        + " WHERE u.nickName = :nickName")
-    Page<Post> fetchListPostsByNickName(@Param("nickName") String nickName, Pageable pageable);
+        + " WHERE u.nickName = :nickName"
+        + " AND p.categoryId = :categoryId ")
+    Page<Post> fetchListPostsByNickName(@Param("nickName") String nickName, Long categoryId, Pageable pageable);
 
     @Query("SELECT new Post(p, ps) FROM Post p"
             + " JOIN Subscription sub ON sub.userId = p.userId"
             + " JOIN PostStatistic ps ON ps.postId = p.id"
-            + " WHERE sub.followerId = :followerId")
-    Page<Post> fetchListPostsByFollowerId(@Param("followerId") Long followerId, Pageable pageable);
+            + " WHERE sub.followerId = :followerId"
+            + " AND p.categoryId = :categoryId ")
+    Page<Post> fetchListPostsByFollowerId(@Param("followerId") Long followerId, Long categoryId, Pageable pageable);
+
+    @Query("SELECT new Post(p, ps) FROM Post p"
+            + " JOIN PostTag pt ON pt.postId = p.id"
+            + " JOIN PostStatistic ps ON ps.postId = p.id"
+            + " WHERE pt.tagId = :tagId"
+            + " AND p.categoryId = :categoryId")
+    Page<Post> fetchListPostsByTagId(@Param("tagId") Long tagId,Long categoryId, Pageable pageable);
 }

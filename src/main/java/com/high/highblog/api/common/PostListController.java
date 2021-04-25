@@ -25,8 +25,8 @@ public class PostListController {
 
     // TODO: bind array of String to array of Objects fot sorts field
     @GetMapping
-    public ResponseEntity<BasePaginationRes> fetchListPost(final BasePaginationReq req) {
-        Page<Post> posts = postListBloc.fetchPosts(req);
+    public ResponseEntity<BasePaginationRes> fetchListPost(final Long categoryId, BasePaginationReq req) {
+        Page<Post> posts = postListBloc.fetchPosts(categoryId,req);
 
         return ResponseEntity.ok(PaginationHelper.buildBasePaginationRes(
                 posts.map(PostMapper.INSTANCE::toPostRes)
@@ -34,14 +34,20 @@ public class PostListController {
     }
 
     @GetMapping(params = "nickName")
-    public ResponseEntity<?> fetchListPost(@RequestParam final String nickName,
+    public ResponseEntity<?> fetchListPost(@RequestParam final String nickName,final Long categoryId,
                                            final BasePaginationReq req) {
 
-        Page<Post> posts = postListBloc.fetchPostsByNickName(nickName, req);
+        Page<Post> posts = postListBloc.fetchPostsByNickName(nickName,categoryId, req);
 
         return ResponseEntity.ok(PaginationHelper.buildBasePaginationRes(
                 posts.map(PostMapper.INSTANCE::toPostRes)
         ));
+    }
+    @GetMapping(params = "tagId")
+    public ResponseEntity<?> fetchListPostsByTagId(@RequestParam final Long tagId,final long categoryId, final  BasePaginationReq req){
+        Page<Post> posts = postListBloc.fetchPostsByTagId(tagId,categoryId,req);
+        return ResponseEntity.ok(PaginationHelper.buildBasePaginationRes(
+                posts.map(PostMapper.INSTANCE::toPostRes)));
     }
 
     @GetMapping("/search")
@@ -52,4 +58,5 @@ public class PostListController {
                 posts.map(PostMapper.INSTANCE::toPostRes)
         ));
     }
+
 }

@@ -6,7 +6,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/api/v1/user/wallets ")
+@RequestMapping("/api/v1/user/wallets")
 public class WalletCrudController {
 
     private final WalletCrudBloc walletCrudBloc;

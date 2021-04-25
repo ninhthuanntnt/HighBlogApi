@@ -23,8 +23,8 @@ public class PostListController {
     }
 
     @GetMapping("/subscriptions")
-    public ResponseEntity<BasePaginationRes> fetchListSubscriptionPosts(BasePaginationReq basePaginationReq) {
-        Page<Post> posts = postListBloc.fetchSubscriptionPostsForCurrentUser(basePaginationReq);
+    public ResponseEntity<BasePaginationRes> fetchListSubscriptionPosts(final Long categoryId,BasePaginationReq basePaginationReq) {
+        Page<Post> posts = postListBloc.fetchSubscriptionPostsForCurrentUser(categoryId,basePaginationReq);
 
         return ResponseEntity.ok(PaginationHelper.buildBasePaginationRes(posts.map(PostMapper.INSTANCE::toPostRes)));
     }
