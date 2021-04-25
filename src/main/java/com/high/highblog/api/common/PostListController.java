@@ -43,6 +43,12 @@ public class PostListController {
                 posts.map(PostMapper.INSTANCE::toPostRes)
         ));
     }
+    @GetMapping(params = "tagId")
+    public ResponseEntity<?> fetchListPostsByTagId(@RequestParam final Long tagId, final  BasePaginationReq req){
+        Page<Post> posts = postListBloc.fetchPostsByTagId(tagId,req);
+        return ResponseEntity.ok(PaginationHelper.buildBasePaginationRes(
+                posts.map(PostMapper.INSTANCE::toPostRes)));
+    }
 
     @GetMapping("/search")
     public ResponseEntity<?> searchPosts(final PostSearchReq req) {
@@ -52,4 +58,5 @@ public class PostListController {
                 posts.map(PostMapper.INSTANCE::toPostRes)
         ));
     }
+
 }

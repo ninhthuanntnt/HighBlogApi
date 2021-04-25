@@ -68,6 +68,17 @@ public class PostListBloc {
         includeUserToPosts(posts);
         return posts;
     }
+    public Page<Post> fetchPostsByTagId(final Long tagId, final BasePaginationReq req) {
+        log.info("Fetch list posts by tagId #{} with req #{}", tagId, req);
+        PageRequest pageRequest = PaginationHelper.generatePageRequestWithDefaultSort(req,
+                "-ps.numberOfVotes");
+
+        Page<Post> posts = postService.fetchPostsByTagIdWithPageRequest(tagId, pageRequest);
+
+        includePostTagsToPosts(posts);
+        includeUserToPosts(posts);
+        return posts;
+    }
 
     public Page<Post> fetchSubscriptionPostsForCurrentUser(final BasePaginationReq req) {
         log.info("Fetch list subscription posts for current user");

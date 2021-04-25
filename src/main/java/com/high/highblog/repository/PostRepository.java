@@ -51,4 +51,10 @@ public interface PostRepository
             + " JOIN PostStatistic ps ON ps.postId = p.id"
             + " WHERE sub.followerId = :followerId")
     Page<Post> fetchListPostsByFollowerId(@Param("followerId") Long followerId, Pageable pageable);
+
+    @Query("SELECT new Post(p, ps) FROM Post p"
+            + " JOIN PostTag pt ON pt.postId = p.id"
+            + " JOIN PostStatistic ps ON ps.postId = p.id"
+            + " WHERE pt.tagId = :tagId")
+    Page<Post> fetchListPostsByTagId(@Param("tagId") Long tagId, Pageable pageable);
 }

@@ -123,4 +123,10 @@ public class PostService {
         if (post.getUserId() != SecurityHelper.getUserId())
             throw new ValidatorException("Invalid user id", "userId");
     }
+
+    public Page<Post> fetchPostsByTagIdWithPageRequest(Long tagId, PageRequest pageRequest) {
+        log.info("Fetch posts by tagId with page request #{}", pageRequest);
+
+        return repository.fetchListPostsByTagId(tagId, pageRequest);
+    }
 }
