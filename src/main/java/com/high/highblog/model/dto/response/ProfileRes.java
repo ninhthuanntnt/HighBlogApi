@@ -21,6 +21,8 @@ public class ProfileRes {
 
     private Long id;
 
+    private String nickName;
+
     private String firstName;
 
     private String lastName;
