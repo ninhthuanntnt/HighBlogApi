@@ -54,24 +54,24 @@ public class PostService {
     }
 
     @Transactional(readOnly = true)
-    public Page<Post> fetchPostsWithPageRequest(final PageRequest pageRequest) {
+    public Page<Post> fetchPostsWithPageRequest(Long categoryId, final PageRequest pageRequest) {
         log.info("Fetch posts with pageRequest");
 
-        return repository.fetchListPosts(pageRequest);
+        return repository.fetchListPosts(categoryId,pageRequest);
     }
 
     @Transactional(readOnly = true)
-    public Page<Post> fetchPostsByNickNameWithPageRequest(final String nickName, final PageRequest pageRequest) {
+    public Page<Post> fetchPostsByNickNameWithPageRequest(final String nickName, Long categoryId, final PageRequest pageRequest) {
         log.info("Fetch posts by nickName #{} with pageRequest #{}", nickName, pageRequest);
 
-        return repository.fetchListPostsByNickName(nickName, pageRequest);
+        return repository.fetchListPostsByNickName(nickName,categoryId, pageRequest);
     }
 
     @Transactional(readOnly = true)
-    public Page<Post> fetchPostsByFollowerIdWithPageRequest(final Long followerId, final PageRequest pageRequest) {
+    public Page<Post> fetchPostsByFollowerIdWithPageRequest(final Long followerId, Long categoryId, final PageRequest pageRequest) {
         log.info("Fetch posts by followerId #{} with pageRequest #{}", followerId, pageRequest);
 
-        return repository.fetchListPostsByFollowerId(followerId, pageRequest);
+        return repository.fetchListPostsByFollowerId(followerId,categoryId, pageRequest);
     }
 
     @Transactional(readOnly = true)
@@ -124,9 +124,9 @@ public class PostService {
             throw new ValidatorException("Invalid user id", "userId");
     }
 
-    public Page<Post> fetchPostsByTagIdWithPageRequest(Long tagId, PageRequest pageRequest) {
+    public Page<Post> fetchPostsByTagIdWithPageRequest( final Long tagId ,final Long categoryId, PageRequest pageRequest) {
         log.info("Fetch posts by tagId with page request #{}", pageRequest);
 
-        return repository.fetchListPostsByTagId(tagId, pageRequest);
+        return repository.fetchListPostsByTagId(tagId,categoryId, pageRequest);
     }
 }

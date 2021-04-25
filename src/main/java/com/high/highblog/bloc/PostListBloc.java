@@ -43,12 +43,12 @@ public class PostListBloc {
     }
 
     @Transactional(readOnly = true)
-    public Page<Post> fetchPosts(final BasePaginationReq req) {
+    public Page<Post> fetchPosts(Long categoryId, final BasePaginationReq req) {
         // TODO: add binding data to convert string of default sort to an object
         PageRequest pageRequest = PaginationHelper.generatePageRequestWithDefaultSort(req,
                                                                                       "-ps.numberOfVotes");
 
-        Page<Post> posts = postService.fetchPostsWithPageRequest(pageRequest);
+        Page<Post> posts = postService.fetchPostsWithPageRequest(categoryId,pageRequest);
 
         // Should use include to make better performance
         includePostTagsToPosts(posts);
@@ -57,35 +57,35 @@ public class PostListBloc {
         return posts;
     }
 
-    public Page<Post> fetchPostsByNickName(final String nickName, final BasePaginationReq req) {
+    public Page<Post> fetchPostsByNickName(final String nickName, Long categoryId, final BasePaginationReq req) {
         log.info("Fetch list posts by nickName #{} with req #{}", nickName, req);
         PageRequest pageRequest = PaginationHelper.generatePageRequestWithDefaultSort(req,
                                                                                       "-ps.numberOfVotes");
 
-        Page<Post> posts = postService.fetchPostsByNickNameWithPageRequest(nickName, pageRequest);
+        Page<Post> posts = postService.fetchPostsByNickNameWithPageRequest(nickName,categoryId, pageRequest);
 
         includePostTagsToPosts(posts);
         includeUserToPosts(posts);
         return posts;
     }
-    public Page<Post> fetchPostsByTagId(final Long tagId, final BasePaginationReq req) {
+    public Page<Post> fetchPostsByTagId(final Long tagId, final Long categoryId, final BasePaginationReq req) {
         log.info("Fetch list posts by tagId #{} with req #{}", tagId, req);
         PageRequest pageRequest = PaginationHelper.generatePageRequestWithDefaultSort(req,
                 "-ps.numberOfVotes");
 
-        Page<Post> posts = postService.fetchPostsByTagIdWithPageRequest(tagId, pageRequest);
+        Page<Post> posts = postService.fetchPostsByTagIdWithPageRequest(tagId,categoryId, pageRequest);
 
         includePostTagsToPosts(posts);
         includeUserToPosts(posts);
         return posts;
     }
 
-    public Page<Post> fetchSubscriptionPostsForCurrentUser(final BasePaginationReq req) {
+    public Page<Post> fetchSubscriptionPostsForCurrentUser(Long categoryId, final BasePaginationReq req) {
         log.info("Fetch list subscription posts for current user");
 
         PageRequest pageRequest = PaginationHelper.generatePageRequest(req);
 
-        Page<Post> posts = postService.fetchPostsByFollowerIdWithPageRequest(SecurityHelper.getUserId(), pageRequest);
+        Page<Post> posts = postService.fetchPostsByFollowerIdWithPageRequest(SecurityHelper.getUserId(),categoryId, pageRequest);
 
         includePostTagsToPosts(posts);
         includeUserToPosts(posts);
