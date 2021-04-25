@@ -34,6 +34,7 @@ public class ProfileBloc {
 
         return ProfileRes.builder()
                          .id(user.getId())
+                         .nickName(user.getNickName())
                          .firstName(user.getFirstName())
                          .lastName(user.getLastName())
                          .imagePath(user.getImagePath())
