@@ -1,12 +1,9 @@
 package com.high.highblog.enums;
 
 public enum UserTransactionStatus {
-    CREATED, IN_PROGRESS, FINISHED, FAILED;
+    CREATED, IN_PROGRESS, FINISHED, FAILED, CANCELED;
 
-    public static boolean isFinalStatus(final UserTransactionStatus status) {
-        if (status == FINISHED || status == FAILED) {
-            return true;
-        }
-        return false;
+    public boolean isFinalStatus() {
+        return this == FINISHED || this == FAILED || this == CANCELED;
     }
 }

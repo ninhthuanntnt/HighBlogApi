@@ -9,5 +9,7 @@ public interface PaymentService {
 
     ThirdPartyTransaction executePayment(String paymentId);
 
+    ThirdPartyTransaction cancelPayment(String paymentId);
+
     ThirdPartyTransaction withdraw(String email, BigDecimal amount);
 }

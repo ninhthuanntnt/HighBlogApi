@@ -66,7 +66,7 @@ public class TransactionBloc {
                                                                         SystemTransactionStatus.FINISHED));
                 break;
             }
-            case PENDING:
+            case PENDING:{
                 UserTransaction userTransaction = userTransactionService.getNullableByPaymentId(thirdPartyTransaction
                                                                                                         .getPaymentId());
                 if (ObjectUtils.isEmpty(userTransaction)) {
@@ -80,9 +80,21 @@ public class TransactionBloc {
                 systemTransactionService.saveNew(buildSystemTransaction(thirdPartyTransaction,
                                                                         userTransaction,
                                                                         SystemTransactionStatus.IN_PROGRESS));
+
                 break;
+            }
             case FAILED:
+                 break;
+            case CANCELED: {
+                UserTransaction userTransaction = userTransactionService.getNullableByPaymentId(thirdPartyTransaction
+                                                                                                        .getPaymentId());
+
+                userTransactionService.saveStatus(userTransaction, UserTransactionStatus.CANCELED);
+                systemTransactionService.saveNew(buildSystemTransaction(thirdPartyTransaction,
+                                                                        userTransaction,
+                                                                        SystemTransactionStatus.CANCELED));
                 break;
+            }
             default:
                 throw new ValidatorException("Invalid transaction status (SERVER ERROR)", "status");
         }

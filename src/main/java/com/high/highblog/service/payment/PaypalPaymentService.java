@@ -2,6 +2,7 @@ package com.high.highblog.service.payment;
 
 import com.high.highblog.enums.CurrencyType;
 import com.high.highblog.enums.ThirdPartyTransactionStatus;
+import com.high.highblog.error.exception.ObjectNotFoundException;
 import com.high.highblog.error.exception.ValidatorException;
 import com.high.highblog.helper.CodeHelper;
 import com.high.highblog.model.entity.ThirdPartyTransaction;
@@ -90,6 +91,28 @@ public class PaypalPaymentService
     }
 
     @Override
+    @Transactional
+    public ThirdPartyTransaction cancelPayment(final String paymentId) {
+        ThirdPartyTransaction lastThirdPartyTransaction = repository.findFirstByPaymentIdOrderByIdDesc(paymentId)
+                                                                    .orElseThrow(() -> new ObjectNotFoundException("thirdPartyTransaction"));
+
+        if (lastThirdPartyTransaction.getStatus().isFinalStatus()) {
+            throw new ValidatorException("Already finish", "transaction");
+        }
+
+        ThirdPartyTransaction thirdPartyTransaction =
+                ThirdPartyTransaction.builder()
+                                     .paymentId(paymentId)
+                                     .amount(lastThirdPartyTransaction.getAmount())
+                                     .currencyType(lastThirdPartyTransaction.getCurrencyType())
+                                     .status(ThirdPartyTransactionStatus.CANCELED)
+                                     .build();
+
+        return repository.save(thirdPartyTransaction);
+    }
+
+    @Override
+    @Transactional
     public ThirdPartyTransaction withdraw(final String email, final BigDecimal amount) {
         log.info("Withdraw to paypal account #{} with amount #{}", email, amount);
         try {
@@ -105,7 +128,7 @@ public class PaypalPaymentService
             HttpResponse<PayoutBatch> payoutBatchRes = payPalHttpClient.execute(payoutsGetRequest);
             PayoutBatch payoutBatch = payoutBatchRes.result();
 
-            HashMap<String, Object> additionalParams = new HashMap<String, Object>(){{
+            HashMap<String, Object> additionalParams = new HashMap<String, Object>() {{
                 put("senderBatchId", payoutHeader.senderBatchHeader().senderBatchId());
                 put("senderItemId", payoutBatch.items().get(0).payoutItem().senderItemId());
                 put("receiverEmail", email);

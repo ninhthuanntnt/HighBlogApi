@@ -50,4 +50,11 @@ public class PaypalDepositBloc {
         walletService.addBalance(SecurityHelper.getUserId(), additionalBalance);
 
     }
+
+    @Transactional
+    public void cancelDeposit(final PaymentExecuteReq paymentExecuteReq) {
+        ThirdPartyTransaction thirdPartyTransaction = paymentService.cancelPayment(paymentExecuteReq.getPaymentId());
+
+        transactionBloc.saveUserAndSystemTransaction(thirdPartyTransaction);
+    }
 }

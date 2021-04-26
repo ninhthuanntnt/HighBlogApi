@@ -21,14 +21,20 @@ public class PaypalDepositController {
     }
 
     @PostMapping("/create")
-    public ResponseEntity<PaymentCreateRes> createPayment(@RequestBody final PaymentCreateReq paymentCreateReq) {
+    public ResponseEntity<PaymentCreateRes> createDeposit(@RequestBody final PaymentCreateReq paymentCreateReq) {
 
         return ResponseEntity.ok(paypalDepositBloc.createDeposit(paymentCreateReq));
     }
 
     @PostMapping("/execute")
-    public ResponseEntity<?> createPayment(@RequestBody final PaymentExecuteReq paymentExecuteReq) {
+    public ResponseEntity<?> executeDeposit(@RequestBody final PaymentExecuteReq paymentExecuteReq) {
         paypalDepositBloc.executeDeposit(paymentExecuteReq);
-        return ResponseEntity.ok().build();
+        return ResponseEntity.noContent().build();
+    }
+
+    @PostMapping("/cancel")
+    public ResponseEntity<?> cancelDeposit(@RequestBody final PaymentExecuteReq paymentExecuteReq) {
+        paypalDepositBloc.cancelDeposit(paymentExecuteReq);
+        return ResponseEntity.noContent().build();
     }
 }
