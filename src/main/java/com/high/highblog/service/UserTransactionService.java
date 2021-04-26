@@ -61,7 +61,7 @@ public class UserTransactionService {
         if (ObjectUtils.isEmpty(userTransaction.getId())) {
             throw new ValidatorException("Invalid user transaction", "userTransaction");
         }
-        if (UserTransactionStatus.isFinalStatus(userTransaction.getStatus())) {
+        if (userTransaction.getStatus().isFinalStatus()) {
             throw new ValidatorException("Transaction already completed", "userTransaction");
         }
     }
