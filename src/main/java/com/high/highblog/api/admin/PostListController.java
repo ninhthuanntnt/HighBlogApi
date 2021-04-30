@@ -42,4 +42,10 @@ public class PostListController {
                 posts.map(PostMapper.INSTANCE::toPostRes)
         ));
     }
+    @GetMapping(params = "tagId")
+    public ResponseEntity<?> fetchListPostsByTagId(@RequestParam final Long tagId,final long categoryId, final  BasePaginationReq req){
+        Page<Post> posts = postListBloc.fetchPostsByTagId(tagId,categoryId,req);
+        return ResponseEntity.ok(PaginationHelper.buildBasePaginationRes(
+                posts.map(PostMapper.INSTANCE::toPostRes)));
+    }
 }
