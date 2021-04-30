@@ -48,4 +48,12 @@ public class PostListController {
         return ResponseEntity.ok(PaginationHelper.buildBasePaginationRes(
                 posts.map(PostMapper.INSTANCE::toPostRes)));
     }
+    @GetMapping("/search")
+    public ResponseEntity<?> searchPosts(final PostSearchReq req) {
+        Page<Post> posts = postListBloc.searchPosts(req);
+
+        return ResponseEntity.ok(PaginationHelper.buildBasePaginationRes(
+                posts.map(PostMapper.INSTANCE::toPostRes)
+        ));
+    }
 }
