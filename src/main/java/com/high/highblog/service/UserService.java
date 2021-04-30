@@ -9,6 +9,8 @@ import com.high.highblog.repository.UserRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang3.ObjectUtils;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -107,5 +109,9 @@ public class UserService {
     private void validateUserBeforeSave(final  User user) {
         if (user.getId() != SecurityHelper.getUserId())
             throw new ValidatorException("Invalid user id", "userId");
+    }
+
+    public Page<User> fetchUsers(PageRequest pageRequest) {
+        return userRepository.findAll(pageRequest);
     }
 }
