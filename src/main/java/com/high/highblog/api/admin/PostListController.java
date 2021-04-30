@@ -32,4 +32,14 @@ public class PostListController {
                 posts.map(PostMapper.INSTANCE::toPostRes)
         ));
     }
+    @GetMapping(params = "nickName")
+    public ResponseEntity<?> fetchListPost(@RequestParam final String nickName,final Long categoryId,
+                                           final BasePaginationReq req) {
+
+        Page<Post> posts = postListBloc.fetchPostsByNickName(nickName,categoryId, req);
+
+        return ResponseEntity.ok(PaginationHelper.buildBasePaginationRes(
+                posts.map(PostMapper.INSTANCE::toPostRes)
+        ));
+    }
 }
