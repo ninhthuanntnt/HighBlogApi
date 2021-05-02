@@ -23,7 +23,6 @@ public class CustomUserDetails
     private String password;
     private Collection<? extends GrantedAuthority> authorities;
 
-
     public CustomUserDetails(final Long id,
                              final Long userId,
                              String username,

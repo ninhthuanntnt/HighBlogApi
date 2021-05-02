@@ -20,6 +20,7 @@ public class ApplicationConfigProperties {
     private ResourceTemplate resourceTemplate;
     private Cors cors;
     private Paypal paypal;
+    private RabbitMq rabbitMq;
 
     @Getter
     @Setter
@@ -56,5 +57,14 @@ public class ApplicationConfigProperties {
         private String clientId;
         private String clientSecret;
         private String environment;
+    }
+
+    @Getter
+    @Setter
+    public static class RabbitMq{
+        private String host;
+        private Integer port;
+        private String username;
+        private String password;
     }
 }

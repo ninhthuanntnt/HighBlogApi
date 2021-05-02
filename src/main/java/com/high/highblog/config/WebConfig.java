@@ -12,6 +12,7 @@ import org.springframework.core.io.ResourceLoader;
 import org.springframework.core.task.TaskExecutor;
 import org.springframework.scheduling.annotation.EnableAsync;
 import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
+import org.springframework.security.task.DelegatingSecurityContextAsyncTaskExecutor;
 import org.springframework.util.ResourceUtils;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;
 import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
@@ -77,7 +78,7 @@ public class WebConfig
         threadPoolTaskExecutor.setQueueCapacity(600);
         threadPoolTaskExecutor.afterPropertiesSet();
         log.info("ThreadPoolTaskExecutor set");
-        return threadPoolTaskExecutor;
+        return new DelegatingSecurityContextAsyncTaskExecutor(threadPoolTaskExecutor);
     }
 
     @Bean

@@ -8,8 +8,13 @@ spring:
             ddl-auto: none
         open-in-view: false
         show-sql: true
+        properties:
+            hibernate.jdbc.batch_size: 50
     liquibase:
         change-log: classpath:config/liquibase_ext/master.xml
+        url: ${HB_DB_URL}
+        user: ${HB_DB_USERNAME}
+        password: ${HB_DB_PASSWORD}
     servlet:
         multipart:
             max-file-size: 10MB
@@ -22,7 +27,6 @@ spring:
         properties.mail.smtp:
             auth: true
             starttls.enable: true
-
 server:
     servlet:
         encoding:
@@ -58,3 +62,9 @@ application:
         client-id: ${HB_PAYPAL_CLIENT_ID}
         client-secret: ${HB_PAYPAL_CLIENT_SECRET}
         environment: ${HB_PAYPAL_ENVIRONMENT}
+    rabbit-mq:
+        host: ${HB_RABBIT_MQ_HOST}
+        port: ${HB_RABBIT_MQ_PORT}
+        username: ${HB_RABBIT_MQ_USERNAME}
+        password: ${HB_RABBIT_MQ_PASSWORD}
+

@@ -12,6 +12,9 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
+import java.util.Set;
+
 @Slf4j
 @Service
 public class AccountService {
@@ -47,6 +50,13 @@ public class AccountService {
 
         return accountRepository.findById(id)
                                 .orElseThrow(() -> new ObjectNotFoundException("account"));
+    }
+
+    @Transactional(readOnly = true)
+    public List<Account> fetchByUserIdIn(List<Long> userIds){
+        log.info("Fetch accounts by userIds in #{}", userIds);
+
+        return accountRepository.findByUserIdIn(userIds);
     }
 
     @Transactional

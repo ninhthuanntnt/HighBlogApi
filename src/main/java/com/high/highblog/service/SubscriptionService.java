@@ -10,6 +10,9 @@ import org.apache.commons.lang3.ObjectUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
+import java.util.Set;
+
 @Slf4j
 @Service
 public class SubscriptionService {
@@ -54,6 +57,13 @@ public class SubscriptionService {
                                               .orElseThrow(() -> new ObjectNotFoundException("subscription"));
 
         repository.delete(subscription);
+    }
+
+    @Transactional(readOnly = true)
+    public List<Long> fetchFollowerIdsByUserId(final Long userId) {
+        log.info("Fetch follower ids by userId #{}", userId);
+
+        return repository.findFollowerIdsByUserId(userId);
     }
 
     private void validatePostVoteBeforeSaveNew(final Subscription subscription) {

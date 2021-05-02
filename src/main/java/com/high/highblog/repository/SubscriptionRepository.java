@@ -8,6 +8,7 @@ import org.springframework.stereotype.Repository;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 
 @Repository
 public interface SubscriptionRepository
@@ -20,4 +21,8 @@ public interface SubscriptionRepository
     Optional<Subscription> findByUserIdAndFollowerId(Long userId, Long followerId);
 
     List<Subscription> findDistinctByFollowerId(Long followerId);
+
+    @Query("SELECT s.followerId FROM Subscription s"
+            + " WHERE s.userId = :userId")
+    List<Long> findFollowerIdsByUserId(@Param("userId") Long userId);
 }
