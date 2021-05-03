@@ -3,11 +3,7 @@ package com.high.highblog.api.user;
 import com.high.highblog.bloc.SubscriptionCrudBloc;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/api/v1/user/subscriptions/users/{nickName}")
@@ -32,4 +28,10 @@ public class SubscriptionCrudController {
 
         return ResponseEntity.noContent().build();
     }
+    @PutMapping("/notified/switch")
+    ResponseEntity<?> updateNotifiedStatus(@PathVariable String nickName){
+        subscriptionCrudBloc.updateNotifiedStatus(nickName);
+        return ResponseEntity.noContent().build();
+    }
+
 }
