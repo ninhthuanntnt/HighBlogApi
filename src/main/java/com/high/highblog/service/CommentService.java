@@ -12,6 +12,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Set;
 
 @Slf4j
 @Service
@@ -35,6 +36,14 @@ public class CommentService {
         log.info("Get comment by id #{} and userId #{}", id, userId);
 
         return repository.findByIdAndUserId(id, userId)
+                         .orElseThrow(() -> new ObjectNotFoundException("comment"));
+    }
+
+    @Transactional(readOnly = true)
+    public Comment getById(final Long id) {
+        log.info("Get comment by id #{}", id);
+
+        return repository.findById(id)
                          .orElseThrow(() -> new ObjectNotFoundException("comment"));
     }
 
@@ -64,7 +73,6 @@ public class CommentService {
         repository.delete(comment);
     }
 
-
     private void validateCommentBeforeSaveNew(final Comment comment) {
         if (ObjectUtils.isNotEmpty(comment.getId()))
             throw new ValidatorException("Invalid comment id", "id");
@@ -78,5 +86,4 @@ public class CommentService {
         if (ObjectUtils.isEmpty(comment.getUserId()) && comment.getUserId() != SecurityHelper.getUserId())
             throw new ValidatorException("Invalid user id", "userId");
     }
-
 }

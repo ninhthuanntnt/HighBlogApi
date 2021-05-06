@@ -57,21 +57,21 @@ public class PostService {
     public Page<Post> fetchPostsWithPageRequest(Long categoryId, final PageRequest pageRequest) {
         log.info("Fetch posts with pageRequest");
 
-        return repository.fetchListPosts(categoryId,pageRequest);
+        return repository.fetchListPosts(categoryId, pageRequest);
     }
 
     @Transactional(readOnly = true)
     public Page<Post> fetchPostsByNickNameWithPageRequest(final String nickName, Long categoryId, final PageRequest pageRequest) {
         log.info("Fetch posts by nickName #{} with pageRequest #{}", nickName, pageRequest);
 
-        return repository.fetchListPostsByNickName(nickName,categoryId, pageRequest);
+        return repository.fetchListPostsByNickName(nickName, categoryId, pageRequest);
     }
 
     @Transactional(readOnly = true)
     public Page<Post> fetchPostsByFollowerIdWithPageRequest(final Long followerId, Long categoryId, final PageRequest pageRequest) {
         log.info("Fetch posts by followerId #{} with pageRequest #{}", followerId, pageRequest);
 
-        return repository.fetchListPostsByFollowerId(followerId,categoryId, pageRequest);
+        return repository.fetchListPostsByFollowerId(followerId, categoryId, pageRequest);
     }
 
     @Transactional(readOnly = true)
@@ -79,10 +79,7 @@ public class PostService {
                                                                   final PageRequest pageRequest) {
         log.info("Search full text post with keyword #{}", keyword);
 
-        if (keyword.length() <= 2)
-            return repository.searchPosts(keyword, pageRequest);
-        else
-            return repository.searchFullTextPosts(keyword, pageRequest);
+        return repository.searchFullTextPosts(keyword, pageRequest);
     }
 
     @Transactional(readOnly = true)
@@ -124,9 +121,9 @@ public class PostService {
             throw new ValidatorException("Invalid user id", "userId");
     }
 
-    public Page<Post> fetchPostsByTagIdWithPageRequest( final Long tagId ,final Long categoryId, PageRequest pageRequest) {
+    public Page<Post> fetchPostsByTagIdWithPageRequest(final Long tagId, final Long categoryId, PageRequest pageRequest) {
         log.info("Fetch posts by tagId with page request #{}", pageRequest);
 
-        return repository.fetchListPostsByTagId(tagId,categoryId, pageRequest);
+        return repository.fetchListPostsByTagId(tagId, categoryId, pageRequest);
     }
 }

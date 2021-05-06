@@ -1,9 +1,12 @@
 package com.high.highblog.bloc;
 
+import com.high.highblog.bloc.notification.NotificationBloc;
+import com.high.highblog.enums.NotificationType;
 import com.high.highblog.helper.SecurityHelper;
 import com.high.highblog.mapper.PostMapper;
 import com.high.highblog.model.dto.request.PostCreateReq;
 import com.high.highblog.model.dto.request.PostUpdateReq;
+import com.high.highblog.model.entity.Notification;
 import com.high.highblog.model.entity.Post;
 import com.high.highblog.model.entity.PostStatistic;
 import com.high.highblog.model.entity.PostTag;
@@ -35,13 +38,16 @@ public class PostCrudBloc {
     private final FavoritePostService favoritePostService;
     private final SubscriptionService subscriptionService;
 
+    private final NotificationBloc notificationBloc;
+
     public PostCrudBloc(final PostService postService,
                         final PostTagService postTagService,
                         final PostStatisticService postStatisticService,
                         final PostVoteService postVoteService,
                         final UserService userService,
                         final FavoritePostService favoritePostService,
-                        final SubscriptionService subscriptionService) {
+                        final SubscriptionService subscriptionService,
+                        final NotificationBloc notificationBloc) {
         this.postService = postService;
         this.postTagService = postTagService;
         this.postStatisticService = postStatisticService;
@@ -49,14 +55,16 @@ public class PostCrudBloc {
         this.userService = userService;
         this.favoritePostService = favoritePostService;
         this.subscriptionService = subscriptionService;
+
+        this.notificationBloc = notificationBloc;
     }
 
     @Transactional
     public Long createPost(final PostCreateReq postCreateReq) {
         log.info("Create new post with data #{}", postCreateReq);
-
+        Long userId = SecurityHelper.getUserId();
         Post post = PostMapper.INSTANCE.toPost(postCreateReq);
-        post.setUserId(SecurityHelper.getUserId());
+        post.setUserId(userId);
         postService.saveNew(post);
 
         List<PostTag> postTags = (List<PostTag>) CollectionUtils.emptyIfNull(post.getPostTags());
@@ -69,6 +77,14 @@ public class PostCrudBloc {
                                                   .postId(post.getId())
                                                   .build());
 
+        User notificationSender = userService.getById(userId);
+        notificationBloc.pushNotificationToFollowers(userId,
+                                                     Notification.builder()
+                                                                 .content(post.getTitle())
+                                                                 .sourceId(post.getId())
+                                                                 .type(NotificationType.POST)
+                                                                 .sender(notificationSender)
+                                                                 .build());
         return post.getId();
     }
 
@@ -121,6 +137,8 @@ public class PostCrudBloc {
 
         postService.delete(id, userId);
         postTagService.deleteAll(id);
+
+        notificationBloc.deleteNotificationToFollowers(id);
     }
 
     private void includeExtraInfoForPostDetailIfUserLogined(Post post) {
@@ -135,7 +153,7 @@ public class PostCrudBloc {
 
                 postOwner.setFollowed(subscriptionService.existsByUserIdAndFollowerId(postOwner.getId(), userId));
             }
-        }catch (Exception ex){
+        } catch (Exception ex) {
             log.info("Extra info of post detail is not set");
             log.error(ex.getMessage());
         }

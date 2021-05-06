@@ -1,5 +1,6 @@
 package com.high.highblog.bloc;
 
+import com.high.highblog.bloc.notification.NotificationBloc;
 import com.high.highblog.helper.PaginationHelper;
 import com.high.highblog.helper.SecurityHelper;
 import com.high.highblog.mapper.CommentMapper;
@@ -28,11 +29,14 @@ public class CommentCrudBloc {
 
     private final CommentService commentService;
     private final PostStatisticService postStatisticService;
+    private final NotificationBloc notificationBloc;
 
     public CommentCrudBloc(final CommentService commentService,
-                           final PostStatisticService postStatisticService) {
+                           final PostStatisticService postStatisticService,
+                           final NotificationBloc notificationBloc) {
         this.commentService = commentService;
         this.postStatisticService = postStatisticService;
+        this.notificationBloc = notificationBloc;
     }
 
     @Transactional

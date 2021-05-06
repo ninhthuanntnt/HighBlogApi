@@ -38,6 +38,10 @@ public class PaginationHelper {
                                            : req.getSorts());
     }
 
+    public static PageRequest generatePageRequestWithoutSort(final BasePaginationReq req) {
+        return PageRequest.of(req.getPage() - 1, req.getPageSize());
+    }
+
     public static PageRequest generatePageRequest(final Integer page,
                                                   final Integer pageSize,
                                                   final String[] sorts) {
@@ -57,7 +61,7 @@ public class PaginationHelper {
 
             char prefix = sortExpression.charAt(0);
             String columnName = sortExpression.substring(1);
-            if(columnName.equals("id"))
+            if (columnName.equals("id"))
                 isContainId = true;
 
             if (prefix == '+')
@@ -68,7 +72,7 @@ public class PaginationHelper {
                 throw new ValidatorException("Invalid sort request", "sorts");
         }
 
-        if(!isContainId)
+        if (!isContainId)
             orders.add(Sort.Order.desc("id"));
 
         return Sort.by(orders);

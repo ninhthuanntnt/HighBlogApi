@@ -20,7 +20,7 @@ public interface PostRepository
 
     @Query(value = "SELECT * FROM hb_posts AS p"
                 + " INNER JOIN hb_post_statistics AS ps ON ps.post_id = p.id"
-                + " WHERE MATCH (p.title, p.summary, p.content) AGAINST (:keyword IN NATURAL LANGUAGE MODE)",
+                + " WHERE MATCH (p.title, p.summary, p.content) AGAINST (:keyword WITH QUERY EXPANSION)",
             nativeQuery = true)
     Page<Post> searchFullTextPosts(@Param("keyword") String keyword, Pageable pageable);
 

@@ -103,7 +103,7 @@ public class PostListBloc {
             PageRequest pageRequest = PaginationHelper.generatePageRequestWithDefaultSort(req, "-ps.numberOfVotes");
             posts = postService.searchPostsByKeywordLikeWithPageRequest(req.getKeyword(), pageRequest);
         } else {
-            PageRequest pageRequest = PaginationHelper.generatePageRequestWithDefaultSort(req, "-ps.number_of_votes");
+            PageRequest pageRequest = PaginationHelper.generatePageRequestWithoutSort(req);
             posts = postService.searchFullTextPostsByKeywordWithPageRequest(req.getKeyword(), pageRequest);
         }
 
