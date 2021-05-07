@@ -2,6 +2,7 @@ package com.high.highblog.api.common;
 
 
 import com.high.highblog.bloc.UserCrudBloc;
+import com.high.highblog.mapper.UserMapper;
 import com.high.highblog.model.entity.User;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -22,6 +23,6 @@ public class UserCrudController {
     @GetMapping("/{nickName}")
     public ResponseEntity<?> getUserDetail(@PathVariable String nickName) {
         User user = userCrudBloc.getUserDetail(nickName);
-        return ResponseEntity.ok(user);
+        return ResponseEntity.ok(UserMapper.INSTANCE.toUserRes(user));
     }
 }

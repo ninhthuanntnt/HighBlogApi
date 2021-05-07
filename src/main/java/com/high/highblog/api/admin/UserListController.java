@@ -25,6 +25,6 @@ public class UserListController {
     public ResponseEntity<?> fetchUsers(BasePaginationReq basePaginationReq) {
         Page<User> users = userListBloc.fetchUsers(basePaginationReq);
         return ResponseEntity.ok(PaginationHelper
-                .buildBasePaginationRes(users.map(UserMapper.INSTANCE::toUserRes)));
+                .buildBasePaginationRes(users.map(UserMapper.INSTANCE::toAdminUserRes)));
     }
 }
