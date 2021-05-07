@@ -74,5 +74,14 @@ public class SubscriptionService {
         if (repository.existsByUserIdAndFollowerId(subscription.getUserId(), subscription.getFollowerId()))
             throw new ValidatorException("Already exists", "subscription");
     }
+    @Transactional
+    public void update(Long userId, Long followerId) {
+        log.info("update subscription with userId #{} and followerId #{}", userId, followerId);
 
+        Subscription subscription = repository.findByUserIdAndFollowerId(userId, followerId)
+                .orElseThrow(() -> new ObjectNotFoundException("subscription"));
+        boolean isNotNotified = subscription.isNotified();
+        subscription.setNotified(!isNotNotified);
+        repository.save(subscription);
+    }
 }

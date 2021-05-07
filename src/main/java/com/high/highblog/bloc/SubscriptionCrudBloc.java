@@ -42,4 +42,14 @@ public class SubscriptionCrudBloc {
 
         subscriptionService.delete(user.getId(), followerId);
     }
+    @Transactional
+    public void updateNotifiedStatus(String nickName) {
+        log.info("Update notified status");
+
+        Long followerId = SecurityHelper.getUserId();
+
+        User user = userService.getByNickName(nickName);
+
+        subscriptionService.update(user.getId(), followerId);
+    }
 }
