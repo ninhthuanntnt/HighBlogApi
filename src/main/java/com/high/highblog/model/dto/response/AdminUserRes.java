@@ -13,7 +13,7 @@ import lombok.Setter;
 @NoArgsConstructor
 @Builder
 @JsonInclude(JsonInclude.Include.NON_NULL)
-public class UserRes {
+public class AdminUserRes {
 
     private Long id;
 
@@ -26,15 +26,5 @@ public class UserRes {
     private String imagePath;
 
     private String backgroundPath;
-
-    private Boolean followed;
-
-    private String createdDate;
-
-    private String bio;
-
-    private String websiteUrl;
-
-    private String location;
 
 }
