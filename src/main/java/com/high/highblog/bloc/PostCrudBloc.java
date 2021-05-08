@@ -158,4 +158,14 @@ public class PostCrudBloc {
             log.error(ex.getMessage());
         }
     }
+
+    public void deletePost(Long id, String nickName) {
+        Long userId = userService.getByNickName(nickName).getId();
+        log.info("Delete post by id #{} with userId #{}", id, userId);
+
+        postService.delete(id, userId);
+        postTagService.deleteAll(id);
+
+        notificationBloc.deleteNotificationToFollowers(id);
+    }
 }
