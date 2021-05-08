@@ -34,12 +34,14 @@ public class TransactionBloc {
         this.walletService = walletService;
     }
 
-    public void saveUserAndSystemTransaction(final ThirdPartyTransaction thirdPartyTransaction) {
+    public void saveUserAndSystemTransaction(final ThirdPartyTransaction thirdPartyTransaction,
+                                             final PaymentType paymentType) {
         // TODO: Need an converter to convert third party transaction to system and user transaction
         switch (thirdPartyTransaction.getStatus()) {
             case CREATED: {
                 UserTransaction userTransaction = buildUserTransaction(thirdPartyTransaction,
-                                                                       UserTransactionStatus.CREATED);
+                                                                       UserTransactionStatus.CREATED,
+                                                                       paymentType);
                 userTransactionService.saveNew(userTransaction);
                 systemTransactionService.saveNew(buildSystemTransaction(thirdPartyTransaction,
                                                                         userTransaction,
@@ -55,7 +57,8 @@ public class TransactionBloc {
 
                 if (ObjectUtils.isEmpty(userTransaction)) {
                     userTransaction = buildUserTransaction(thirdPartyTransaction,
-                                                           UserTransactionStatus.FINISHED);
+                                                           UserTransactionStatus.FINISHED,
+                                                           paymentType);
                     userTransactionService.saveNew(userTransaction);
                 } else {
                     userTransactionService.saveStatus(userTransaction, UserTransactionStatus.FINISHED);
@@ -71,7 +74,8 @@ public class TransactionBloc {
                                                                                                         .getPaymentId());
                 if (ObjectUtils.isEmpty(userTransaction)) {
                     userTransaction = buildUserTransaction(thirdPartyTransaction,
-                                                           UserTransactionStatus.IN_PROGRESS);
+                                                           UserTransactionStatus.IN_PROGRESS,
+                                                           paymentType);
                     userTransactionService.saveNew(userTransaction);
                 } else {
                     userTransactionService.saveStatus(userTransaction, UserTransactionStatus.IN_PROGRESS);
@@ -101,7 +105,8 @@ public class TransactionBloc {
     }
 
     private UserTransaction buildUserTransaction(final ThirdPartyTransaction thirdPartyTransaction,
-                                                 final UserTransactionStatus userTransactionStatus) {
+                                                 final UserTransactionStatus userTransactionStatus,
+                                                 final PaymentType paymentType) {
         Long userId = SecurityHelper.getUserId();
         Wallet wallet = walletService.getToSaveByUserId(userId);
 
@@ -111,7 +116,7 @@ public class TransactionBloc {
                               .amount(thirdPartyTransaction.getAmount())
                               .status(userTransactionStatus)
                               .paymentMethod(PaymentMethod.PAYPAL)
-                              .paymentType(PaymentType.DEPOSIT)
+                              .paymentType(paymentType)
                               .balance(wallet.getBalance())
                               .build();
 

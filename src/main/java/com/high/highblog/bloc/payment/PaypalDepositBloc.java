@@ -1,5 +1,6 @@
 package com.high.highblog.bloc.payment;
 
+import com.high.highblog.enums.PaymentType;
 import com.high.highblog.helper.SecurityHelper;
 import com.high.highblog.model.dto.request.PaymentCreateReq;
 import com.high.highblog.model.dto.request.PaymentExecuteReq;
@@ -34,7 +35,7 @@ public class PaypalDepositBloc {
     public PaymentCreateRes createDeposit(final PaymentCreateReq paymentCreateReq) {
         ThirdPartyTransaction thirdPartyTransaction = paymentService.createPayment(paymentCreateReq.getAmount());
 
-        transactionBloc.saveUserAndSystemTransaction(thirdPartyTransaction);
+        transactionBloc.saveUserAndSystemTransaction(thirdPartyTransaction, PaymentType.DEPOSIT);
 
         return new PaymentCreateRes(thirdPartyTransaction.getPaymentId());
     }
@@ -43,7 +44,7 @@ public class PaypalDepositBloc {
     public void executeDeposit(final PaymentExecuteReq paymentExecuteReq) {
         ThirdPartyTransaction thirdPartyTransaction = paymentService.executePayment(paymentExecuteReq.getPaymentId());
 
-        transactionBloc.saveUserAndSystemTransaction(thirdPartyTransaction);
+        transactionBloc.saveUserAndSystemTransaction(thirdPartyTransaction, PaymentType.DEPOSIT);
 
         BigDecimal additionalBalance = thirdPartyTransaction.getAmount().subtract(thirdPartyTransaction.getFee());
 
@@ -55,6 +56,6 @@ public class PaypalDepositBloc {
     public void cancelDeposit(final PaymentExecuteReq paymentExecuteReq) {
         ThirdPartyTransaction thirdPartyTransaction = paymentService.cancelPayment(paymentExecuteReq.getPaymentId());
 
-        transactionBloc.saveUserAndSystemTransaction(thirdPartyTransaction);
+        transactionBloc.saveUserAndSystemTransaction(thirdPartyTransaction, PaymentType.DEPOSIT);
     }
 }
