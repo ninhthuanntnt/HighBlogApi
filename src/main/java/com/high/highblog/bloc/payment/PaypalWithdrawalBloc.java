@@ -1,5 +1,6 @@
 package com.high.highblog.bloc.payment;
 
+import com.high.highblog.enums.PaymentType;
 import com.high.highblog.error.exception.ValidatorException;
 import com.high.highblog.helper.SecurityHelper;
 import com.high.highblog.model.dto.request.PaypalWithdrawReq;
@@ -39,6 +40,6 @@ public class PaypalWithdrawalBloc {
         ThirdPartyTransaction thirdPartyTransaction = paymentService.withdraw(paypalWithdrawReq.getEmail(),
                                                                               paypalWithdrawReq.getAmount());
 
-        transactionBloc.saveUserAndSystemTransaction(thirdPartyTransaction);
+        transactionBloc.saveUserAndSystemTransaction(thirdPartyTransaction, PaymentType.WITHDRAW);
     }
 }
