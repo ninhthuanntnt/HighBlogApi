@@ -28,4 +28,10 @@ public class UserTransactionBloc {
         log.info("Fetch transactions of user userId#{}", currentUserId);
         return userTransactionService.fetchAllByUserId(currentUserId, pageRequest);
     }
+
+    public Page<UserTransaction> fetchListTransactions(BasePaginationReq req) {
+        PageRequest pageRequest = PaginationHelper.generatePageRequest(req);
+        log.info("Fetch list transactions ");
+        return userTransactionService.fetchAll(pageRequest);
+    }
 }
