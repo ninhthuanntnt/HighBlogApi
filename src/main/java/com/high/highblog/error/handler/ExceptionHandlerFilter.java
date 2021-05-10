@@ -38,7 +38,8 @@ public class ExceptionHandlerFilter
                           response,
                           HttpStatus.FORBIDDEN);
         } catch (Exception ex) {
-            responseError(ex.getMessage(),
+            log.error(ex.getMessage());
+            responseError("Server error",
                           AppErrorCode.DEFAULT_INTERNAL_SERVER_ERROR,
                           "server",
                           response,
