@@ -63,6 +63,9 @@ public class Post
     @Column(name = "cover_image_path")
     private String coverImagePath;
 
+    @Column(name = "deleted")
+    private boolean deleted;
+
     @Builder.Default
     @NotNull
     @Enumerated(EnumType.STRING)

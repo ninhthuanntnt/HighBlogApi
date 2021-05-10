@@ -135,8 +135,7 @@ public class PostCrudBloc {
         Long userId = SecurityHelper.getUserId();
         log.info("Delete post by id #{} with userId #{}", id, userId);
 
-        postService.delete(id, userId);
-        postTagService.deleteAll(id);
+        postService.softDelete(id, userId);
 
         notificationBloc.deleteNotificationToFollowers(id);
     }
@@ -163,7 +162,7 @@ public class PostCrudBloc {
         Long userId = userService.getByNickName(nickName).getId();
         log.info("Delete post by id #{} with userId #{}", id, userId);
 
-        postService.delete(id, userId);
+        postService.softDelete(id, userId);
         postTagService.deleteAll(id);
 
         notificationBloc.deleteNotificationToFollowers(id);
