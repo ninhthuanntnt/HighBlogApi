@@ -20,45 +20,54 @@ public interface PostRepository
 
     @Query(value = "SELECT * FROM hb_posts AS p"
                 + " INNER JOIN hb_post_statistics AS ps ON ps.post_id = p.id"
-                + " WHERE MATCH (p.title, p.summary, p.content) AGAINST (:keyword WITH QUERY EXPANSION)",
-            nativeQuery = true)
+                + " WHERE MATCH (p.title, p.summary, p.content) AGAINST (:keyword WITH QUERY EXPANSION)"
+                + " AND p.deleted = false ",
+                    nativeQuery = true)
     Page<Post> searchFullTextPosts(@Param("keyword") String keyword, Pageable pageable);
 
     @Query(value = "SELECT p FROM Post p"
                 + " JOIN PostStatistic ps ON ps.postId = p.id"
                 + " WHERE p.title LIKE %:keyword%"
+                + " AND p.deleted = false "
                 + " OR p.summary LIKE %:keyword%"
-                + " OR p.content LIKE %:keyword%")
+                + " AND p.deleted = false "
+                + " OR p.content LIKE %:keyword%"
+                + " AND p.deleted = false ")
     Page<Post> searchPosts(@Param("keyword") String keyword, Pageable pageable);
 
     @Query("SELECT new Post(p, ps) FROM Post p"
         + " JOIN PostStatistic ps ON ps.postId = p.id"
-        + " WHERE p.categoryId = :categoryId")
+        + " WHERE p.categoryId = :categoryId"
+        + " AND p.deleted = false ")
     Page<Post> fetchListPosts(Long categoryId, Pageable pageable);
 
     @Query("SELECT p FROM Post p "
         + " JOIN FavoritePost fp ON fp.postId = p.id"
-        + " WHERE fp.userId = :userId" )
+        + " WHERE fp.userId = :userId"
+        + " AND p.deleted = false ")
     Page<Post> fetchListFavoritePostsByUserId(@Param("userId") Long userId, Pageable pageable);
 
     @Query("SELECT new Post(p, ps) FROM Post p"
         + " JOIN User u ON u.id = p.userId"
         + " JOIN PostStatistic ps ON ps.postId = p.id"
         + " WHERE u.nickName = :nickName"
-        + " AND p.categoryId = :categoryId ")
+        + " AND p.categoryId = :categoryId "
+        + " AND p.deleted = false ")
     Page<Post> fetchListPostsByNickName(@Param("nickName") String nickName, Long categoryId, Pageable pageable);
 
     @Query("SELECT new Post(p, ps) FROM Post p"
             + " JOIN Subscription sub ON sub.userId = p.userId"
             + " JOIN PostStatistic ps ON ps.postId = p.id"
             + " WHERE sub.followerId = :followerId"
-            + " AND p.categoryId = :categoryId ")
+            + " AND p.categoryId = :categoryId "
+            + " AND p.deleted = false ")
     Page<Post> fetchListPostsByFollowerId(@Param("followerId") Long followerId, Long categoryId, Pageable pageable);
 
     @Query("SELECT new Post(p, ps) FROM Post p"
             + " JOIN PostTag pt ON pt.postId = p.id"
             + " JOIN PostStatistic ps ON ps.postId = p.id"
             + " WHERE pt.tagId = :tagId"
-            + " AND p.categoryId = :categoryId")
+            + " AND p.categoryId = :categoryId"
+            + " AND p.deleted = false ")
     Page<Post> fetchListPostsByTagId(@Param("tagId") Long tagId,Long categoryId, Pageable pageable);
 }
