@@ -1,12 +1,10 @@
 package com.high.highblog.api.user;
 
-import com.high.highblog.bloc.notification.NotificationBloc;
 import com.high.highblog.bloc.notification.NotificationListBloc;
 import com.high.highblog.helper.PaginationHelper;
 import com.high.highblog.mapper.NotificationMapper;
 import com.high.highblog.model.dto.request.BasePaginationReq;
 import com.high.highblog.model.entity.Notification;
-import javafx.scene.control.Pagination;
 import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
