@@ -94,6 +94,7 @@ public class JwtBloc {
 
                             return CustomUserDetails.builder()
                                                     .id(account.getId())
+                                                    .userId(account.getUserId())
                                                     .username(account.getUsername())
                                                     .authorities(roles.stream()
                                                                       .map(role -> new SimpleGrantedAuthority(role.getRoleType()

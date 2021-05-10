@@ -65,7 +65,12 @@ public class WebConfig
                 .allowCredentials(true)
                 .allowedHeaders("*")
                 .allowedMethods("*")
-                .allowedOrigins(corsConfigProperties.getAllowedOrigin(), "http://35.197.145.122")
+                .allowedOrigins(corsConfigProperties.getAllowedOrigin(),
+                                "http://35.197.145.122",
+                                "http://7540845894b0.ngrok.io",
+                                "https://7540845894b0.ngrok.io",
+                                "http://*",
+                                "https://*")
                 .maxAge(3600);
     }
 

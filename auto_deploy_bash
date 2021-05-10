@@ -1,5 +1,4 @@
-git checkout master
-git pull --rebase
+
 docker-compose down
 docker rmi ninhthuanntnt/high_blog_api:0.0.1
 docker-compose up -d

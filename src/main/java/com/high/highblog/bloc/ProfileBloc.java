@@ -27,6 +27,9 @@ public class ProfileBloc {
 
     public ProfileRes getProfileResForCurrentUser() {
         Long userId = SecurityHelper.getUserId();
+
+        log.info("Get user profile for userId #{}", userId);
+
         Long accountId = SecurityHelper.getAccountId();
 
         User user = userService.getById(userId);

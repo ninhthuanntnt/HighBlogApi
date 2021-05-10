@@ -1,5 +1,6 @@
 package com.high.highblog.mapper;
 
+import com.high.highblog.helper.DateTimeHelper;
 import com.high.highblog.model.dto.request.CommentCreateReq;
 import com.high.highblog.model.dto.request.CommentUpdateReq;
 import com.high.highblog.model.dto.response.CommentRes;
@@ -10,6 +11,7 @@ import org.mapstruct.MappingTarget;
 import org.mapstruct.Mappings;
 import org.mapstruct.factory.Mappers;
 
+import java.time.Instant;
 import java.util.List;
 
 import static org.mapstruct.ReportingPolicy.IGNORE;
@@ -27,4 +29,8 @@ public interface CommentMapper {
     Comment toComment(CommentCreateReq commentCreateReq);
 
     List<CommentRes> toListCommentsRes(List<Comment> comments);
+
+    default Long toLongFromInstant(Instant instant) {
+        return DateTimeHelper.toMilli(instant);
+    }
 }

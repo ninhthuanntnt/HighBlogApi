@@ -5,18 +5,26 @@ import com.high.highblog.helper.SecurityHelper;
 import com.high.highblog.mapper.NotificationMapper;
 import com.high.highblog.model.dto.response.NotificationRes;
 import com.high.highblog.model.entity.Notification;
+import com.high.highblog.model.entity.User;
 import com.high.highblog.service.AccountService;
 import com.high.highblog.service.SubscriptionService;
+import com.high.highblog.service.UserService;
 import com.high.highblog.service.notification.NotificationService;
 import com.high.highblog.service.notification.UserNotificationService;
+import io.jsonwebtoken.impl.crypto.MacProvider;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.jws.soap.SOAPBinding;
+
 import java.util.Collections;
 import java.util.List;
+import java.util.Map;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 @Slf4j
 @Component
@@ -27,6 +35,7 @@ public class NotificationBloc {
     private final UserNotificationService userNotificationService;
     private final SubscriptionService subscriptionService;
     private final AccountService accountService;
+    private final UserService userService;
 
     private static final String DEFAULT_NOTIFICATION_DESTINATION = "/exchange/amq.direct/notification";
 
@@ -34,12 +43,14 @@ public class NotificationBloc {
                             final NotificationService notificationService,
                             final UserNotificationService userNotificationService,
                             final SubscriptionService subscriptionService,
-                            final AccountService accountService) {
+                            final AccountService accountService,
+                            final UserService userService) {
         this.simpMessagingTemplate = simpMessagingTemplate;
         this.notificationService = notificationService;
         this.userNotificationService = userNotificationService;
         this.subscriptionService = subscriptionService;
         this.accountService = accountService;
+        this.userService = userService;
     }
 
     @Async
@@ -98,6 +109,8 @@ public class NotificationBloc {
         Long userId = SecurityHelper.getUserId();
         List<Notification> unreadNotifications = notificationService.fetchUnreadNotifications(userId);
 
+        populateSenderIdForNotifications(unreadNotifications);
+
         String username = SecurityHelper.getAccountUsername()
                                         .orElseThrow(() -> new ObjectNotFoundException("username"));
 
@@ -109,5 +122,18 @@ public class NotificationBloc {
                                             simpMessagingTemplate.convertAndSendToUser(username,
                                                                                        DEFAULT_NOTIFICATION_DESTINATION,
                                                                                        notificationRes));
+    }
+
+    private void populateSenderIdForNotifications(final List<Notification> notifications) {
+        Set<Long> senderIds = notifications.stream()
+                                           .map(Notification::getSenderId)
+                                           .collect(Collectors.toSet());
+
+        Map<Long, List<User>> senderIdsMap = userService.fetchByIdIn(senderIds)
+                                                        .stream()
+                                                        .collect(Collectors.groupingBy(User::getId));
+
+        notifications.forEach(notification -> notification.setSender(senderIdsMap.get(notification.getSenderId())
+                                                                                 .get(0)));
     }
 }
