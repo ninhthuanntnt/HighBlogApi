@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog https://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.3.xsd">
+    <property name="now" value="now(3)"/>
+
+    <changeSet id="HB-20210510152700" author="ducminhle">
+        <addColumn tableName="hb_posts">
+            <column name="deleted" type="bit(1)" defaultValue="false" afterColumn="last_modified_date"/>
+        </addColumn>
+    </changeSet>
+</databaseChangeLog>
