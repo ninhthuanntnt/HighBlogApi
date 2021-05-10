@@ -23,6 +23,7 @@ import javax.validation.constraints.Size;
 public class NotificationRes {
 
     private Long id;
+    private Long sourceId;
     private String content;
     private NotificationType type;
 

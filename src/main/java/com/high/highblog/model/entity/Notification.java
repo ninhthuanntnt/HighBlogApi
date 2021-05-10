@@ -36,6 +36,9 @@ public class Notification
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @Column(name = "sender_id")
+    private Long senderId;
+
     @NotNull
     @Column(name = "source_id")
     private Long sourceId;

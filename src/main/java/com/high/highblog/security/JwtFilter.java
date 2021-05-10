@@ -47,6 +47,8 @@ public class JwtFilter
 
             SecurityContextHolder.getContext().setAuthentication(authentication);
 
+            logger.info("Authentication successfully");
+
         }
 
         filterChain.doFilter(request, response);

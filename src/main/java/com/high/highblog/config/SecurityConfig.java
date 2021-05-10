@@ -78,7 +78,7 @@ public class SecurityConfig
                          "/configuration/security",
                          "/swagger-ui.html",
                          "/webjars/**").permitAll()
-            .antMatchers("/api/*/user/**").hasAuthority(RoleType.ROLE_USER.name());
+            .antMatchers("/api/*/user/**", "/api/v1/profiles").hasAuthority(RoleType.ROLE_USER.name());
 
         http.addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class);
     }
