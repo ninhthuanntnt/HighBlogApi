@@ -6,6 +6,8 @@ import com.high.highblog.model.entity.Notification;
 import com.high.highblog.repository.NotificationRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.ObjectUtils;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -22,6 +24,15 @@ public class NotificationService {
         this.repository = repository;
     }
 
+    @Transactional(readOnly = true)
+    public Page<Notification> fetchByReceiverIdWithPageRequest(final Long receiverId,
+                                                               final PageRequest pageRequest) {
+        log.info("Fetch list notifications");
+
+        return repository.findByReceiverId(receiverId, pageRequest);
+    }
+
+    @Transactional
     public Notification saveNew(final Notification notification) {
         log.info("Save new notification with data #{}", notification);
 
