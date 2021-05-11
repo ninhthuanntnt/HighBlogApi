@@ -128,6 +128,15 @@ public class NotificationBloc {
                                                                                        notificationRes));
     }
 
+    @Transactional
+    public void markSentNotificationForCurrentUser(final Long notificationId) {
+        Long userId = SecurityHelper.getUserId();
+
+        log.info("Mark as sent notification for current user #{}", userId);
+
+        userNotificationService.markAsSentByIdAndUserId(notificationId, userId);
+    }
+
     private void populateSenderIdForNotifications(final List<Notification> notifications) {
         Set<Long> senderIds = notifications.stream()
                                            .map(Notification::getSenderId)

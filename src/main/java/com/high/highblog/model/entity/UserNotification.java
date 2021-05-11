@@ -44,4 +44,8 @@ public class UserNotification
     @Column(name = "seen")
     private boolean seen = false;
 
+    @NotNull
+    @Builder.Default
+    @Column(name = "sent")
+    private boolean sent = false;
 }

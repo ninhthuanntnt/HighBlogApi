@@ -1,5 +1,6 @@
 package com.high.highblog.service.notification;
 
+import com.high.highblog.error.exception.ObjectNotFoundException;
 import com.high.highblog.model.entity.UserNotification;
 import com.high.highblog.repository.UserNotificationRepository;
 import lombok.extern.slf4j.Slf4j;
@@ -30,5 +31,17 @@ public class UserNotificationService {
                                                           .collect(Collectors.toList());
         log.info("Data before save #{}", userNotifications);
         repository.save(userNotifications.get(0));
+    }
+
+    @Transactional
+    public void markAsSentByIdAndUserId(final Long id, final Long userId){
+        log.info("Mark as sent for notification by id #{}", id);
+
+        UserNotification userNotification = repository.findByIdAndUserId(id, userId)
+                                                      .orElseThrow(()->new ObjectNotFoundException("userNotification"));
+
+        userNotification.setSent(true);
+
+        repository.save(userNotification);
     }
 }
