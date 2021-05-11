@@ -18,11 +18,11 @@ public interface NotificationRepository
 
     @Query("SELECT n FROM Notification n"
             + " JOIN UserNotification un ON un.notificationId = n.id"
-            + " WHERE un.userId = :receiverId")
+            + " WHERE n.deleted = false AND un.userId = :receiverId AND ")
     Page<Notification> findByReceiverId(@Param("receiverId") Long receiverId, Pageable pageable);
 
     @Query("SELECT n FROM Notification n"
             + " JOIN UserNotification un ON un.notificationId = n.id"
-            + " WHERE un.userId = :userId AND un.seen = :seen")
+            + " WHERE n.deleted = false AND un.userId = :userId AND un.seen = :seen AND un.sent = false")
     List<Notification> findByUserIdAndSeen(@Param("userId") Long userId, @Param("seen") boolean seen);
 }
