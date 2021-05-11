@@ -70,4 +70,8 @@ public class UserTransactionService {
     public Page<UserTransaction> fetchAllByUserId(Long currentUserId, PageRequest pageRequest) {
         return repository.findAllByUserId(currentUserId, pageRequest);
     }
+    @Transactional(readOnly = true)
+    public Page<UserTransaction> fetchAll(PageRequest pageRequest) {
+        return repository.findAll(pageRequest);
+    }
 }
