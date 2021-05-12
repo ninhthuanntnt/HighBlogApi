@@ -32,6 +32,8 @@ public class UserRes {
 
     private Boolean followed;
 
+    private Boolean notified;
+
     private Long createdDate;
 
     private String bio;

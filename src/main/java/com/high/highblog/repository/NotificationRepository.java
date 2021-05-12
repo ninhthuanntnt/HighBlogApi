@@ -18,7 +18,7 @@ public interface NotificationRepository
 
     @Query("SELECT n FROM Notification n"
             + " JOIN UserNotification un ON un.notificationId = n.id"
-            + " WHERE n.deleted = false AND un.userId = :receiverId AND ")
+            + " WHERE n.deleted = false AND un.userId = :receiverId")
     Page<Notification> findByReceiverId(@Param("receiverId") Long receiverId, Pageable pageable);
 
     @Query("SELECT n FROM Notification n"

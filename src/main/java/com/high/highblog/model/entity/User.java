@@ -68,4 +68,7 @@ public class User
 
     @Transient
     private Boolean followed;
+
+    @Transient
+    private Boolean notified;
 }
