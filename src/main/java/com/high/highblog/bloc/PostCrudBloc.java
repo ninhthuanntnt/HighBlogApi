@@ -10,6 +10,7 @@ import com.high.highblog.model.entity.Notification;
 import com.high.highblog.model.entity.Post;
 import com.high.highblog.model.entity.PostStatistic;
 import com.high.highblog.model.entity.PostTag;
+import com.high.highblog.model.entity.Subscription;
 import com.high.highblog.model.entity.User;
 import com.high.highblog.service.FavoritePostService;
 import com.high.highblog.service.PostService;
@@ -149,11 +150,15 @@ public class PostCrudBloc {
                 post.setAddedToFavorite(favoritePostService.existsByPostIdAndUserId(post.getId(), userId));
 
                 User postOwner = post.getUser();
+                Subscription subscription = subscriptionService.findNullableByUserIdAndFollowerId(postOwner.getId(), userId);
+                postOwner.setFollowed(ObjectUtils.isNotEmpty(subscription));
 
-                postOwner.setFollowed(subscriptionService.existsByUserIdAndFollowerId(postOwner.getId(), userId));
+                if(ObjectUtils.isNotEmpty(subscription)){
+                    postOwner.setNotified(subscription.isNotified());
+                }
             }
         } catch (Exception ex) {
-            log.info("Extra info of post detail is not set");
+            log.error("Extra info of post detail is not set");
             log.error(ex.getMessage());
         }
     }
