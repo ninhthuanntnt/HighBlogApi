@@ -70,4 +70,13 @@ public interface PostRepository
             + " AND p.categoryId = :categoryId"
             + " AND p.deleted = false ")
     Page<Post> fetchListPostsByTagId(@Param("tagId") Long tagId,Long categoryId, Pageable pageable);
+
+    @Query("SELECT new Post(p, ps) FROM Post p"
+            + " JOIN PostTag pt ON pt.postId = p.id"
+            + " JOIN PostStatistic ps ON ps.postId = p.id"
+            + " WHERE p.categoryId = :categoryId "
+            + " AND (:userId IS NULL OR p.userId = :userId)"
+            + " AND (COALESCE(:tagIds) IS NULL OR pt.tagId IN (:tagIds))"
+            + " AND (:keyword IS NULL OR p.title LIKE %:keyword% OR p.summary LIKE %:keyword% OR p.content LIKE %:keyword%)")
+    Page<Post> searchDynamicPosts(Long categoryId, Long userId, List<Long> tagIds, String keyword, Pageable pageable);
 }

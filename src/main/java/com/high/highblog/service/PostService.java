@@ -12,6 +12,8 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
+
 @Slf4j
 @Service
 public class PostService {
@@ -126,5 +128,10 @@ public class PostService {
         log.info("Fetch posts by tagId with page request #{}", pageRequest);
 
         return repository.fetchListPostsByTagId(tagId, categoryId, pageRequest);
+    }
+    @Transactional(readOnly = true)
+    public Page<Post> searchDynamicPosts(Long categoryId, Long userId, List<Long> tagIds, PageRequest pageRequest, String keyword) {
+        log.info("search dynamic posts ");
+        return repository.searchDynamicPosts(categoryId,userId,tagIds,keyword,pageRequest);
     }
 }
