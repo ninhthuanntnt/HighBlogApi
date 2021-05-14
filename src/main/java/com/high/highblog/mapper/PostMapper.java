@@ -6,6 +6,7 @@ import com.high.highblog.model.dto.request.PostUpdateReq;
 import com.high.highblog.model.dto.response.PostDetailRes;
 import com.high.highblog.model.dto.response.PostDetailToUpdateRes;
 import com.high.highblog.model.dto.response.PostRes;
+import com.high.highblog.model.dto.response.admin.AdminPostRes;
 import com.high.highblog.model.entity.Post;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
@@ -45,6 +46,14 @@ public interface PostMapper {
     @Mapping(target = "tagsRes", source = "postTags")
     @Mapping(target = "userRes", source = "user")
     PostRes toPostRes(Post posts);
+
+    @Mapping(target = "numberOfVotes", source = "postStatistic.numberOfVotes")
+    @Mapping(target = "numberOfComments", source = "postStatistic.numberOfComments")
+    @Mapping(target = "numberOfFavorites", source = "postStatistic.numberOfFavorites")
+    @Mapping(target = "tagsRes", source = "postTags")
+    @Mapping(target = "userRes", source = "user")
+    @Mapping(target = "deleted", source = "deleted")
+    AdminPostRes toAdminPostRes(Post post);
 
     default Long toLongFromInstant(Instant instant) {
         return DateTimeHelper.toMilli(instant);

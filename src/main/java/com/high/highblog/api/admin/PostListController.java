@@ -27,7 +27,7 @@ public class PostListController {
         Page<Post> posts = postListBloc.searchDynamicPosts(categoryId,req);
 
         return ResponseEntity.ok(PaginationHelper.buildBasePaginationRes(
-                posts.map(PostMapper.INSTANCE::toPostRes)
+                posts.map(PostMapper.INSTANCE::toAdminPostRes)
         ));
     }
 }

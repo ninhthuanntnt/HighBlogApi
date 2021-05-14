@@ -9,6 +9,7 @@ import lombok.*;
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import java.math.BigDecimal;
+import java.time.Instant;
 
 @Getter
 @Setter
@@ -33,4 +34,7 @@ public class UserTransactionRes {
     private PaymentType paymentType;
 
     private BigDecimal balance;
+
+    private Instant createdDate;
+
 }

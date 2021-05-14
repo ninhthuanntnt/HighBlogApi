@@ -1,9 +1,7 @@
 package com.high.highblog.service;
 
 import com.high.highblog.enums.UserTransactionStatus;
-import com.high.highblog.error.exception.ObjectNotFoundException;
 import com.high.highblog.error.exception.ValidatorException;
-import com.high.highblog.model.dto.request.BasePaginationReq;
 import com.high.highblog.model.entity.UserTransaction;
 import com.high.highblog.repository.UserTransactionRepository;
 import lombok.extern.slf4j.Slf4j;
@@ -13,7 +11,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.List;
+import java.time.Instant;
 
 @Slf4j
 @Service
@@ -71,7 +69,7 @@ public class UserTransactionService {
         return repository.findAllByUserId(currentUserId, pageRequest);
     }
     @Transactional(readOnly = true)
-    public Page<UserTransaction> fetchAll(PageRequest pageRequest) {
-        return repository.findAll(pageRequest);
+    public Page<UserTransaction> searchDynamicTransactions(Long userId, String transactionNo, Instant startDate, Instant endDate, PageRequest pageRequest) {
+        return repository.searchDynamicTransactions(userId,transactionNo,startDate,endDate,pageRequest);
     }
 }

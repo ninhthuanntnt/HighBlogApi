@@ -27,12 +27,10 @@ public interface PostRepository
 
     @Query(value = "SELECT p FROM Post p"
                 + " JOIN PostStatistic ps ON ps.postId = p.id"
-                + " WHERE p.title LIKE %:keyword%"
-                + " AND p.deleted = false "
+                + " WHERE p.deleted = false"
+                + " AND ( p.title LIKE %:keyword%"
                 + " OR p.summary LIKE %:keyword%"
-                + " AND p.deleted = false "
-                + " OR p.content LIKE %:keyword%"
-                + " AND p.deleted = false ")
+                + " OR p.content LIKE %:keyword%)")
     Page<Post> searchPosts(@Param("keyword") String keyword, Pageable pageable);
 
     @Query("SELECT new Post(p, ps) FROM Post p"
