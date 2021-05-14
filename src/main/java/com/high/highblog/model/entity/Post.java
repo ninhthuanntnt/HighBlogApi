@@ -64,7 +64,7 @@ public class Post
     private String coverImagePath;
 
     @Column(name = "deleted")
-    private boolean deleted;
+    private Boolean deleted;
 
     @Builder.Default
     @NotNull
@@ -99,6 +99,7 @@ public class Post
         this.coverImagePath = post.coverImagePath;
         this.postType = post.postType;
         this.postTags = post.postTags;
+        this.deleted = post.deleted;
         this.setCreatedBy(post.getCreatedBy());
         this.setCreatedDate(post.getCreatedDate());
         this.setLastModifiedBy(post.getLastModifiedBy());

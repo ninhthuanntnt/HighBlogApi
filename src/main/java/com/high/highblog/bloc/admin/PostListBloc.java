@@ -44,7 +44,8 @@ public class PostListBloc {
         // TODO: add binding data to convert string of default sort to an object
         PageRequest pageRequest = PaginationHelper.generatePageRequestWithDefaultSort(req,
                 "-ps.numberOfVotes");
-        Long userId = userService.getByNickName(req.getNickName()).getId();
+        Long userId =null;
+        if(req.getNickName() != null) userId =  userService.getByNickName(req.getNickName()).getId();
         List<Long> tagIds = req.getTagIds();
         String keyword = req.getKeyWord();
         Page<Post> posts = postService.searchDynamicPosts(categoryId, userId, tagIds ,pageRequest ,keyword);

@@ -2,7 +2,7 @@ package com.high.highblog.mapper;
 
 import com.high.highblog.helper.DateTimeHelper;
 import com.high.highblog.model.dto.request.UserUpdateReq;
-import com.high.highblog.model.dto.response.AdminUserRes;
+import com.high.highblog.model.dto.response.admin.AdminUserRes;
 import com.high.highblog.model.dto.response.UserRes;
 import com.high.highblog.model.entity.User;
 import org.mapstruct.Mapper;

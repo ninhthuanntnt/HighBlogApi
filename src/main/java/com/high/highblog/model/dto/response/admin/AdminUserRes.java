@@ -1,4 +1,4 @@
-package com.high.highblog.model.dto.response;
+package com.high.highblog.model.dto.response.admin;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.AllArgsConstructor;
