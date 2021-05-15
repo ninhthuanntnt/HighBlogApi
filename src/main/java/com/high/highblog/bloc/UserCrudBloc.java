@@ -4,10 +4,14 @@ import com.high.highblog.error.exception.ValidatorException;
 import com.high.highblog.helper.SecurityHelper;
 import com.high.highblog.mapper.UserMapper;
 import com.high.highblog.model.dto.request.UserUpdateReq;
+import com.high.highblog.model.entity.Post;
+import com.high.highblog.model.entity.Subscription;
 import com.high.highblog.model.entity.User;
 import com.high.highblog.service.FileService;
+import com.high.highblog.service.SubscriptionService;
 import com.high.highblog.service.UserService;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.ObjectUtils;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
@@ -18,16 +22,24 @@ import org.springframework.web.multipart.MultipartFile;
 public class UserCrudBloc {
     private final UserService userService;
     private final FileService fileService;
+    private final SubscriptionService subscriptionService;
 
-    public UserCrudBloc(final UserService userService, FileService fileService) {
+    public UserCrudBloc(final UserService userService,
+                        final FileService fileService,
+                        final SubscriptionService subscriptionService) {
         this.userService = userService;
         this.fileService = fileService;
+        this.subscriptionService = subscriptionService;
     }
 
     @Transactional(readOnly = true)
     public User getUserDetail(String nickName) {
         log.info("get user detail by nick name #{}", nickName);
-        return userService.getByNickName(nickName);
+
+        User user = userService.getByNickName(nickName);
+        includeExtraInfoIfUserLogined(user);
+
+        return user;
     }
 
     @Transactional
@@ -73,6 +85,21 @@ public class UserCrudBloc {
         userService.saveBackground(currentUserId,path);
 
         return path;
+    }
+
+    private void includeExtraInfoIfUserLogined(final User user) {
+        try {
+            Long currentUserId = SecurityHelper.getUserId();
+            if(currentUserId != user.getId()){
+                Subscription subscription = subscriptionService.findNullableByUserIdAndFollowerId(user.getId(),
+                                                                                                  currentUserId);
+                user.setFollowed(ObjectUtils.isNotEmpty(subscription));
+            }
+
+        } catch (Exception ex) {
+            log.error("Extra info of post detail is not set");
+            log.error(ex.getMessage());
+        }
     }
 
 }
