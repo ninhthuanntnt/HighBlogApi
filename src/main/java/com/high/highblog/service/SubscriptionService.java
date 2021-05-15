@@ -74,6 +74,14 @@ public class SubscriptionService {
         return repository.findFollowerIdsByUserId(userId);
     }
 
+    @Transactional(readOnly = true)
+    public Long getNumberOfFollowersByUserId(final Long userId) {
+        log.info("Get number of followers by user id #{}", userId);
+
+        return repository.countByUserId(userId)
+                         .orElse(0L);
+    }
+
     private void validatePostVoteBeforeSaveNew(final Subscription subscription) {
         if (ObjectUtils.isNotEmpty(subscription.getId()))
             throw new ValidatorException("Invalid post id", "id");

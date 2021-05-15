@@ -23,6 +23,6 @@ public class UserCrudController {
     @GetMapping("/{nickName}")
     public ResponseEntity<?> getUserDetail(@PathVariable String nickName) {
         User user = userCrudBloc.getUserDetail(nickName);
-        return ResponseEntity.ok(UserMapper.INSTANCE.toUserRes(user));
+        return ResponseEntity.ok(UserMapper.INSTANCE.toUserDetailRes(user));
     }
 }

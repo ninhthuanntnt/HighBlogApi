@@ -37,6 +37,7 @@ public class UserCrudBloc {
         log.info("get user detail by nick name #{}", nickName);
 
         User user = userService.getByNickName(nickName);
+        user.setNumberOfFollowers(subscriptionService.getNumberOfFollowersByUserId(user.getId()));
         includeExtraInfoIfUserLogined(user);
 
         return user;
