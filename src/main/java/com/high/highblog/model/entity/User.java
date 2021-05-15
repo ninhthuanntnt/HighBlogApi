@@ -65,6 +65,9 @@ public class User
 
     @Column(name = "bio")
     private String bio;
+    
+    @Transient
+    private Long numberOfFollowers;
 
     @Transient
     private Boolean followed;

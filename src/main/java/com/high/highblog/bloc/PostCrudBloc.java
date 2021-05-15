@@ -141,7 +141,18 @@ public class PostCrudBloc {
         notificationBloc.deleteNotificationToFollowers(id);
     }
 
-    private void includeExtraInfoForPostDetailIfUserLogined(Post post) {
+    @Transactional
+    public void deletePost(Long id, String nickName) {
+        Long userId = userService.getByNickName(nickName).getId();
+        log.info("Delete post by id #{} with userId #{}", id, userId);
+
+        postService.softDelete(id, userId);
+        postTagService.deleteAll(id);
+
+        notificationBloc.deleteNotificationToFollowers(id);
+    }
+
+    private void includeExtraInfoForPostDetailIfUserLogined(final Post post) {
         try {
             Long userId = SecurityHelper.getUserId();
             if (ObjectUtils.isNotEmpty(userId)) {
@@ -161,15 +172,5 @@ public class PostCrudBloc {
             log.error("Extra info of post detail is not set");
             log.error(ex.getMessage());
         }
-    }
-
-    public void deletePost(Long id, String nickName) {
-        Long userId = userService.getByNickName(nickName).getId();
-        log.info("Delete post by id #{} with userId #{}", id, userId);
-
-        postService.softDelete(id, userId);
-        postTagService.deleteAll(id);
-
-        notificationBloc.deleteNotificationToFollowers(id);
     }
 }
