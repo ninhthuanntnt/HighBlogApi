@@ -13,14 +13,17 @@ import java.util.Set;
 @Repository
 public interface SubscriptionRepository
         extends JpaRepository<Subscription, Long> {
+    Optional<Subscription> findByUserIdAndFollowerId(Long userId, Long followerId);
+
+    List<Subscription> findDistinctByFollowerId(Long followerId);
+
+    Optional<Long> countByUserId(Long userId);
+
     @Query("SELECT CASE WHEN count(sub) > 0 THEN TRUE ELSE FALSE END "
             + " FROM Subscription sub"
             + " WHERE sub.userId = :userId AND sub.followerId = :followerId")
     boolean existsByUserIdAndFollowerId(@Param("userId") Long userId, @Param("followerId") Long followerId);
 
-    Optional<Subscription> findByUserIdAndFollowerId(Long userId, Long followerId);
-
-    List<Subscription> findDistinctByFollowerId(Long followerId);
 
     @Query("SELECT s.followerId FROM Subscription s"
             + " WHERE s.userId = :userId")
