@@ -101,13 +101,22 @@ public class PostService {
 
     @Transactional
     public void softDelete(final Long id, final Long userId) {
-        log.info("Delete post by id #{} with userId #{}", id, userId);
+        log.info("soft delete post by id #{} with userId #{}", id, userId);
 
         Post post = repository.findByIdAndUserId(id, userId)
                               .orElseThrow(() -> new ObjectNotFoundException("post"));
 
         post.setDeleted(true);
 
+    }
+    @Transactional
+    public void delete(Long id, Long userId) {
+        log.info("Delete post by id #{} with userId #{}", id, userId);
+
+        Post post = repository.findByIdAndUserId(id, userId)
+                .orElseThrow(() -> new ObjectNotFoundException("post"));
+
+        repository.delete(post);
     }
 
     private void validatePostBeforeSaveNew(final Post post) {

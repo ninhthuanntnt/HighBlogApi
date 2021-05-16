@@ -1,6 +1,6 @@
 package com.high.highblog.api.admin;
 
-import com.high.highblog.bloc.UserListBloc;
+import com.high.highblog.bloc.admin.UserListBloc;
 import com.high.highblog.helper.PaginationHelper;
 import com.high.highblog.mapper.UserMapper;
 import com.high.highblog.model.dto.request.BasePaginationReq;

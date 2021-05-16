@@ -1,6 +1,7 @@
 package com.high.highblog.api.admin;
 
-import com.high.highblog.bloc.UserTransactionBloc;
+
+import com.high.highblog.bloc.admin.UserTransactionBloc;
 import com.high.highblog.helper.PaginationHelper;
 import com.high.highblog.mapper.UserTransactionMapper;
 import com.high.highblog.model.dto.request.admin.AdminTransactionReq;

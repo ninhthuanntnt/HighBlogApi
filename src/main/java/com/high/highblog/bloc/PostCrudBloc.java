@@ -141,17 +141,6 @@ public class PostCrudBloc {
         notificationBloc.deleteNotificationToFollowers(id);
     }
 
-    @Transactional
-    public void deletePost(Long id, String nickName) {
-        Long userId = userService.getByNickName(nickName).getId();
-        log.info("Delete post by id #{} with userId #{}", id, userId);
-
-        postService.softDelete(id, userId);
-        postTagService.deleteAll(id);
-
-        notificationBloc.deleteNotificationToFollowers(id);
-    }
-
     private void includeExtraInfoForPostDetailIfUserLogined(final Post post) {
         try {
             Long userId = SecurityHelper.getUserId();

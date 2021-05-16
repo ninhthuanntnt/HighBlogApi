@@ -1,6 +1,7 @@
 package com.high.highblog.api.admin;
 
-import com.high.highblog.bloc.PostCrudBloc;
+
+import com.high.highblog.bloc.admin.PostCrudBloc;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -18,6 +19,13 @@ public class PostCrudController {
     public ResponseEntity<?> deletePost(@RequestParam final Long id, final String nickName) {
 
         postCrudBloc.deletePost(id,nickName);
+
+        return ResponseEntity.noContent().build();
+    }
+    @DeleteMapping("/soft-delete")
+    public ResponseEntity<?> softDeletePost(@RequestParam final Long id, final String nickName) {
+
+        postCrudBloc.softDeletePost(id,nickName);
 
         return ResponseEntity.noContent().build();
     }
