@@ -5,8 +5,12 @@ import com.high.highblog.model.entity.SystemTransaction;
 import com.high.highblog.repository.SystemTransactionRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.ObjectUtils;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
 
 @Slf4j
 @Service
@@ -31,5 +35,10 @@ public class SystemTransactionService {
         if (ObjectUtils.isNotEmpty(systemTransaction.getId())) {
             throw new ValidatorException("Invalid system transaction", "systemTransaction");
         }
+    }
+@Transactional(readOnly = true)
+    public List<SystemTransaction> fetchSystemTransactions(Long senderId) {
+        log.info("fetch system transaction by senderId");
+        return repository.fetchBySenderTransactionId(senderId);
     }
 }

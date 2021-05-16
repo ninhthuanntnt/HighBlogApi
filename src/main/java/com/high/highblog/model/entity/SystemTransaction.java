@@ -1,6 +1,7 @@
 package com.high.highblog.model.entity;
 
 import com.high.highblog.enums.SystemTransactionStatus;
+import com.high.highblog.model.dto.response.admin.SystemTransactionRes;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -8,14 +9,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.EnumType;
-import javax.persistence.Enumerated;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 
 import java.math.BigDecimal;
@@ -55,4 +49,20 @@ public class SystemTransaction
     @Builder.Default
     @Column(name = "fee_rate")
     private Float feeRate = 0F;
+
+    @Transient
+    private ThirdPartyTransaction  thirdPartyTransaction;
+
+    public SystemTransaction(final  SystemTransaction systemTransaction, final ThirdPartyTransaction thirdPartyTransaction){
+        this.amount = systemTransaction.amount;
+        this.feeRate = systemTransaction.feeRate;
+        this.receiverTransactionId = systemTransaction.receiverTransactionId;
+        this.senderTransactionId = systemTransaction.senderTransactionId;
+        this.id = systemTransaction.id;
+        this.status = systemTransaction.status;
+        this.thirdPartyTransactionId = systemTransaction.thirdPartyTransactionId;
+
+        this.thirdPartyTransaction = thirdPartyTransaction;
+    }
+
 }

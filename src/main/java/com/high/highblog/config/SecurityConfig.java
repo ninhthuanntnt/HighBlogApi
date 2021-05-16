@@ -53,7 +53,7 @@ public class SecurityConfig
     protected void configure(final AuthenticationManagerBuilder auth)
             throws Exception {
         auth.userDetailsService(userDetailsService)
-            .passwordEncoder(passwordEncoder());
+                .passwordEncoder(passwordEncoder());
     }
 
     @Override
@@ -65,20 +65,21 @@ public class SecurityConfig
         http.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
 
         http.requiresChannel()
-            .anyRequest()
-            .requiresSecure();
+                .anyRequest()
+                .requiresSecure();
 
         http.authorizeRequests()
-            .antMatchers("/api/*/auth/**",
-                         "/api/*/auth/logout",
-                         "/api/*/register/**",
-                         "/v2/api-docs",
-                         "/configuration/ui",
-                         "/swagger-resources/**",
-                         "/configuration/security",
-                         "/swagger-ui.html",
-                         "/webjars/**").permitAll()
-            .antMatchers("/api/*/user/**", "/api/v1/profiles").hasAuthority(RoleType.ROLE_USER.name());
+                .antMatchers("/api/*/auth/**",
+                        "/api/*/auth/logout",
+                        "/api/*/register/**",
+                        "/v2/api-docs",
+                        "/configuration/ui",
+                        "/swagger-resources/**",
+                        "/configuration/security",
+                        "/swagger-ui.html",
+                        "/webjars/**").permitAll()
+                .antMatchers("/api/*/user/**", "/api/v1/profiles").hasAuthority(RoleType.ROLE_USER.name())
+                .antMatchers("/api/*/admin/**").hasAuthority(RoleType.ROLE_ADMIN.name());
 
         http.addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class);
     }
