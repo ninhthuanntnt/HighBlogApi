@@ -45,8 +45,7 @@ public class PostListBloc {
     @Transactional(readOnly = true)
     public Page<Post> fetchPosts(Long categoryId, final BasePaginationReq req) {
         // TODO: add binding data to convert string of default sort to an object
-        PageRequest pageRequest = PaginationHelper.generatePageRequestWithDefaultSort(req,
-                                                                                      "-ps.numberOfVotes");
+        PageRequest pageRequest = PaginationHelper.generatePageRequestWithoutSort(req);
 
         Page<Post> posts = postService.fetchPostsWithPageRequest(categoryId,pageRequest);
 
@@ -60,7 +59,7 @@ public class PostListBloc {
     public Page<Post> fetchPostsByNickName(final String nickName, Long categoryId, final BasePaginationReq req) {
         log.info("Fetch list posts by nickName #{} with req #{}", nickName, req);
         PageRequest pageRequest = PaginationHelper.generatePageRequestWithDefaultSort(req,
-                                                                                      "-ps.numberOfVotes");
+                                                                                      "-ps.id");
 
         Page<Post> posts = postService.fetchPostsByNickNameWithPageRequest(nickName,categoryId, pageRequest);
 
