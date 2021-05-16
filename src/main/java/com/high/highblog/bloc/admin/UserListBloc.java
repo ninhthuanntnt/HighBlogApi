@@ -1,4 +1,4 @@
-package com.high.highblog.bloc;
+package com.high.highblog.bloc.admin;
 
 import com.high.highblog.helper.PaginationHelper;
 import com.high.highblog.model.dto.request.BasePaginationReq;
@@ -12,7 +12,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 
 @Slf4j
-@Component
+@Component("adminUerListBloc")
 public class UserListBloc {
     private final UserService userService;
 
