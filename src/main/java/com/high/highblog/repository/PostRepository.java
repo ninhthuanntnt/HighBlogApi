@@ -19,38 +19,39 @@ public interface PostRepository
     Optional<Post> findByIdAndUserId(Long id, Long userId);
 
     @Query(value = "SELECT * FROM hb_posts AS p"
-                + " INNER JOIN hb_post_statistics AS ps ON ps.post_id = p.id"
-                + " WHERE MATCH (p.title, p.summary, p.content) AGAINST (:keyword WITH QUERY EXPANSION)"
-                + " AND p.deleted = false ",
-                    nativeQuery = true)
+            + " INNER JOIN hb_post_statistics AS ps ON ps.post_id = p.id"
+            + " WHERE MATCH (p.title, p.summary, p.content) AGAINST (:keyword WITH QUERY EXPANSION)"
+            + " AND p.deleted = false ",
+            nativeQuery = true)
     Page<Post> searchFullTextPosts(@Param("keyword") String keyword, Pageable pageable);
 
     @Query(value = "SELECT p FROM Post p"
-                + " JOIN PostStatistic ps ON ps.postId = p.id"
-                + " WHERE p.deleted = false"
-                + " AND ( p.title LIKE %:keyword%"
-                + " OR p.summary LIKE %:keyword%"
-                + " OR p.content LIKE %:keyword%)")
+            + " JOIN PostStatistic ps ON ps.postId = p.id"
+            + " WHERE p.deleted = false"
+            + " AND ( p.title LIKE %:keyword%"
+            + " OR p.summary LIKE %:keyword%"
+            + " OR p.content LIKE %:keyword%)")
     Page<Post> searchPosts(@Param("keyword") String keyword, Pageable pageable);
 
     @Query("SELECT new Post(p, ps) FROM Post p"
-        + " JOIN PostStatistic ps ON ps.postId = p.id"
-        + " WHERE p.categoryId = :categoryId"
-        + " AND p.deleted = false ")
-    Page<Post> fetchListPosts(Long categoryId, Pageable pageable);
+            + " JOIN PostStatistic ps ON ps.postId = p.id"
+            + " WHERE p.categoryId = :categoryId"
+            + " AND p.deleted = false "
+            + " ORDER BY ps.numberOfVotes - DATEDIFF(CURRENT_DATE, p.createdDate)*20")
+    Page<Post> fetchByCategoryId(Long categoryId, Pageable pageable);
 
     @Query("SELECT p FROM Post p "
-        + " JOIN FavoritePost fp ON fp.postId = p.id"
-        + " WHERE fp.userId = :userId"
-        + " AND p.deleted = false ")
+            + " JOIN FavoritePost fp ON fp.postId = p.id"
+            + " WHERE fp.userId = :userId"
+            + " AND p.deleted = false ")
     Page<Post> fetchListFavoritePostsByUserId(@Param("userId") Long userId, Pageable pageable);
 
     @Query("SELECT new Post(p, ps) FROM Post p"
-        + " JOIN User u ON u.id = p.userId"
-        + " JOIN PostStatistic ps ON ps.postId = p.id"
-        + " WHERE u.nickName = :nickName"
-        + " AND p.categoryId = :categoryId "
-        + " AND p.deleted = false ")
+            + " JOIN User u ON u.id = p.userId"
+            + " JOIN PostStatistic ps ON ps.postId = p.id"
+            + " WHERE u.nickName = :nickName"
+            + " AND p.categoryId = :categoryId "
+            + " AND p.deleted = false ")
     Page<Post> fetchListPostsByNickName(@Param("nickName") String nickName, Long categoryId, Pageable pageable);
 
     @Query("SELECT new Post(p, ps) FROM Post p"
@@ -66,8 +67,10 @@ public interface PostRepository
             + " JOIN PostStatistic ps ON ps.postId = p.id"
             + " WHERE pt.tagId = :tagId"
             + " AND p.categoryId = :categoryId"
-            + " AND p.deleted = false ")
-    Page<Post> fetchListPostsByTagId(@Param("tagId") Long tagId,Long categoryId, Pageable pageable);
+            + " AND p.deleted = false "
+            + " ORDER BY ps.numberOfVotes - DATEDIFF(CURRENT_DATE, p.createdDate)*20"
+    )
+    Page<Post> fetchByTagIdAndCategoryId(@Param("tagId") Long tagId, Long categoryId, Pageable pageable);
 
     @Query("SELECT new Post(p, ps) FROM Post p"
             + " JOIN PostTag pt ON pt.postId = p.id"

@@ -59,7 +59,7 @@ public class PostService {
     public Page<Post> fetchPostsWithPageRequest(Long categoryId, final PageRequest pageRequest) {
         log.info("Fetch posts with pageRequest");
 
-        return repository.fetchListPosts(categoryId, pageRequest);
+        return repository.fetchByCategoryId(categoryId, pageRequest);
     }
 
     @Transactional(readOnly = true)
@@ -127,7 +127,7 @@ public class PostService {
     public Page<Post> fetchPostsByTagIdWithPageRequest(final Long tagId, final Long categoryId, PageRequest pageRequest) {
         log.info("Fetch posts by tagId with page request #{}", pageRequest);
 
-        return repository.fetchListPostsByTagId(tagId, categoryId, pageRequest);
+        return repository.fetchByTagIdAndCategoryId(tagId, categoryId, pageRequest);
     }
     @Transactional(readOnly = true)
     public Page<Post> searchDynamicPosts(Long categoryId, Long userId, List<Long> tagIds, PageRequest pageRequest, String keyword) {
