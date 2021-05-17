@@ -100,20 +100,20 @@ public class PostService {
     }
 
     @Transactional
-    public void softDelete(final Long id, final Long userId) {
-        log.info("soft delete post by id #{} with userId #{}", id, userId);
+    public void softDelete(final Long id) {
+        log.info("soft delete post by id #{}", id);
 
-        Post post = repository.findByIdAndUserId(id, userId)
+        Post post = repository.findById(id)
                               .orElseThrow(() -> new ObjectNotFoundException("post"));
 
         post.setDeleted(true);
 
     }
     @Transactional
-    public void delete(Long id, Long userId) {
-        log.info("Delete post by id #{} with userId #{}", id, userId);
+    public void delete(final Long id) {
+        log.info("Delete post by id #{}", id);
 
-        Post post = repository.findByIdAndUserId(id, userId)
+        Post post = repository.findById(id)
                 .orElseThrow(() -> new ObjectNotFoundException("post"));
 
         repository.delete(post);
@@ -144,10 +144,10 @@ public class PostService {
         return repository.searchDynamicPosts(categoryId,userId,tagIds,keyword,pageRequest);
     }
     @Transactional
-    public void restorePost(Long id, Long userId) {
-        log.info("restore post by id #{} with userId #{}", id, userId);
+    public void restorePost(final Long id) {
+        log.info("restore post by id #{}", id);
 
-        Post post = repository.findByIdAndUserId(id, userId)
+        Post post = repository.findById(id)
                 .orElseThrow(() -> new ObjectNotFoundException("post"));
 
         post.setDeleted(false);

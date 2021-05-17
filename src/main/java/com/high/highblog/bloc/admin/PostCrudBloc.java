@@ -22,45 +22,39 @@ public class PostCrudBloc {
 
     private final PostService postService;
     private final PostTagService postTagService;
-    private final UserService userService;
 
     private final NotificationBloc notificationBloc;
 
     public PostCrudBloc(final PostService postService,
                         final PostTagService postTagService,
-                        final UserService userService,
                         final NotificationBloc notificationBloc) {
         this.postService = postService;
         this.postTagService = postTagService;
-        this.userService = userService;
         this.notificationBloc = notificationBloc;
     }
 
 
     @Transactional
-    public void deletePost(Long id, String nickName) {
-        Long userId = userService.getByNickName(nickName).getId();
-        log.info("Delete post by id #{} with userId #{}", id, userId);
+    public void deletePost(final Long id) {
+        log.info("Delete post by id #{} ", id);
 
-        postService.delete(id, userId);
+        postService.delete(id);
         postTagService.deleteAll(id);
 
         notificationBloc.deleteNotificationToFollowers(id);
     }
     @Transactional
-    public void softDeletePost(Long id, String nickName) {
-        Long userId = userService.getByNickName(nickName).getId();
-        log.info("Delete post by id #{} with userId #{}", id, userId);
+    public void softDeletePost(final Long id) {
+        log.info("Delete post by id #{}", id);
 
-        postService.softDelete(id, userId);
+        postService.softDelete(id);
 
         notificationBloc.deleteNotificationToFollowers(id);
     }
     @Transactional
-    public void restorePost(Long id, String nickName) {
-        Long userId = userService.getByNickName(nickName).getId();
-        log.info("Restore post by id #{} with userId #{}", id, userId);
+    public void restorePost(final Long id) {
+        log.info("Restore post by id #{}", id);
 
-        postService.restorePost(id, userId);
+        postService.restorePost(id);
     }
 }

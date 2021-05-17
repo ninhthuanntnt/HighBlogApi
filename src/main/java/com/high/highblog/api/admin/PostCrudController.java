@@ -6,7 +6,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController("adminPostCrudController")
-@RequestMapping("/api/v1/admin/post")
+@RequestMapping("/api/v1/admin/posts")
 public class PostCrudController {
 
     private final PostCrudBloc postCrudBloc;
@@ -15,23 +15,23 @@ public class PostCrudController {
         this.postCrudBloc = postCrudBloc;
     }
 
-    @DeleteMapping()
-    public ResponseEntity<?> deletePost(@RequestParam final Long id, final String nickName) {
+    @DeleteMapping("/{id}")
+    public ResponseEntity<?> deletePost(@PathVariable final Long id) {
 
-        postCrudBloc.deletePost(id,nickName);
-
-        return ResponseEntity.noContent().build();
-    }
-    @DeleteMapping("/soft-delete")
-    public ResponseEntity<?> softDeletePost(@RequestParam final Long id, final String nickName) {
-
-        postCrudBloc.softDeletePost(id,nickName);
+        postCrudBloc.deletePost(id);
 
         return ResponseEntity.noContent().build();
     }
-    @PutMapping("/restore-post")
-    public ResponseEntity<?> restorePost(@RequestParam final Long id, final  String nickName){
-        postCrudBloc.restorePost(id,nickName);
+    @DeleteMapping("/soft-delete/{id}")
+    public ResponseEntity<?> softDeletePost(@PathVariable final Long id) {
+
+        postCrudBloc.softDeletePost(id);
+
+        return ResponseEntity.noContent().build();
+    }
+    @PutMapping("/restore-post/{id}")
+    public ResponseEntity<?> restorePost(@PathVariable final Long id){
+        postCrudBloc.restorePost(id);
         return ResponseEntity.noContent().build();
     }
 }

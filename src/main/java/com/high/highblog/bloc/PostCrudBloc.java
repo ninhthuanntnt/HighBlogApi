@@ -134,9 +134,9 @@ public class PostCrudBloc {
     @Transactional
     public void deletePostForCurrentUser(final Long id) {
         Long userId = SecurityHelper.getUserId();
-        log.info("Delete post by id #{} with userId #{}", id, userId);
+        log.info("Delete post by id #{}", id);
 
-        postService.softDelete(id, userId);
+        postService.softDelete(id);
 
         notificationBloc.deleteNotificationToFollowers(id);
     }
