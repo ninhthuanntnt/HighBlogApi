@@ -3,6 +3,7 @@ package com.high.highblog.service;
 import com.high.highblog.error.exception.ObjectNotFoundException;
 import com.high.highblog.error.exception.ValidatorException;
 import com.high.highblog.helper.SecurityHelper;
+import com.high.highblog.model.dto.response.admin.CountPostsRes;
 import com.high.highblog.model.entity.Post;
 import com.high.highblog.repository.PostRepository;
 import lombok.extern.slf4j.Slf4j;
@@ -153,7 +154,11 @@ public class PostService {
         post.setDeleted(false);
     }
     @Transactional(readOnly = true)
-    public Long countPosts() {
-        return repository.count();
+    public CountPostsRes countPosts() {
+        CountPostsRes posts = new CountPostsRes();
+        posts.setTotal(repository.count());
+        posts.setPosts(repository.countPostsByCategoryId(1L));
+        posts.setQuestions(repository.countPostsByCategoryId(2L));
+        return posts;
     }
 }

@@ -80,4 +80,6 @@ public interface PostRepository
             + " AND (COALESCE(:tagIds) IS NULL OR pt.tagId IN (:tagIds))"
             + " AND (:keyword IS NULL OR p.title LIKE %:keyword% OR p.summary LIKE %:keyword% OR p.content LIKE %:keyword%)")
     Page<Post> searchDynamicPosts(Long categoryId, Long userId, List<Long> tagIds, String keyword, Pageable pageable);
+
+    Long countPostsByCategoryId(Long id);
 }
