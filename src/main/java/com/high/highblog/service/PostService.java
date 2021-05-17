@@ -143,4 +143,13 @@ public class PostService {
         log.info("search dynamic posts ");
         return repository.searchDynamicPosts(categoryId,userId,tagIds,keyword,pageRequest);
     }
+    @Transactional
+    public void restorePost(Long id, Long userId) {
+        log.info("restore post by id #{} with userId #{}", id, userId);
+
+        Post post = repository.findByIdAndUserId(id, userId)
+                .orElseThrow(() -> new ObjectNotFoundException("post"));
+
+        post.setDeleted(false);
+    }
 }

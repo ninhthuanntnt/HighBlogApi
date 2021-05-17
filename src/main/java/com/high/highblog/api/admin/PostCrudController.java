@@ -29,4 +29,9 @@ public class PostCrudController {
 
         return ResponseEntity.noContent().build();
     }
+    @PutMapping("/restore-post")
+    public ResponseEntity<?> restorePost(@RequestParam final Long id, final  String nickName){
+        postCrudBloc.restorePost(id,nickName);
+        return ResponseEntity.noContent().build();
+    }
 }

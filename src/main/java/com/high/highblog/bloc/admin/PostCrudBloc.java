@@ -56,4 +56,11 @@ public class PostCrudBloc {
 
         notificationBloc.deleteNotificationToFollowers(id);
     }
+    @Transactional
+    public void restorePost(Long id, String nickName) {
+        Long userId = userService.getByNickName(nickName).getId();
+        log.info("Restore post by id #{} with userId #{}", id, userId);
+
+        postService.restorePost(id, userId);
+    }
 }
