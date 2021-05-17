@@ -114,4 +114,5 @@ public class UserService {
     public Page<User> fetchUsers(PageRequest pageRequest) {
         return userRepository.findAll(pageRequest);
     }
+
 }
