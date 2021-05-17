@@ -72,7 +72,7 @@ public interface PostRepository
     )
     Page<Post> fetchByTagIdAndCategoryId(@Param("tagId") Long tagId, Long categoryId, Pageable pageable);
 
-    @Query("SELECT new Post(p, ps) FROM Post p"
+    @Query("SELECT DISTINCT new Post(p, ps) FROM Post p"
             + " JOIN PostTag pt ON pt.postId = p.id"
             + " JOIN PostStatistic ps ON ps.postId = p.id"
             + " WHERE p.categoryId = :categoryId "
