@@ -84,5 +84,10 @@ public class PostListBloc {
 
         posts.forEach(post -> post.setPostStatistic(postIdPostStatisticMap.get(post.getId())));
     }
+    @Transactional(readOnly = true)
+    public Long countPosts() {
+        log.info("count number of posts");
+        return postService.countPosts();
+    }
 }
 

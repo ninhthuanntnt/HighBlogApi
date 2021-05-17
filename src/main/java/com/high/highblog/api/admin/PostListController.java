@@ -30,4 +30,9 @@ public class PostListController {
                 posts.map(PostMapper.INSTANCE::toAdminPostRes)
         ));
     }
+    @GetMapping("/count-posts")
+    public ResponseEntity<?> countposts(){
+        Long posts = postListBloc.countPosts();
+        return ResponseEntity.ok(posts);
+    }
 }

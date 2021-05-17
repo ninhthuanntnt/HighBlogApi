@@ -152,4 +152,8 @@ public class PostService {
 
         post.setDeleted(false);
     }
+    @Transactional(readOnly = true)
+    public Long countPosts() {
+        return repository.count();
+    }
 }
