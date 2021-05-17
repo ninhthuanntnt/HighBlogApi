@@ -115,4 +115,8 @@ public class UserService {
         return userRepository.findAll(pageRequest);
     }
 
+    @Transactional(readOnly = true)
+    public Long countUsers() {
+        return userRepository.count();
+    }
 }

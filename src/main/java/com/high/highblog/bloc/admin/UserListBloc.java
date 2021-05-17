@@ -26,4 +26,9 @@ public class UserListBloc {
         log.info("Fetch list user");
         return userService.fetchUsers(pageRequest);
     }
+    @Transactional(readOnly = true)
+    public Long countUsers() {
+        log.info("count number of user");
+        return userService.countUsers();
+    }
 }

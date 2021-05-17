@@ -27,4 +27,9 @@ public class UserListController {
         return ResponseEntity.ok(PaginationHelper
                 .buildBasePaginationRes(users.map(UserMapper.INSTANCE::toAdminUserRes)));
     }
+    @GetMapping("/count-users")
+    public ResponseEntity<?> countUsers(){
+        Long users = userListBloc.countUsers();
+        return ResponseEntity.ok(users);
+    }
 }
