@@ -5,6 +5,7 @@ import com.high.highblog.helper.PaginationHelper;
 import com.high.highblog.mapper.PostMapper;
 import com.high.highblog.model.dto.request.admin.AdminPostSearchReq;
 import com.high.highblog.model.dto.response.BasePaginationRes;
+import com.high.highblog.model.dto.response.admin.CountPostsRes;
 import com.high.highblog.model.entity.Post;
 import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
@@ -31,8 +32,8 @@ public class PostListController {
         ));
     }
     @GetMapping("/count-posts")
-    public ResponseEntity<?> countposts(){
-        Long posts = postListBloc.countPosts();
+    public ResponseEntity<?> countPosts(){
+        CountPostsRes posts = postListBloc.countPosts();
         return ResponseEntity.ok(posts);
     }
 }

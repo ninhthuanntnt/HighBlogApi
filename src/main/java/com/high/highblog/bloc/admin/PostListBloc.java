@@ -2,6 +2,7 @@ package com.high.highblog.bloc.admin;
 
 import com.high.highblog.helper.PaginationHelper;
 import com.high.highblog.model.dto.request.admin.AdminPostSearchReq;
+import com.high.highblog.model.dto.response.admin.CountPostsRes;
 import com.high.highblog.model.entity.Post;
 import com.high.highblog.model.entity.PostStatistic;
 import com.high.highblog.model.entity.PostTag;
@@ -85,7 +86,7 @@ public class PostListBloc {
         posts.forEach(post -> post.setPostStatistic(postIdPostStatisticMap.get(post.getId())));
     }
     @Transactional(readOnly = true)
-    public Long countPosts() {
+    public CountPostsRes countPosts() {
         log.info("count number of posts");
         return postService.countPosts();
     }

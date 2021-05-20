@@ -8,6 +8,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import javax.validation.Valid;
+
 @RestController
 @RequestMapping("/api/v1/user/donations")
 public class DonationController {
@@ -19,7 +21,7 @@ public class DonationController {
     }
 
     @PostMapping
-    public ResponseEntity<?> donate(@RequestBody final DonationReq donationReq) {
+    public ResponseEntity<?> donate(@RequestBody @Valid final DonationReq donationReq) {
 
         donationBloc.donate(donationReq);
 
