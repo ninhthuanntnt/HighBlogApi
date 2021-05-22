@@ -18,7 +18,7 @@ import java.util.Map;
 
 
 @Slf4j
-@Component("adminUerListBloc")
+@Component("adminUserListBloc")
 public class UserListBloc {
     private final UserService userService;
     private final AccountService accountService;
