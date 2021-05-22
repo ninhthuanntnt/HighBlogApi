@@ -18,6 +18,7 @@ import javax.persistence.Id;
 import javax.persistence.Table;
 import javax.persistence.Transient;
 import javax.validation.constraints.NotNull;
+import java.util.List;
 
 @Entity
 @Table(name = "hb_users")
@@ -74,4 +75,7 @@ public class User
 
     @Transient
     private Boolean notified;
+
+    @Transient
+    private List<Role> roles;
 }

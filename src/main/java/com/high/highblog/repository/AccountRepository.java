@@ -16,4 +16,6 @@ public interface AccountRepository
     Optional<Account> findByEmail(String email);
 
     List<Account> findByUserIdIn(List<Long> userIds);
+
+    Account findByUserId(Long id);
 }
