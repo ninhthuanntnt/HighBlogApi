@@ -85,4 +85,10 @@ public class AccountService {
         account.setPassword(passwordEncoder.encode(newPassword));
         accountRepository.save(account);
     }
+    @Transactional(readOnly = true)
+    public Account getAccountByUserId(final Long userId) {
+        log.info("get account by userId #{}", userId);
+
+        return accountRepository.findByUserId(userId);
+    }
 }
