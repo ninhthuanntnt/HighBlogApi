@@ -4,7 +4,6 @@ import com.high.highblog.error.exception.ValidatorException;
 import com.high.highblog.helper.SecurityHelper;
 import com.high.highblog.mapper.UserMapper;
 import com.high.highblog.model.dto.request.UserUpdateReq;
-import com.high.highblog.model.entity.Post;
 import com.high.highblog.model.entity.Subscription;
 import com.high.highblog.model.entity.User;
 import com.high.highblog.service.FileService;
@@ -94,7 +93,11 @@ public class UserCrudBloc {
             if(currentUserId != user.getId()){
                 Subscription subscription = subscriptionService.findNullableByUserIdAndFollowerId(user.getId(),
                                                                                                   currentUserId);
-                user.setFollowed(ObjectUtils.isNotEmpty(subscription));
+
+                if(ObjectUtils.isNotEmpty(subscription)){
+                    user.setFollowed(ObjectUtils.isNotEmpty(subscription));
+                    user.setNotified(subscription.isNotified());
+                }
             }
 
         } catch (Exception ex) {

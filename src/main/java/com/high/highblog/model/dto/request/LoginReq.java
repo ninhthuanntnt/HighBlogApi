@@ -6,6 +6,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
@@ -16,11 +17,11 @@ import javax.validation.constraints.Size;
 @Builder
 public class LoginReq {
     @NotNull
-    @Size(min = 6, max = 100)
+    @NotEmpty
     private String username;
 
     @NotNull
-    @Size(min = 8, max = 255)
+    @NotEmpty
     private String password;
 
     @Builder.Default
