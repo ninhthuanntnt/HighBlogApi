@@ -8,6 +8,7 @@ import org.springframework.data.mapping.PropertyReferenceException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.BadCredentialsException;
+import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
@@ -102,23 +103,23 @@ public class GlobalExceptionHandler {
         return ResponseEntity.badRequest().body(errorMessageRes);
     }
 
-    @ExceptionHandler(MethodArgumentNotValidException.class)
-    public ResponseEntity<?> methodArgumentNotValidException(MethodArgumentNotValidException ex) {
+    @ExceptionHandler(ServletException.class)
+    public ResponseEntity<?> missingServletRequestPartException(ServletException ex) {
         ErrorMessageRes errorMessageRes = ErrorMessageRes.builder()
                                                          .errorCode(AppErrorCode.DEFAULT_VALIDATOR)
                                                          .message(ex.getMessage())
-                                                         .fieldName(ex.getObjectName())
+                                                         .fieldName("servlet")
                                                          .build();
 
         return ResponseEntity.badRequest().body(errorMessageRes);
     }
 
-    @ExceptionHandler(ServletException.class)
-    public ResponseEntity<?> missingServletRequestPartException(ServletException ex){
+    @ExceptionHandler(MethodArgumentNotValidException.class)
+    public ResponseEntity<?> handleValidationExceptions(MethodArgumentNotValidException ex) {
         ErrorMessageRes errorMessageRes = ErrorMessageRes.builder()
                                                          .errorCode(AppErrorCode.DEFAULT_VALIDATOR)
-                                                         .message(ex.getMessage())
-                                                         .fieldName("servlet")
+                                                         .message(ex.getAllErrors().get(0).getDefaultMessage())
+                                                         .fieldName(((FieldError) ex.getAllErrors().get(0)).getField())
                                                          .build();
 
         return ResponseEntity.badRequest().body(errorMessageRes);

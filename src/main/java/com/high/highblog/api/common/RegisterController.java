@@ -16,6 +16,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import javax.validation.Valid;
+
 @RestController
 @RequestMapping("/api/v1/register")
 public class RegisterController {
@@ -27,7 +29,7 @@ public class RegisterController {
     }
 
     @PostMapping
-    public ResponseEntity<?> register(@RequestBody RegisterReq registerReq) {
+    public ResponseEntity<?> register(@Valid @RequestBody RegisterReq registerReq) {
         Long confirmationCodeId = registerBloc.register(registerReq);
         ResponseCookie cookie = ResponseCookie.from(Constant.REGISTRATION_CONFIRMATION_CODE_ID_COOKIE,
                                                     confirmationCodeId.toString())
