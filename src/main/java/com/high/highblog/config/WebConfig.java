@@ -67,8 +67,7 @@ public class WebConfig
                 .allowedMethods("*")
                 .allowedOrigins(corsConfigProperties.getAllowedOrigin(),
                                 "http://35.197.145.122",
-                                "http://7540845894b0.ngrok.io",
-                                "https://7540845894b0.ngrok.io",
+                                "http://localhost:19006",
                                 "http://*",
                                 "https://*")
                 .maxAge(3600);

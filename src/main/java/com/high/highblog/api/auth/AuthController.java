@@ -16,6 +16,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import javax.validation.Valid;
+
 @RestController
 @RequestMapping("/api/v1/auth")
 public class AuthController {
@@ -30,7 +32,7 @@ public class AuthController {
     }
 
     @PostMapping("/login")
-    public ResponseEntity<TokenRes> login(@RequestBody final LoginReq loginReq) {
+    public ResponseEntity<TokenRes> login(@Valid @RequestBody final LoginReq loginReq) {
         Authentication authentication =
                 authenticationManager
                         .authenticate(new UsernamePasswordAuthenticationToken(loginReq.getUsername(),
@@ -43,7 +45,7 @@ public class AuthController {
     }
 
     @PostMapping("/refresh")
-    public ResponseEntity<TokenRes> refreshToken(@RequestBody final RefreshTokenReq refreshTokenReq) {
+    public ResponseEntity<TokenRes> refreshToken(@Valid @RequestBody final RefreshTokenReq refreshTokenReq) {
 
         // TODO: Get refresh token from Redis to make sure that it is exists for current user
         if (!jwtBloc.isExpiredToken(refreshTokenReq)) {
