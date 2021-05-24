@@ -2,6 +2,7 @@ package com.high.highblog.bloc.admin;
 
 import com.high.highblog.helper.PaginationHelper;
 import com.high.highblog.model.dto.request.BasePaginationReq;
+import com.high.highblog.model.dto.request.admin.UserListReq;
 import com.high.highblog.model.entity.*;
 import com.high.highblog.service.AccountService;
 import com.high.highblog.service.RoleService;
@@ -31,10 +32,11 @@ public class UserListBloc {
     }
 
     @Transactional(readOnly = true)
-    public Page<User> fetchUsers(BasePaginationReq req) {
+    public Page<User> fetchUsers(UserListReq req) {
         PageRequest pageRequest = PaginationHelper.generatePageRequest(req);
         log.info("Fetch list user");
-        Page<User> users = userService.fetchUsers(pageRequest);
+        String nickname = req.getNickName();
+        Page<User> users = userService.fetchUsers(nickname,pageRequest);
         includeUserRoleToUsers(users);
         return users;
     }
