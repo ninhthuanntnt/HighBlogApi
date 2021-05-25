@@ -110,9 +110,9 @@ public class UserService {
         if (user.getId() != SecurityHelper.getUserId())
             throw new ValidatorException("Invalid user id", "userId");
     }
-
-    public Page<User> fetchUsers(PageRequest pageRequest) {
-        return userRepository.findAll(pageRequest);
+    @Transactional(readOnly = true)
+    public Page<User> fetchUsers(final String nickname, PageRequest pageRequest) {
+        return userRepository.fetchUsers(nickname,pageRequest);
     }
 
     @Transactional(readOnly = true)

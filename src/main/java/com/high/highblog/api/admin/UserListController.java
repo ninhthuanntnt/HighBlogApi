@@ -4,6 +4,7 @@ import com.high.highblog.bloc.admin.UserListBloc;
 import com.high.highblog.helper.PaginationHelper;
 import com.high.highblog.mapper.UserMapper;
 import com.high.highblog.model.dto.request.BasePaginationReq;
+import com.high.highblog.model.dto.request.admin.UserListReq;
 import com.high.highblog.model.entity.User;
 import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
@@ -22,8 +23,8 @@ public class UserListController {
     }
 
     @GetMapping
-    public ResponseEntity<?> fetchUsers(BasePaginationReq basePaginationReq) {
-        Page<User> users = userListBloc.fetchUsers(basePaginationReq);
+    public ResponseEntity<?> fetchUsers(UserListReq userListReq) {
+        Page<User> users = userListBloc.fetchUsers(userListReq);
         return ResponseEntity.ok(PaginationHelper
                 .buildBasePaginationRes(users.map(UserMapper.INSTANCE::toAdminUserRes)));
     }
