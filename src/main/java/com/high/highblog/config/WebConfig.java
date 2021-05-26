@@ -65,11 +65,7 @@ public class WebConfig
                 .allowCredentials(true)
                 .allowedHeaders("*")
                 .allowedMethods("*")
-                .allowedOrigins(corsConfigProperties.getAllowedOrigin(),
-                                "http://35.197.145.122",
-                                "http://localhost:19006",
-                                "http://*",
-                                "https://*")
+                .allowedOriginPatterns("*")
                 .maxAge(3600);
     }
 

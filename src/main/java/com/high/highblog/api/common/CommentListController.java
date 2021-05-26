@@ -21,10 +21,12 @@ public class CommentListController {
         this.commentListBloc = commentListBloc;
     }
 
+    // TODO: Return number of child comment
     @GetMapping
     public ResponseEntity<?> fetchListCommentForPost(final CommentListReq commentListReq) {
 
         List<Comment> comments = commentListBloc.fetchCommentsByPostId(commentListReq);
         return ResponseEntity.ok(CommentMapper.INSTANCE.toListCommentsRes(comments));
     }
+    // TODO: Create api to fetch child comment by parentId
 }
