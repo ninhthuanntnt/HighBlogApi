@@ -5,17 +5,19 @@ import com.high.highblog.enums.NotificationType;
 import com.high.highblog.helper.SecurityHelper;
 import com.high.highblog.model.dto.request.admin.NotificationCreateReq;
 import com.high.highblog.model.entity.Notification;
+import com.high.highblog.service.notification.NotificationService;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Service;
 
 @Slf4j
 @Service("adminNotificationCrudBloc")
 public class NotificationCrudBloc {
     private final NotificationBloc notificationBloc;
+    public final NotificationService notificationService;
 
-    public NotificationCrudBloc(final NotificationBloc notificationBloc) {
+    public NotificationCrudBloc(final NotificationBloc notificationBloc, NotificationService notificationService) {
         this.notificationBloc = notificationBloc;
+        this.notificationService = notificationService;
     }
 
     public void createNotification(final NotificationCreateReq notificationCreateReq) {
@@ -24,7 +26,7 @@ public class NotificationCrudBloc {
         Notification notification = Notification.builder().type(NotificationType.ADMIN)
                                                 .content(notificationCreateReq.getMessage())
                                                 .senderId(adminId)
-                                                .sourceId(null)
+                                                .sourceId(0L)
                                                 .build();
 
         notificationBloc.pushNotificationTo(notificationCreateReq.getReceiverIds(), notification);
