@@ -1,7 +1,9 @@
 package com.high.highblog.service.notification;
 
+import com.high.highblog.enums.NotificationType;
 import com.high.highblog.error.exception.ObjectNotFoundException;
 import com.high.highblog.error.exception.ValidatorException;
+import com.high.highblog.model.dto.request.BasePaginationReq;
 import com.high.highblog.model.entity.Notification;
 import com.high.highblog.repository.NotificationRepository;
 import lombok.extern.slf4j.Slf4j;
@@ -64,5 +66,11 @@ public class NotificationService {
             throw new ValidatorException("Should be not null", "notification");
         if (notification.getId() != null && notification.getId() != 0)
             throw new ValidatorException("Invalid id", "notification");
+    }
+
+
+    public Page<Notification> fetchAdminNotifications(NotificationType type, PageRequest pageRequest) {
+        log.info("fetch list notification with type #{}",type);
+        return repository.findNotificationsByType(type,pageRequest);
     }
 }

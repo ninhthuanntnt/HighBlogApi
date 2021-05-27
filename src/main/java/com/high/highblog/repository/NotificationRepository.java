@@ -1,5 +1,6 @@
 package com.high.highblog.repository;
 
+import com.high.highblog.enums.NotificationType;
 import com.high.highblog.model.entity.Notification;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -25,4 +26,7 @@ public interface NotificationRepository
             + " JOIN UserNotification un ON un.notificationId = n.id"
             + " WHERE n.deleted = false AND un.userId = :userId AND un.seen = :seen AND un.sent = false")
     List<Notification> findByUserIdAndSeen(@Param("userId") Long userId, @Param("seen") boolean seen);
+
+    Page<Notification> findNotificationsByType(NotificationType type, Pageable pageable);
+
 }
