@@ -33,11 +33,19 @@ public interface PostRepository
             + " OR p.content LIKE %:keyword%)")
     Page<Post> searchPosts(@Param("keyword") String keyword, Pageable pageable);
 
+    @Query(value = "SELECT p.* FROM hb_posts AS p"
+            + " JOIN hb_post_statistics AS ps ON ps.post_id = p.id"
+            + " WHERE p.deleted = false"
+            + " AND ( p.title REGEXP :keyword"
+            + " OR p.summary REGEXP :keyword"
+            + " OR p.content REGEXP :keyword)", nativeQuery = true)
+    Page<Post> searchPostsRegexp(@Param("keyword") String keyword, Pageable pageable);
+
     @Query("SELECT new Post(p, ps) FROM Post p"
             + " JOIN PostStatistic ps ON ps.postId = p.id"
             + " WHERE p.categoryId = :categoryId"
             + " AND p.deleted = false "
-            + " ORDER BY ps.numberOfVotes - DATEDIFF(CURRENT_DATE, p.createdDate)*20")
+            + " ORDER BY ps.numberOfVotes - FUNCTION('DATEDIFF', CURRENT_DATE, p.createdDate)*20 DESC")
     Page<Post> fetchByCategoryId(Long categoryId, Pageable pageable);
 
     @Query("SELECT p FROM Post p "
@@ -68,7 +76,7 @@ public interface PostRepository
             + " WHERE pt.tagId = :tagId"
             + " AND p.categoryId = :categoryId"
             + " AND p.deleted = false "
-            + " ORDER BY ps.numberOfVotes - DATEDIFF(CURRENT_DATE, p.createdDate)*20"
+            + " ORDER BY ps.numberOfVotes - FUNCTION('DATEDIFF', CURRENT_DATE, p.createdDate)*20 DESC"
     )
     Page<Post> fetchByTagIdAndCategoryId(@Param("tagId") Long tagId, Long categoryId, Pageable pageable);
 

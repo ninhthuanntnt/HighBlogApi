@@ -63,8 +63,9 @@ public class Post
     @Column(name = "cover_image_path")
     private String coverImagePath;
 
+    @Builder.Default
     @Column(name = "deleted")
-    private Boolean deleted;
+    private Boolean deleted = false;
 
     @Builder.Default
     @NotNull

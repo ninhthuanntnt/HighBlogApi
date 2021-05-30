@@ -38,8 +38,8 @@ public class WebsocketConfig
 
     @Override
     public void registerStompEndpoints(final StompEndpointRegistry registry) {
-        registry.addEndpoint("/notification").setAllowedOrigins(corsConfigProperties.getAllowedOrigin());
-        registry.addEndpoint("/notification").setAllowedOrigins(corsConfigProperties.getAllowedOrigin())
+        registry.addEndpoint("/notification").setAllowedOriginPatterns("*");
+        registry.addEndpoint("/notification").setAllowedOriginPatterns("*")
                 .withSockJS().setSessionCookieNeeded(false);
     }
 

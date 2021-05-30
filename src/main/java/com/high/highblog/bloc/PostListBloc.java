@@ -47,7 +47,7 @@ public class PostListBloc {
         // TODO: add binding data to convert string of default sort to an object
         PageRequest pageRequest = PaginationHelper.generatePageRequestWithoutSort(req);
 
-        Page<Post> posts = postService.fetchPostsWithPageRequest(categoryId,pageRequest);
+        Page<Post> posts = postService.fetchPostsWithPageRequest(categoryId, pageRequest);
 
         // Should use include to make better performance
         includePostTagsToPosts(posts);
@@ -61,18 +61,19 @@ public class PostListBloc {
         PageRequest pageRequest = PaginationHelper.generatePageRequestWithDefaultSort(req,
                                                                                       "-ps.id");
 
-        Page<Post> posts = postService.fetchPostsByNickNameWithPageRequest(nickName,categoryId, pageRequest);
+        Page<Post> posts = postService.fetchPostsByNickNameWithPageRequest(nickName, categoryId, pageRequest);
 
         includePostTagsToPosts(posts);
         includeUserToPosts(posts);
         return posts;
     }
+
     public Page<Post> fetchPostsByTagId(final Long tagId, final Long categoryId, final BasePaginationReq req) {
         log.info("Fetch list posts by tagId #{} with req #{}", tagId, req);
         PageRequest pageRequest = PaginationHelper.generatePageRequestWithDefaultSort(req,
-                "-ps.numberOfVotes");
+                                                                                      "-ps.numberOfVotes");
 
-        Page<Post> posts = postService.fetchPostsByTagIdWithPageRequest(tagId,categoryId, pageRequest);
+        Page<Post> posts = postService.fetchPostsByTagIdWithPageRequest(tagId, categoryId, pageRequest);
 
         includePostTagsToPosts(posts);
         includeUserToPosts(posts);
@@ -84,7 +85,8 @@ public class PostListBloc {
 
         PageRequest pageRequest = PaginationHelper.generatePageRequest(req);
 
-        Page<Post> posts = postService.fetchPostsByFollowerIdWithPageRequest(SecurityHelper.getUserId(),categoryId, pageRequest);
+        Page<Post> posts = postService
+                .fetchPostsByFollowerIdWithPageRequest(SecurityHelper.getUserId(), categoryId, pageRequest);
 
         includePostTagsToPosts(posts);
         includeUserToPosts(posts);
@@ -99,11 +101,18 @@ public class PostListBloc {
         // TODO: add binding data to convert string of default sort to an object
         Page<Post> posts;
         if (req.getKeyword().length() <= 2) {
-            PageRequest pageRequest = PaginationHelper.generatePageRequestWithDefaultSort(req, "-ps.numberOfVotes");
+            PageRequest pageRequest = PaginationHelper.generatePageRequestWithDefaultSort(req,
+                                                                                          "-ps.numberOfVotes");
             posts = postService.searchPostsByKeywordLikeWithPageRequest(req.getKeyword(), pageRequest);
         } else {
             PageRequest pageRequest = PaginationHelper.generatePageRequestWithoutSort(req);
-            posts = postService.searchFullTextPostsByKeywordWithPageRequest(req.getKeyword(), pageRequest);
+            String keyword = req.getKeyword().replace("( +)", " ")
+                                .trim();
+            posts = postService.searchFullTextPostsByKeywordWithPageRequest(keyword, pageRequest);
+            if (posts.getContent().size() == 0) {
+                keyword = keyword.replace(" ", "|");
+                posts = postService.searchPostsByKeywordRegexpWithPageRequest(keyword, pageRequest);
+            }
         }
 
         includePostTagsToPosts(posts);

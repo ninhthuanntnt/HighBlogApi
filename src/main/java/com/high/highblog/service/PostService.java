@@ -94,6 +94,14 @@ public class PostService {
     }
 
     @Transactional(readOnly = true)
+    public Page<Post> searchPostsByKeywordRegexpWithPageRequest(final String keyword,
+                                                              final PageRequest pageRequest) {
+        log.info("Search post with keyword #{}", keyword);
+
+        return repository.searchPostsRegexp(keyword, pageRequest);
+    }
+
+    @Transactional(readOnly = true)
     public Page<Post> fetchFavoritePostByUserIdWithPageRequest(final Long userId, final PageRequest pageRequests) {
         log.info("Fetch favorite posts with page request #{}", pageRequests);
 
