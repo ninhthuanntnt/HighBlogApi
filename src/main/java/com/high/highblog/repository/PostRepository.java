@@ -37,7 +37,7 @@ public interface PostRepository
             + " JOIN PostStatistic ps ON ps.postId = p.id"
             + " WHERE p.categoryId = :categoryId"
             + " AND p.deleted = false "
-            + " ORDER BY ps.numberOfVotes - DATEDIFF(CURRENT_DATE, p.createdDate)*20")
+            + " ORDER BY ps.numberOfVotes - FUNCTION('DATEDIFF', CURRENT_DATE, p.createdDate)*20 DESC")
     Page<Post> fetchByCategoryId(Long categoryId, Pageable pageable);
 
     @Query("SELECT p FROM Post p "
@@ -68,7 +68,7 @@ public interface PostRepository
             + " WHERE pt.tagId = :tagId"
             + " AND p.categoryId = :categoryId"
             + " AND p.deleted = false "
-            + " ORDER BY ps.numberOfVotes - DATEDIFF(CURRENT_DATE, p.createdDate)*20"
+            + " ORDER BY ps.numberOfVotes - FUNCTION('DATEDIFF', CURRENT_DATE, p.createdDate)*20 DESC"
     )
     Page<Post> fetchByTagIdAndCategoryId(@Param("tagId") Long tagId, Long categoryId, Pageable pageable);
 
