@@ -50,11 +50,12 @@ public class DonationBloc {
 
         // TODO: Use queue to handle transactions
         // TODO: Handle pessimistic locking exception then create IN_PROGRESS transaction and response immediately
-
         BigDecimal amount = donationReq.getAmount();
 
         Long senderId = SecurityHelper.getUserId();
         Long receiverId = userService.getByNickName(donationReq.getNickName()).getId();
+
+        ValidateUserDonation(receiverId);
 
         boolean locked = true;
         while (locked) {
@@ -133,4 +134,9 @@ public class DonationBloc {
                                 .status(SystemTransactionStatus.FINISHED)
                                 .build();
     }
+    private void ValidateUserDonation(final Long userId){
+        Long currentUserId = SecurityHelper.getUserId();
+        if (currentUserId == userId ) throw new ValidatorException("wrong receiver nickname", "nickName");
+    }
+
 }

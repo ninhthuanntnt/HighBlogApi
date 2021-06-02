@@ -1,5 +1,6 @@
 package com.high.highblog.repository;
 
+import com.high.highblog.enums.PostType;
 import com.high.highblog.model.entity.Post;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -18,6 +19,8 @@ public interface PostRepository
 
     Optional<Post> findByIdAndUserId(Long id, Long userId);
 
+    Optional<Post> findByIdAndPostType(Long id, PostType postType);
+
     @Query(value = "SELECT * FROM hb_posts AS p"
             + " INNER JOIN hb_post_statistics AS ps ON ps.post_id = p.id"
             + " WHERE MATCH (p.title, p.summary, p.content) AGAINST (:keyword WITH QUERY EXPANSION)"
@@ -28,6 +31,7 @@ public interface PostRepository
     @Query(value = "SELECT p FROM Post p"
             + " JOIN PostStatistic ps ON ps.postId = p.id"
             + " WHERE p.deleted = false"
+            + " AND p.postType = 'NORMAL'"
             + " AND ( p.title LIKE %:keyword%"
             + " OR p.summary LIKE %:keyword%"
             + " OR p.content LIKE %:keyword%)")
@@ -36,6 +40,7 @@ public interface PostRepository
     @Query(value = "SELECT p.* FROM hb_posts AS p"
             + " JOIN hb_post_statistics AS ps ON ps.post_id = p.id"
             + " WHERE p.deleted = false"
+            + " AND p.postType = 'NORMAL'"
             + " AND ( p.title REGEXP :keyword"
             + " OR p.summary REGEXP :keyword"
             + " OR p.content REGEXP :keyword)", nativeQuery = true)
@@ -45,12 +50,14 @@ public interface PostRepository
             + " JOIN PostStatistic ps ON ps.postId = p.id"
             + " WHERE p.categoryId = :categoryId"
             + " AND p.deleted = false "
+            + " AND p.postType = 'NORMAL'"
             + " ORDER BY ps.numberOfVotes - FUNCTION('DATEDIFF', CURRENT_DATE, p.createdDate)*20 DESC")
     Page<Post> fetchByCategoryId(Long categoryId, Pageable pageable);
 
     @Query("SELECT p FROM Post p "
             + " JOIN FavoritePost fp ON fp.postId = p.id"
             + " WHERE fp.userId = :userId"
+            + " AND p.postType = 'NORMAL'"
             + " AND p.deleted = false ")
     Page<Post> fetchListFavoritePostsByUserId(@Param("userId") Long userId, Pageable pageable);
 
@@ -59,6 +66,7 @@ public interface PostRepository
             + " JOIN PostStatistic ps ON ps.postId = p.id"
             + " WHERE u.nickName = :nickName"
             + " AND p.categoryId = :categoryId "
+            + " AND p.postType = 'NORMAL'"
             + " AND p.deleted = false ")
     Page<Post> fetchListPostsByNickName(@Param("nickName") String nickName, Long categoryId, Pageable pageable);
 
@@ -67,6 +75,7 @@ public interface PostRepository
             + " JOIN PostStatistic ps ON ps.postId = p.id"
             + " WHERE sub.followerId = :followerId"
             + " AND p.categoryId = :categoryId "
+            + " AND p.postType = 'NORMAL'"
             + " AND p.deleted = false ")
     Page<Post> fetchListPostsByFollowerId(@Param("followerId") Long followerId, Long categoryId, Pageable pageable);
 
@@ -75,6 +84,7 @@ public interface PostRepository
             + " JOIN PostStatistic ps ON ps.postId = p.id"
             + " WHERE pt.tagId = :tagId"
             + " AND p.categoryId = :categoryId"
+            + " AND p.postType = 'NORMAL'"
             + " AND p.deleted = false "
             + " ORDER BY ps.numberOfVotes - FUNCTION('DATEDIFF', CURRENT_DATE, p.createdDate)*20 DESC"
     )
