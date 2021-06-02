@@ -1,5 +1,6 @@
 package com.high.highblog.service;
 
+import com.high.highblog.enums.PostType;
 import com.high.highblog.error.exception.ObjectNotFoundException;
 import com.high.highblog.error.exception.ValidatorException;
 import com.high.highblog.helper.SecurityHelper;
@@ -52,7 +53,7 @@ public class PostService {
     public Post getById(final Long id) {
         log.info("Get post by id #{}", id);
 
-        return repository.findById(id)
+        return repository.findByIdAndPostType(id, PostType.NORMAL)
                          .orElseThrow(() -> new ObjectNotFoundException("post"));
     }
 
