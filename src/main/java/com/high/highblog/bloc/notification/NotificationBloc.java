@@ -1,10 +1,8 @@
 package com.high.highblog.bloc.notification;
 
 import com.high.highblog.error.exception.ObjectNotFoundException;
-import com.high.highblog.helper.PaginationHelper;
 import com.high.highblog.helper.SecurityHelper;
 import com.high.highblog.mapper.NotificationMapper;
-import com.high.highblog.model.dto.request.BasePaginationReq;
 import com.high.highblog.model.dto.response.NotificationRes;
 import com.high.highblog.model.entity.Notification;
 import com.high.highblog.model.entity.User;
@@ -13,16 +11,11 @@ import com.high.highblog.service.SubscriptionService;
 import com.high.highblog.service.UserService;
 import com.high.highblog.service.notification.NotificationService;
 import com.high.highblog.service.notification.UserNotificationService;
-import io.jsonwebtoken.impl.crypto.MacProvider;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
-
-import javax.jws.soap.SOAPBinding;
 
 import java.util.Collections;
 import java.util.List;
