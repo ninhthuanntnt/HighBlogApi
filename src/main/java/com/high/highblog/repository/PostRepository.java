@@ -40,7 +40,7 @@ public interface PostRepository
     @Query(value = "SELECT p.* FROM hb_posts AS p"
             + " JOIN hb_post_statistics AS ps ON ps.post_id = p.id"
             + " WHERE p.deleted = false"
-            + " AND p.postType = 'NORMAL'"
+            + " AND p.post_type = 'NORMAL'"
             + " AND ( p.title REGEXP :keyword"
             + " OR p.summary REGEXP :keyword"
             + " OR p.content REGEXP :keyword)", nativeQuery = true)

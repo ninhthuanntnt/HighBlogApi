@@ -81,6 +81,7 @@ public class PostCrudBloc {
         User notificationSender = userService.getById(userId);
         notificationBloc.pushNotificationToFollowers(userId,
                                                      Notification.builder()
+                                                                 .senderId(userId)
                                                                  .content(post.getTitle())
                                                                  .sourceId(post.getId())
                                                                  .type(NotificationType.POST)
