@@ -127,7 +127,7 @@ public class NotificationBloc {
 
         log.info("Mark as sent notification for current user #{}", userId);
 
-        userNotificationService.markAsSentByIdAndUserId(notificationId, userId);
+        userNotificationService.markAsSentByNotificationIdAndUserId(notificationId, userId);
     }
 
     private void populateSenderIdForNotifications(final List<Notification> notifications) {
