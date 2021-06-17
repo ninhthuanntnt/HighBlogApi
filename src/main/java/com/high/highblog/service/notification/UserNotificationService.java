@@ -34,10 +34,10 @@ public class UserNotificationService {
     }
 
     @Transactional
-    public void markAsSentByIdAndUserId(final Long id, final Long userId){
+    public void markAsSentByNotificationIdAndUserId(final Long id, final Long userId){
         log.info("Mark as sent for notification by id #{}", id);
 
-        UserNotification userNotification = repository.findByIdAndUserId(id, userId)
+        UserNotification userNotification = repository.findByNotificationIdAndUserId(id, userId)
                                                       .orElseThrow(()->new ObjectNotFoundException("userNotification"));
 
         userNotification.setSent(true);
