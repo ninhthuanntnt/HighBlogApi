@@ -56,33 +56,47 @@ public class UserCrudBloc {
     private void validateUserUpdateReq(final UserUpdateReq userUpdateReq, Long currentUserId) {
         String newNickname = userUpdateReq.getNickName();
         User currentUser = userService.getById(currentUserId);
-        if(newNickname.equals(currentUser.getNickName())) return;
+        if (newNickname.equals(currentUser.getNickName())) return;
         if (userService.existsByNickName(newNickname))
             throw new ValidatorException("NickName already exists", "nickName");
     }
+
     @Transactional
-    public String uploadAvatar(MultipartFile  avatarReq) {
+    public String uploadAvatar(MultipartFile avatarReq) {
         Long currentUserId = SecurityHelper.getUserId();
+        log.info("Save new avatar for user #{}", currentUserId);
+
         User currentUser = userService.getById(currentUserId);
         String path = fileService.saveNewImageToStorage(avatarReq);
 
-        if(currentUser.getImagePath()!= null){
-            fileService.deleteImageFromStorageByPath(currentUser.getImagePath());
+        try {
+            if (currentUser.getImagePath() != null) {
+                fileService.deleteImageFromStorageByPath(currentUser.getImagePath());
+            }
+        } catch (Exception ex) {
+            log.info("Can't delete image but still save new avatar");
+        } finally {
+            userService.saveAvatar(currentUserId, path);
         }
-        userService.saveAvatar(currentUserId,path);
 
         return path;
     }
+
     @Transactional
     public String updateBackground(MultipartFile backgroundReq) {
         Long currentUserId = SecurityHelper.getUserId();
         User currentUser = userService.getById(currentUserId);
         String path = fileService.saveNewImageToStorage(backgroundReq);
 
-        if(currentUser.getBackgroundPath()!= null){
-            fileService.deleteImageFromStorageByPath(currentUser.getBackgroundPath());
+        try {
+            if (currentUser.getBackgroundPath() != null) {
+                fileService.deleteImageFromStorageByPath(currentUser.getBackgroundPath());
+            }
+        } catch (Exception ex) {
+            log.info("Can't delete image but still save new background");
+        } finally {
+            userService.saveBackground(currentUserId, path);
         }
-        userService.saveBackground(currentUserId,path);
 
         return path;
     }
@@ -90,11 +104,11 @@ public class UserCrudBloc {
     private void includeExtraInfoIfUserLogined(final User user) {
         try {
             Long currentUserId = SecurityHelper.getUserId();
-            if(currentUserId != user.getId()){
+            if (currentUserId != user.getId()) {
                 Subscription subscription = subscriptionService.findNullableByUserIdAndFollowerId(user.getId(),
                                                                                                   currentUserId);
 
-                if(ObjectUtils.isNotEmpty(subscription)){
+                if (ObjectUtils.isNotEmpty(subscription)) {
                     user.setFollowed(ObjectUtils.isNotEmpty(subscription));
                     user.setNotified(subscription.isNotified());
                 }

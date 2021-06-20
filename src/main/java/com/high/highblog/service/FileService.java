@@ -125,7 +125,7 @@ public class FileService {
         } catch (IOException e) {
             log.error("Cannot delete file at storage path #{}", storagePath);
             e.printStackTrace();
-            throw new ValidatorException("Can't delete image", "image");
+//            throw new ValidatorException("Can't delete image", "image");
         }
     }
 
