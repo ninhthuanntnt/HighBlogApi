@@ -96,7 +96,7 @@ public class PostService {
 
     @Transactional(readOnly = true)
     public Page<Post> searchPostsByKeywordRegexpWithPageRequest(final String keyword,
-                                                              final PageRequest pageRequest) {
+                                                                final PageRequest pageRequest) {
         log.info("Search post with keyword #{}", keyword);
 
         return repository.searchPostsRegexp(keyword, pageRequest);
@@ -119,12 +119,13 @@ public class PostService {
         post.setDeleted(true);
 
     }
+
     @Transactional
     public void delete(final Long id) {
         log.info("Delete post by id #{}", id);
 
         Post post = repository.findById(id)
-                .orElseThrow(() -> new ObjectNotFoundException("post"));
+                              .orElseThrow(() -> new ObjectNotFoundException("post"));
 
         repository.delete(post);
     }
@@ -148,20 +149,23 @@ public class PostService {
 
         return repository.fetchByTagIdAndCategoryId(tagId, categoryId, pageRequest);
     }
+
     @Transactional(readOnly = true)
     public Page<Post> searchDynamicPosts(Long categoryId, Long userId, List<Long> tagIds, PageRequest pageRequest, String keyword) {
-        log.info("search dynamic posts ");
-        return repository.searchDynamicPosts(categoryId,userId,tagIds,keyword,pageRequest);
+        log.info("Search dynamic posts ");
+        return repository.searchDynamicPosts(categoryId, userId, tagIds, keyword, pageRequest);
     }
+
     @Transactional
     public void restorePost(final Long id) {
         log.info("restore post by id #{}", id);
 
         Post post = repository.findById(id)
-                .orElseThrow(() -> new ObjectNotFoundException("post"));
+                              .orElseThrow(() -> new ObjectNotFoundException("post"));
 
         post.setDeleted(false);
     }
+
     @Transactional(readOnly = true)
     public CountPostsRes countPosts() {
         CountPostsRes posts = new CountPostsRes();
