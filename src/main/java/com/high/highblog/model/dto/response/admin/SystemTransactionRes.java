@@ -30,5 +30,6 @@ public class SystemTransactionRes {
 
     private SystemTransactionStatus status;
 
+    @Builder.Default
     private Float feeRate = 0F;
 }

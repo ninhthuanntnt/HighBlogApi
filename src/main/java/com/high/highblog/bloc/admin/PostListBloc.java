@@ -42,12 +42,13 @@ public class PostListBloc {
 
     @Transactional(readOnly = true)
     public Page<Post> searchDynamicPosts(Long categoryId, final AdminPostSearchReq req) {
-
-        Long userId =null;
-        if(req.getNickName() != null) userId =  userService.getByNickName(req.getNickName()).getId();
+// TODO: add binding data to convert string of default sort to an object
+        PageRequest pageRequest = PaginationHelper.generatePageRequest(req);
+        Long userId = null;
+        if (req.getNickName() != null) userId = userService.getByNickName(req.getNickName()).getId();
         List<Long> tagIds = req.getTagIds();
         String keyword = req.getKeyWord();
-        Page<Post> posts = postService.searchDynamicPosts(categoryId, userId, tagIds ,pageRequest ,keyword);
+        Page<Post> posts = postService.searchDynamicPosts(categoryId, userId, tagIds, pageRequest, keyword);
 
         // Should use include to make better performance
         includePostTagsToPosts(posts);
@@ -58,31 +59,32 @@ public class PostListBloc {
 
     private void includePostTagsToPosts(Page<Post> posts) {
         Map<Long, List<PostTag>> postIdPostTagsMap =
-                postTagService
-                        .fetchByPostIdIn(posts.map(Post::getId).toSet())
-                        .stream()
-                        .collect(Collectors.groupingBy(PostTag::getPostId));
+            postTagService
+                .fetchByPostIdIn(posts.map(Post::getId).toSet())
+                .stream()
+                .collect(Collectors.groupingBy(PostTag::getPostId));
 
         posts.forEach(post -> post.setPostTags(postIdPostTagsMap.get(post.getId())));
     }
 
     private void includeUserToPosts(Page<Post> posts) {
         Map<Long, User> userIdUserMap = userService.fetchByIdIn(posts.map(Post::getUserId).toSet())
-                .stream()
-                .collect(Collectors.toMap(User::getId, user -> user));
+                                                   .stream()
+                                                   .collect(Collectors.toMap(User::getId, user -> user));
 
         posts.forEach(post -> post.setUser(userIdUserMap.get(post.getUserId())));
     }
 
     private void includePostStatisticToPosts(Page<Post> posts) {
         Map<Long, PostStatistic> postIdPostStatisticMap =
-                postStatisticService.fetchByPostIdIn(posts.map(Post::getId).toSet())
-                        .stream()
-                        .collect(Collectors.toMap(PostStatistic::getPostId,
-                                postStatistic -> postStatistic));
+            postStatisticService.fetchByPostIdIn(posts.map(Post::getId).toSet())
+                                .stream()
+                                .collect(Collectors.toMap(PostStatistic::getPostId,
+                                                          postStatistic -> postStatistic));
 
         posts.forEach(post -> post.setPostStatistic(postIdPostStatisticMap.get(post.getId())));
     }
+
     @Transactional(readOnly = true)
     public CountPostsRes countPosts() {
         log.info("count number of posts");
