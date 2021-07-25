@@ -3,10 +3,10 @@ docker rmi ninhthuanntnt/high_blog_api:0.0.1
 docker-compose up -d
 docker push ninhthuanntnt/high_blog_api:0.0.1
 
-ssh thuanntn@40.83.73.173 << \EOF
+ssh -i ~/.ssh/gc_nt199952 nt199952@35.241.106.112 << \EOF
 cd project/high_blog_api
-docker stop high_blog_api
-docker rm high_blog_api
-docker rmi ninhthuanntnt/high_blog_api:0.0.1
-docker-compose up -d
+sudo docker stop high_blog_api
+sudo docker rm high_blog_api
+sudo docker rmi ninhthuanntnt/high_blog_api:0.0.1
+sudo docker-compose up -d
 EOF

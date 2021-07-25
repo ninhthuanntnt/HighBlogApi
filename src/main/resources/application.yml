@@ -48,7 +48,7 @@ application:
     file-upload:
         allowed-image-extensions:
             - jpg
-            - jepg
+            - jpeg
             - png
             - gif
         root-dir: ${HB_ABSOLUTE_PATH_UPLOADS_DIR:/home/ninhthuan/uploads}
