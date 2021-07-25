@@ -42,9 +42,7 @@ public class PostListBloc {
 
     @Transactional(readOnly = true)
     public Page<Post> searchDynamicPosts(Long categoryId, final AdminPostSearchReq req) {
-        // TODO: add binding data to convert string of default sort to an object
-        PageRequest pageRequest = PaginationHelper.generatePageRequestWithDefaultSort(req,
-                "-ps.numberOfVotes");
+
         Long userId =null;
         if(req.getNickName() != null) userId =  userService.getByNickName(req.getNickName()).getId();
         List<Long> tagIds = req.getTagIds();
