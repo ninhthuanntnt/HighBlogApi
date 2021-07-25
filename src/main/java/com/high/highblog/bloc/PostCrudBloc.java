@@ -2,6 +2,8 @@ package com.high.highblog.bloc;
 
 import com.high.highblog.bloc.notification.NotificationBloc;
 import com.high.highblog.enums.NotificationType;
+import com.high.highblog.enums.PostType;
+import com.high.highblog.error.exception.ValidatorException;
 import com.high.highblog.helper.SecurityHelper;
 import com.high.highblog.mapper.PostMapper;
 import com.high.highblog.model.dto.request.PostCreateReq;
@@ -108,6 +110,10 @@ public class PostCrudBloc {
         log.info("Get post detail by id #{}", id);
 
         Post post = postService.getById(id);
+
+        if(!post.getUserId().equals(SecurityHelper.getUserId()) && post.getPostType() == PostType.DRAFT){
+            throw new ValidatorException("Invalid", "post");
+        }
 
         post.setPostTags(postTagService.fetchByPostId(post.getId()));
         post.setUser(userService.getById(post.getUserId()));
