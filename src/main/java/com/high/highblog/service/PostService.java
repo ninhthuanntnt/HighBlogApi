@@ -53,7 +53,7 @@ public class PostService {
     public Post getById(final Long id) {
         log.info("Get post by id #{}", id);
 
-        return repository.findByIdAndPostType(id, PostType.NORMAL)
+        return repository.findById(id)
                          .orElseThrow(() -> new ObjectNotFoundException("post"));
     }
 

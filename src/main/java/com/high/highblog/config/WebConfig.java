@@ -1,19 +1,15 @@
 package com.high.highblog.config;
 
 import com.high.highblog.helper.FileHelper;
-import com.high.highblog.model.entity.File;
-import liquibase.pro.packaged.B;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.core.io.ClassPathResource;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.ResourceLoader;
 import org.springframework.core.task.TaskExecutor;
 import org.springframework.scheduling.annotation.EnableAsync;
 import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
 import org.springframework.security.task.DelegatingSecurityContextAsyncTaskExecutor;
-import org.springframework.util.ResourceUtils;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;
 import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
@@ -28,7 +24,7 @@ import springfox.documentation.swagger2.annotations.EnableSwagger2;
 @EnableSwagger2
 @EnableAsync(proxyTargetClass = true)
 public class WebConfig
-        implements WebMvcConfigurer {
+    implements WebMvcConfigurer {
 
     private final ApplicationConfigProperties.FileUpload fileUploadConfigProperties;
     private final ApplicationConfigProperties.ResourceTemplate resourceTemplateConfigProperties;
@@ -52,7 +48,7 @@ public class WebConfig
     @Override
     public void addResourceHandlers(ResourceHandlerRegistry registry) {
         String imageRootDir = fileUploadConfigProperties.getRootDir() + "/" + fileUploadConfigProperties
-                .getImagesSubDir();
+            .getImagesSubDir();
         registry.addResourceHandler("static/**",
                                     fileUploadConfigProperties.getImagesSubDir() + "/**")
                 .addResourceLocations("classpath:static/",
@@ -69,7 +65,7 @@ public class WebConfig
                 .maxAge(3600);
     }
 
-    @Bean(name="taskExecutor")
+    @Bean(name = "taskExecutor")
     public TaskExecutor taskExecutor() {
         ThreadPoolTaskExecutor threadPoolTaskExecutor = new ThreadPoolTaskExecutor();
         threadPoolTaskExecutor.setThreadNamePrefix("Async-");
@@ -83,10 +79,9 @@ public class WebConfig
 
     @Bean
     public Docket api() {
-        return new Docket(DocumentationType.SWAGGER_2)
-                .select()
-                .apis(RequestHandlerSelectors.any())
-                .paths(PathSelectors.any())
-                .build();
+        return new Docket(DocumentationType.SWAGGER_2).select()
+                                                      .apis(RequestHandlerSelectors.any())
+                                                      .paths(PathSelectors.any())
+                                                      .build();
     }
 }
