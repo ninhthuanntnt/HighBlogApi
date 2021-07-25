@@ -2,11 +2,9 @@ package com.high.highblog.api.admin;
 
 import com.high.highblog.bloc.admin.TagCrudBloc;
 import com.high.highblog.model.dto.request.admin.AdminTagReq;
+import com.high.highblog.model.dto.request.admin.AdminUpdateTagReq;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController("adminTagCrudController")
 @RequestMapping("/api/v1/admin/tags")
@@ -20,6 +18,11 @@ public class TagCrudController {
     @PostMapping
     public ResponseEntity<?> addNewTag(@RequestBody final AdminTagReq adminTagReq) {
         tagCrudBloc.addNewTag(adminTagReq);
+        return ResponseEntity.noContent().build();
+    }
+    @PutMapping
+    public ResponseEntity<?> updateTag(@RequestBody final AdminUpdateTagReq adminUpdateTagReq){
+        tagCrudBloc.updateTag(adminUpdateTagReq);
         return ResponseEntity.noContent().build();
     }
 }

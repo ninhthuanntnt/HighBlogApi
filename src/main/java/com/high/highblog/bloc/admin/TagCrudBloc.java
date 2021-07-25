@@ -2,6 +2,7 @@ package com.high.highblog.bloc.admin;
 
 import com.high.highblog.model.dto.request.admin.AdminTagReq;
 
+import com.high.highblog.model.dto.request.admin.AdminUpdateTagReq;
 import com.high.highblog.model.entity.Tag;
 import com.high.highblog.service.*;
 import lombok.extern.slf4j.Slf4j;
@@ -26,5 +27,13 @@ public class TagCrudBloc {
         Tag newTag = new Tag();
         newTag.setName(req.getTagName());
         tagService.addNewTag(newTag);
+    }
+
+    @Transactional
+    public void updateTag(final AdminUpdateTagReq req) {
+        Long tagId = req.getId();
+        String tagName = req.getTagName();
+        log.info("update tag #{}",tagName);
+        tagService.updateTag(tagId,tagName);
     }
 }

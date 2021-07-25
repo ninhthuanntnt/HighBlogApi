@@ -32,7 +32,7 @@ public class File
     @Column(name = "user_id")
     private Long userId;
 
-    @Column(length = 50, nullable = false)
+    @Column(length = 500, nullable = false)
     private String name;
 
     private String path;
