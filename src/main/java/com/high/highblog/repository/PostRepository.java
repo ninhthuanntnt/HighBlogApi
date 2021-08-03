@@ -71,6 +71,14 @@ public interface PostRepository
     Page<Post> fetchListPostsByNickName(@Param("nickName") String nickName, Long categoryId, Pageable pageable);
 
     @Query("SELECT new Post(p, ps) FROM Post p"
+            + " JOIN User u ON u.id = p.userId"
+            + " JOIN PostStatistic ps ON ps.postId = p.id"
+            + " WHERE u.nickName = :nickName"
+            + " AND p.categoryId = :categoryId "
+            + " AND p.deleted = false ")
+    Page<Post> fetchPostsOfCurrentUser(@Param("nickName") String nickName, Long categoryId, Pageable pageable);
+
+    @Query("SELECT new Post(p, ps) FROM Post p"
             + " JOIN Subscription sub ON sub.userId = p.userId"
             + " JOIN PostStatistic ps ON ps.postId = p.id"
             + " WHERE sub.followerId = :followerId"

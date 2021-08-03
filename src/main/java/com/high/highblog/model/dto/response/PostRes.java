@@ -2,6 +2,7 @@ package com.high.highblog.model.dto.response;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.high.highblog.enums.PostType;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -40,6 +41,8 @@ public class PostRes {
     private Long numberOfComments;
 
     private Long numberOfFavorites;
+
+    private PostType postType;
 
     @JsonProperty("tags")
     private List<TagRes> tagsRes;

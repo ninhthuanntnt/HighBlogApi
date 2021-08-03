@@ -61,4 +61,16 @@ public class SecurityHelper {
                            return null;
                        });
     }
+
+    public static Long getNullableUserId() {
+        SecurityContext securityContext = SecurityContextHolder.getContext();
+        return Optional.of(securityContext.getAuthentication())
+                .map(authentication -> {
+                    if (authentication.getPrincipal() instanceof UserDetails) {
+                        CustomUserDetails customUserDetails = (CustomUserDetails) authentication.getPrincipal();
+                        return customUserDetails.getUserId();
+                    }
+                    return null;
+                }).orElse(null);
+    }
 }

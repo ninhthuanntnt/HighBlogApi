@@ -11,7 +11,6 @@ import com.high.highblog.model.entity.User;
 import com.high.highblog.service.PostService;
 import com.high.highblog.service.PostStatisticService;
 import com.high.highblog.service.PostTagService;
-import com.high.highblog.service.SubscriptionService;
 import com.high.highblog.service.UserService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
@@ -60,8 +59,12 @@ public class PostListBloc {
         log.info("Fetch list posts by nickName #{} with req #{}", nickName, req);
         PageRequest pageRequest = PaginationHelper.generatePageRequestWithDefaultSort(req,
                                                                                       "-ps.id");
-
-        Page<Post> posts = postService.fetchPostsByNickNameWithPageRequest(nickName, categoryId, pageRequest);
+        Long currentUserId = SecurityHelper.getNullableUserId();
+        Page<Post> posts= null;
+        if(currentUserId == userService.getByNickName(nickName).getId()) {
+            posts = postService.fetchPostsOfCurrentUser(nickName, categoryId, pageRequest);
+        }
+        else  posts = postService.fetchPostsByNickNameWithPageRequest(nickName, categoryId, pageRequest);
 
         includePostTagsToPosts(posts);
         includeUserToPosts(posts);
