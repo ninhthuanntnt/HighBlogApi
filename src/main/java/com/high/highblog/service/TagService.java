@@ -44,8 +44,16 @@ public class TagService {
     public void updateTag(final Long tagId, final String tagName) {
         Tag tag = repository.findById(tagId)
                 .orElseThrow(() -> new ObjectNotFoundException("tag not found"));
-        log.info("update tag #{} to #{}",tag.getName(),tagName);
+        log.info("update tag #{} to #{}", tag.getName(), tagName);
         tag.setName(tagName);
         repository.save(tag);
+    }
+
+    @Transactional
+    public void deleteTag(final Long tagId) {
+        log.info("delete tag by tagId#{}", tagId);
+        repository.findById(tagId)
+                .orElseThrow(() -> new ObjectNotFoundException("tag not found"));
+        repository.deleteById(tagId);
     }
 }

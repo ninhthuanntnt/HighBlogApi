@@ -25,4 +25,6 @@ public interface PostTagRepository
             + " JOIN Tag t ON t.id = pt.tagId"
             + " WHERE pt.postId IN (:postId)")
     List<PostTag> fetchByPostIdIn(Collection<Long> postId);
+
+    void deleteAllByTagId(Long tagId);
 }

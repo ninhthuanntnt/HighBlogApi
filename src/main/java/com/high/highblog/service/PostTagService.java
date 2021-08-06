@@ -86,4 +86,10 @@ public class PostTagService {
                 }
             });
     }
+
+    @Transactional
+    public void deleteByTagId(final Long tagId) {
+        log.info("delete postTag by tagId #{}", tagId);
+        repository.deleteAllByTagId(tagId);
+    }
 }
