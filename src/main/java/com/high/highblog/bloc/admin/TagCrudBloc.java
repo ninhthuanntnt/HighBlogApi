@@ -1,6 +1,5 @@
 package com.high.highblog.bloc.admin;
 
-import com.high.highblog.model.dto.request.admin.AdminDeleteTagReq;
 import com.high.highblog.model.dto.request.admin.AdminTagReq;
 import com.high.highblog.model.dto.request.admin.AdminUpdateTagReq;
 import com.high.highblog.model.entity.Tag;
@@ -39,8 +38,7 @@ public class TagCrudBloc {
     }
 
     @Transactional
-    public void deleteTag(final AdminDeleteTagReq req) {
-        Long tagId = req.getId();
+    public void deleteTag(final Long tagId) {
         log.info("delete tag with tagId#{} ",tagId);
         postTagService.deleteByTagId(tagId);
         tagService.deleteTag(tagId);
