@@ -70,7 +70,12 @@ public class PostService {
 
         return repository.fetchListPostsByNickName(nickName, categoryId, pageRequest);
     }
+    @Transactional(readOnly = true)
+    public Page<Post> fetchPostsOfCurrentUser(final String nickName, Long categoryId, final PageRequest pageRequest) {
+        log.info("Fetch posts by nickName #{} with pageRequest #{}", nickName, pageRequest);
 
+        return repository.fetchPostsOfCurrentUser(nickName, categoryId, pageRequest);
+    }
     @Transactional(readOnly = true)
     public Page<Post> fetchPostsByFollowerIdWithPageRequest(final Long followerId, Long categoryId, final PageRequest pageRequest) {
         log.info("Fetch posts by followerId #{} with pageRequest #{}", followerId, pageRequest);
