@@ -1,6 +1,7 @@
 package com.high.highblog.api.admin;
 
 import com.high.highblog.bloc.admin.TagCrudBloc;
+import com.high.highblog.model.dto.request.admin.AdminDeleteTagReq;
 import com.high.highblog.model.dto.request.admin.AdminTagReq;
 import com.high.highblog.model.dto.request.admin.AdminUpdateTagReq;
 import org.springframework.http.ResponseEntity;
@@ -23,6 +24,11 @@ public class TagCrudController {
     @PutMapping
     public ResponseEntity<?> updateTag(@RequestBody final AdminUpdateTagReq adminUpdateTagReq){
         tagCrudBloc.updateTag(adminUpdateTagReq);
+        return ResponseEntity.noContent().build();
+    }
+    @DeleteMapping
+    public ResponseEntity<?> deleteTag(@RequestBody final AdminDeleteTagReq adminDeleteTagReq){
+        tagCrudBloc.deleteTag(adminDeleteTagReq);
         return ResponseEntity.noContent().build();
     }
 }
