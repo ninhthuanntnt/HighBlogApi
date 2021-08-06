@@ -45,6 +45,9 @@ public class CustomUserDetailsService
             if (role.getRoleType() == RoleType.ROLE_LOCKED_USER) {
                 throw new ValidatorException("Locked account", "account");
             }
+            if(role.getRoleType() == RoleType.ROLE_INACTIVE_USER){
+                throw new ValidatorException("Inactive account", "account");
+            }
         }
 
         Set<SimpleGrantedAuthority> grantedAuthorities = roles.stream()

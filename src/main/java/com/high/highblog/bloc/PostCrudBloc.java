@@ -111,7 +111,7 @@ public class PostCrudBloc {
 
         Post post = postService.getById(id);
 
-        if(!post.getUserId().equals(SecurityHelper.getUserId()) && post.getPostType() == PostType.DRAFT){
+        if(!post.getUserId().equals(SecurityHelper.getNullableUserId()) && post.getPostType() == PostType.DRAFT){
             throw new ValidatorException("Invalid", "post");
         }
 

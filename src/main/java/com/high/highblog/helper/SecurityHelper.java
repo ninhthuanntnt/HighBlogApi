@@ -51,6 +51,18 @@ public class SecurityHelper {
                        }).orElseThrow(() -> new ObjectNotFoundException("userId"));
     }
 
+    public static Long getNullableUserId() {
+        SecurityContext securityContext = SecurityContextHolder.getContext();
+        return Optional.of(securityContext.getAuthentication())
+                       .map(authentication -> {
+                           if (authentication.getPrincipal() instanceof UserDetails) {
+                               CustomUserDetails customUserDetails = (CustomUserDetails) authentication.getPrincipal();
+                               return customUserDetails.getUserId();
+                           }
+                           return null;
+                       }).orElse(null);
+    }
+
     public static Optional<UserDetails> getUserDetails() {
         SecurityContext securityContext = SecurityContextHolder.getContext();
         return Optional.ofNullable(securityContext.getAuthentication())
@@ -60,17 +72,5 @@ public class SecurityHelper {
                            }
                            return null;
                        });
-    }
-
-    public static Long getNullableUserId() {
-        SecurityContext securityContext = SecurityContextHolder.getContext();
-        return Optional.of(securityContext.getAuthentication())
-                .map(authentication -> {
-                    if (authentication.getPrincipal() instanceof UserDetails) {
-                        CustomUserDetails customUserDetails = (CustomUserDetails) authentication.getPrincipal();
-                        return customUserDetails.getUserId();
-                    }
-                    return null;
-                }).orElse(null);
     }
 }

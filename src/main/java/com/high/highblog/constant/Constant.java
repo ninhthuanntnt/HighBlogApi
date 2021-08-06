@@ -12,6 +12,6 @@ public final class Constant {
     public static final String REGISTRATION_CONFIRMATION_CODE_ID_COOKIE= "registrationConfirmationCodeId";
 
     public static class Expiration {
-        public static final Long CONFIRMATION_CODE_EXPIRATION = ONE_MINUTE_EXPIRATION;
+        public static final Long CONFIRMATION_CODE_EXPIRATION = FIVE_MINUTE_EXPIRATION;
     }
 }
