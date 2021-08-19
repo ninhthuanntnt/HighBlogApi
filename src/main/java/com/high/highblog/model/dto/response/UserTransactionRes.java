@@ -6,8 +6,6 @@ import com.high.highblog.enums.PaymentType;
 import com.high.highblog.enums.UserTransactionStatus;
 import lombok.*;
 
-import javax.persistence.*;
-import javax.validation.constraints.NotNull;
 import java.math.BigDecimal;
 import java.time.Instant;
 
@@ -32,6 +30,8 @@ public class UserTransactionRes {
     private PaymentMethod paymentMethod;
 
     private PaymentType paymentType;
+
+    private boolean isReceiver;
 
     private BigDecimal balance;
 
