@@ -5,8 +5,6 @@ import com.high.highblog.model.entity.SystemTransaction;
 import com.high.highblog.repository.SystemTransactionRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.ObjectUtils;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -36,9 +34,16 @@ public class SystemTransactionService {
             throw new ValidatorException("Invalid system transaction", "systemTransaction");
         }
     }
-@Transactional(readOnly = true)
+
+    @Transactional(readOnly = true)
     public List<SystemTransaction> fetchSystemTransactions(Long senderId) {
         log.info("fetch system transaction by senderId");
         return repository.fetchBySenderTransactionId(senderId);
+    }
+
+    @Transactional(readOnly = true)
+    public boolean existByReceiverId(final Long receiverId) {
+        log.info("exist by receiverId");
+        return repository.existsByReceiverTransactionId(receiverId);
     }
 }
